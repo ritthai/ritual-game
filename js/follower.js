@@ -116,49 +116,44 @@ makeFollower = function (x, y, startCult) {
 		return (cult == "player" ? "green" : (cult == "ai one" ? "purple" : (cult == "ai two" ? "blue" : "red")));
 	};
 
+	var handleNecessities = function () {
+		food -= FollowerFoodDrain * FrameRate;
+		happy -= FollowerHappyDrain * FrameRate;
+		if (food <= 0) {
+			// you starved!
+			sprite.destroy();
+			followers.splice(followers.indexOf(follower), 1); // remove from list
+			return;
+		}
+		if (happy <= 0)
+		{
+			// you converted! switch to happiest cult that's not yours
+			happy = 100;
+			cultIn = getHappiestOtherCult();
+			sprite.color(getCultColor(cultIn));
+			return;
+		}
+	};
+
+	var getHappiestOtherCult = function () {
+		var cults = ['player', 'ai one', 'ai two', 'ai three'];
+		var bestOtherCult = '';
+		cults.forEach(function (x) {
+			if (cultIn !== x && utils.getAverageHappy(x) > utils.getAverageHappy(bestOtherCult)) {
+				bestOtherCult = x;
+			}
+		});
+		return bestOtherCult;
+	};
+
 	//main loop
 	var sprite = Crafty.e("2D, Canvas, Color")
 		.color(getCultColor(startCult))
 		.attr({x:x, y:y, w:20, h:20})
 		.bind("EnterFrame", function(e){
+			if (paused) return;
 
-			if (paused)
-				return;
-
-			//necessities
-			food -= FollowerFoodDrain * FrameRate;
-			happy -= FollowerHappyDrain * FrameRate;
-
-			if (food <= 0)
-			{
-				//you starved!
-				sprite.destroy();
-
-				//remove from the followers list
-				followers.splice(followers.indexOf(follower), 1);
-
-				return;
-			}
-			if (happy <= 0)
-			{
-				//you converted!
-				happy = 100;
-
-				//switch to the happiest cult that's not yours
-				var bestOtherCult = null;
-				if (cultIn != "player")
-					bestOtherCult = "player";
-				if (cultIn != "ai one" && utils.getAverageHappy("ai one") > utils.getAverageHappy(bestOtherCult))
-					bestOtherCult = "ai one";
-				if (cultIn != "ai two" && utils.getAverageHappy("ai two") > utils.getAverageHappy(bestOtherCult))
-					bestOtherCult = "ai two";
-				if (cultIn != "ai three" && utils.getAverageHappy("ai three") > utils.getAverageHappy(bestOtherCult))
-					bestOtherCult = "ai three";
-
-				cultIn = bestOtherCult;
-				sprite.color(getCultColor(cultIn));
-				return;
-			}
+			handleNecessities();
 
 			if (locationAt != "none")
 			{
