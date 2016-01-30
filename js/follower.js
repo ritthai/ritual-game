@@ -153,6 +153,150 @@ makeFollower = function (x, y, startCult) {
 		return bestOtherCult;
 	};
 
+	var handleAiNeutral = function () {
+		getRealLocation();
+
+		//check rituals list for rituals that are based on time, location, or proximity to people
+		for (var ritual in rituals[cultIn])
+		{
+			//check the condition
+			var conditionSuccess = false;
+			var doOnce = false;
+			switch(rituals[cultIn][ritual].condition.type)
+			{
+			case "morning":
+				//is it morning?
+				conditionSuccess = dayTimer <= DayLength / 3;
+				doOnce = true;
+				break;
+			case "afternoon":
+				//is it afternoon?
+				conditionSuccess = dayTimer <= DayLength * 2 / 3 && dayTimer > DayLength / 3;
+				doOnce = true;
+				break;
+			case "evening":
+				//is it evening?
+				conditionSuccess = dayTimer > DayLength * 2 / 3;
+				doOnce = true;
+				break;
+			case "atLocation":
+				//are you there?
+				conditionSuccess = rituals[cultIn][ritual].condition.param == locationAt;
+				break;
+			case "bird":
+				//is there... a bird nearby?
+				doOnce = true;
+				for (var bird in birds)
+				{
+					var xD = birds[bird].x - sprite.x;
+					var yD = birds[bird].y - sprite.y;
+					var dist = Math.sqrt(xD*xD+yD*yD)
+					if (dist < FollowerBirdDistance)
+					{
+						conditionSuccess = true; //you DID see a bird! oh my god! etc etc
+						break;
+					}
+				}
+				break;
+			case "seeDeath":
+				doOnce = true;
+				//TODO: this activates if someone has died in your area recently
+				break;
+			}
+			if (doOnce && followed.length > ritual && followed[ritual] == dayNumber)
+				conditionSuccess = false;
+
+			if (conditionSuccess)
+			{
+				switch(rituals[cultIn][ritual].action.type)
+				{
+				case "gatherFood":
+					//is there food?
+					var nearFoodArray = nearestFood();
+					if (nearFoodArray[0] != -1)
+					{
+						xTarget = foods[nearFoodArray[0]].x;
+						yTarget = foods[nearFoodArray[0]].y;
+						aiState = "gatherFood";
+						locationAt = "none";
+						break;
+					}
+					break;
+				case "travel":
+					//get the location of the given position
+					if (locationAt != rituals[cultIn][ritual].action.param)
+					{
+						for (var loc in locations)
+						{
+							if (locations[loc].locationType == rituals[cultIn][ritual].action.param)
+							{
+								xTarget = locations[loc].x + Math.random() * LocationSize;
+								yTarget = locations[loc].y + Math.random() * LocationSize;
+								aiState = "travel";
+								locationAt = "none";
+								break;
+							}
+						}
+					}
+					break;
+				case "wander":
+					xTarget = utils.getRandomX();
+					yTarget = utils.getRandomY();
+					aiState = "travel";
+					locationAt = "none";
+					break;
+				case "celebrate":
+					getRealLocation();
+					aiState = "celebrate";
+					skillTimer = FollowerSingTime;
+					break;
+				case "proselytize":
+					getRealLocation();
+					aiState = "proselytize";
+					skillTimer = FollowerProclaimTime;
+					break;
+				case "salvage":
+					getRealLocation();
+					aiState = "salvage";
+					skillTimer = FollowerWorkTime;
+					break;
+				default:
+					console.log("ERROR: unknown result " + rituals[cultIn][ritual].action.type);
+					break;
+				}
+			}
+
+			if (aiState != "neutral")
+			{
+				//register this ritual as followed
+				followed[ritual] = dayNumber;
+
+				break; //stop checking
+			}
+		}
+
+		if (aiState == "neutral")
+		{
+			//there are no rituals to follow
+			//so wander somewhere at random
+
+			if (lethargy == -1)
+				lethargy = (FollowerLethargyMax - FollowerLethargyMin) * Math.random() + FollowerLethargyMin;
+			else
+			{
+				lethargy -= FrameRate;
+				if (lethargy <= 0)
+				{
+					lethargy = -1;
+					xTarget = sprite.x + FollowerMaxRandomWander * 2 * Math.random() - FollowerMaxRandomWander;
+					yTarget = sprite.y + FollowerMaxRandomWander * 2 * Math.random() - FollowerMaxRandomWander;
+					aiState = "travel";
+					locationAt = "none";
+				}
+			}
+		}
+	};
+
 	//main loop
 	var sprite = Crafty.e("2D, Canvas, Color")
 		.color(getCultColor(startCult))
@@ -167,148 +311,7 @@ makeFollower = function (x, y, startCult) {
 			switch (aiState)
 			{
 			case "neutral":
-				getRealLocation();
-
-				//check rituals list for rituals that are based on time, location, or proximity to people
-				for (var ritual in rituals[cultIn])
-				{
-					//check the condition
-					var conditionSuccess = false;
-					var doOnce = false;
-					switch(rituals[cultIn][ritual].condition.type)
-					{
-					case "morning":
-						//is it morning?
-						conditionSuccess = dayTimer <= DayLength / 3;
-						doOnce = true;
-						break;
-					case "afternoon":
-						//is it afternoon?
-						conditionSuccess = dayTimer <= DayLength * 2 / 3 && dayTimer > DayLength / 3;
-						doOnce = true;
-						break;
-					case "evening":
-						//is it evening?
-						conditionSuccess = dayTimer > DayLength * 2 / 3;
-						doOnce = true;
-						break;
-					case "atLocation":
-						//are you there?
-						conditionSuccess = rituals[cultIn][ritual].condition.param == locationAt;
-						break;
-					case "bird":
-						//is there... a bird nearby?
-						doOnce = true;
-						for (var bird in birds)
-						{
-							var xD = birds[bird].x - sprite.x;
-							var yD = birds[bird].y - sprite.y;
-							var dist = Math.sqrt(xD*xD+yD*yD)
-							if (dist < FollowerBirdDistance)
-							{
-								conditionSuccess = true; //you DID see a bird! oh my god! etc etc
-								break;
-							}
-						}
-						break;
-					case "seeDeath":
-						doOnce = true;
-						//TODO: this activates if someone has died in your area recently
-						break;
-					}
-					if (doOnce && followed.length > ritual && followed[ritual] == dayNumber)
-						conditionSuccess = false;
-
-					if (conditionSuccess)
-					{
-						switch(rituals[cultIn][ritual].action.type)
-						{
-						case "gatherFood":
-							//is there food?
-							var nearFoodArray = nearestFood();
-							if (nearFoodArray[0] != -1)
-							{
-								xTarget = foods[nearFoodArray[0]].x;
-								yTarget = foods[nearFoodArray[0]].y;
-								aiState = "gatherFood";
-								locationAt = "none";
-								break;
-							}
-							break;
-						case "travel":
-							//get the location of the given position
-							if (locationAt != rituals[cultIn][ritual].action.param)
-							{
-								for (var loc in locations)
-								{
-									if (locations[loc].locationType == rituals[cultIn][ritual].action.param)
-									{
-										xTarget = locations[loc].x + Math.random() * LocationSize;
-										yTarget = locations[loc].y + Math.random() * LocationSize;
-										aiState = "travel";
-										locationAt = "none";
-										break;
-									}
-								}
-							}
-							break;
-						case "wander":
-							xTarget = utils.getRandomX();
-							yTarget = utils.getRandomY();
-							aiState = "travel";
-							locationAt = "none";
-							break;
-						case "celebrate":
-							getRealLocation();
-							aiState = "celebrate";
-							skillTimer = FollowerSingTime;
-							break;
-						case "proselytize":
-							getRealLocation();
-							aiState = "proselytize";
-							skillTimer = FollowerProclaimTime;
-							break;
-						case "salvage":
-							getRealLocation();
-							aiState = "salvage";
-							skillTimer = FollowerWorkTime;
-							break;
-						default:
-							console.log("ERROR: unknown result " + rituals[cultIn][ritual].action.type);
-							break;
-						}
-					}
-
-					if (aiState != "neutral")
-					{
-						//register this ritual as followed
-						followed[ritual] = dayNumber;
-
-						break; //stop checking
-					}
-				}
-
-				if (aiState == "neutral")
-				{
-					//there are no rituals to follow
-					//so wander somewhere at random
-
-					if (lethargy == -1)
-						lethargy = (FollowerLethargyMax - FollowerLethargyMin) * Math.random() + FollowerLethargyMin;
-					else
-					{
-						lethargy -= FrameRate;
-						if (lethargy <= 0)
-						{
-							lethargy = -1;
-							xTarget = sprite.x + FollowerMaxRandomWander * 2 * Math.random() - FollowerMaxRandomWander;
-							yTarget = sprite.y + FollowerMaxRandomWander * 2 * Math.random() - FollowerMaxRandomWander;
-							aiState = "travel";
-							locationAt = "none";
-						}
-					}
-				}
-
+				handleAiNeutral();
 				break;
 			case "celebrate":
 				skillTimer -= FrameRate;
