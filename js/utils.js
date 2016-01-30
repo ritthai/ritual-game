@@ -8,7 +8,7 @@ var utils = (function (){
 	module.getRandomY = function () {
 		return Math.random() * SCREEN_HEIGHT;
 	};
-	
+
 	module.getAverageHappy = function(forCult) {
 		var ofCult = 0;
 		var meter = 0;
@@ -26,7 +26,7 @@ var utils = (function (){
 		else
 			return meter / ofCult;
 	};
-	
+
 	module.getAverageFood = function(forCult) {
 		var ofCult = 0;
 		var meter = 0;
@@ -45,11 +45,19 @@ var utils = (function (){
 			return meter / ofCult;
 	};
 
+	module.getFollowerCount = function(forCult) {
+		return followers.filter(function (x) { return x.getCult() === forCult; }).length;
+	};
+
 	return module;
 }());
 
 var printMeters = function() {
-	document.getElementById('meter-info').textContent = "FOOD = " + utils.getAverageFood("player").toFixed(1) + ", HAPPY = " + utils.getAverageHappy("player").toFixed(1);
+	document.getElementById('meter-info').textContent =
+		"FOOD = " + utils.getAverageFood("player").toFixed(1) + ", " +
+		"HAPPY = " + utils.getAverageHappy("player").toFixed(1) + ", " +
+		"FOLLOWERS = " + utils.getFollowerCount("player").toFixed(0);
+
 }
 
 var makeAtRandomPosition = function (callback, thirdVar) {
