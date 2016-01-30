@@ -1,9 +1,10 @@
 var FollowerSpeed = 200;
+var FollowerSpeedStarving = 75;
 var FollowerSingTime = 4.0;
 var FollowerWorkTime = 10.0;
 var FollowerProclaimTime = 2.0;
 var FollowerFoodDrain = 0.5;
-var FollowerHappyDrain = 0.15;
+var FollowerHappyDrain = 0.2;
 var FollowerFoodGatherDistance = 30;
 var FollowerSingBoost = 1;
 var FollowerProclaimPenalty = 1;
@@ -350,7 +351,7 @@ makeFollower = function (x, y, startCult) {
 				//TODO: check rituals list for rituals that are based on location or proximity to moving things
 
 				//walk there at constant speed
-				var speedAdjusted = FollowerSpeed * FrameRate;
+				var speedAdjusted = ((FollowerSpeed - FollowerSpeedStarving) * food * 0.01 + FollowerSpeedStarving) * FrameRate;
 				var xDif = xTarget - sprite.x;
 				var yDif = yTarget - sprite.y;
 				var dif = Math.sqrt(xDif*xDif+yDif*yDif);

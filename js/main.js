@@ -250,6 +250,8 @@ var printRituals = function() {
 			people_count = 30
 			bird_count = 4;
 			cult_count = 3;
+			ais["ai one"] = "druid";
+			ais["ai two"] = "necromancer";
 			
 			makeLocation(20, 45, "marsh");
 			makeLocation(170, 110, "firepit");
