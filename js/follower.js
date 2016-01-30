@@ -26,7 +26,7 @@ makeFollower = function (x, y, startCult) {
 	var lethargy = -1;
 
 	var follower = {};
-	
+
 	var followed = [];
 
 	follower.feelJoyful = function(loc, cul) {
@@ -74,7 +74,7 @@ makeFollower = function (x, y, startCult) {
 	var getRealLocation = function() {
 		if (locationAt == "none")
 		{
-			var nearestDist = 999999;
+			var nearestDist = Infinity;
 			for (var loc in locations)
 			{
 				var xD = sprite.x - locations[loc].x - (LocationSize / 2);
@@ -119,7 +119,7 @@ makeFollower = function (x, y, startCult) {
 			{
 			case "neutral":
 				getRealLocation();
-				
+
 				//check rituals list for rituals that are based on time, location, or proximity to people
 				for (var ritual in rituals[cultIn])
 				{
@@ -209,7 +209,7 @@ makeFollower = function (x, y, startCult) {
 					{
 						//register this ritual as followed
 						followed[ritual] = dayNumber;
-						
+
 						break; //stop checking
 					}
 				}
@@ -218,7 +218,7 @@ makeFollower = function (x, y, startCult) {
 				{
 					//there are no rituals to follow
 					//so wander somewhere at random
-					
+
 					if (lethargy == -1)
 						lethargy = (FollowerLethargyMax - FollowerLethargyMin) * Math.random() + FollowerLethargyMin;
 					else
