@@ -122,7 +122,9 @@ var utils = {};
 	}
 
 	var makeScreen = function () {
-		Crafty.e("Screen, 2D, Canvas, Color, Mouse")
+		var timeOfDay = 'morning';
+
+		Crafty.e("Screen, 2D, Canvas, Color, Mouse, Tween")
 			.color('rgb(150, 200, 200)')
 			.attr({w:SCREEN_WIDTH, h:SCREEN_HEIGHT })
 			.bind("MouseMove", function(e) {
@@ -131,10 +133,19 @@ var utils = {};
 			})
 			.bind ("EnterFrame", function(e) {
 				dayTimer += FrameRate;
+
 				if (dayTimer >= DayLength)
 				{
 					dayTimer = 0;
 					dayNumber += 1;
+				}
+
+				if (dayTimer < DayLength / 3) {
+					changeTimeOfDay('morning');
+				} else if (dayTimer < DayLength * 2 / 3) {
+					changeTimeOfDay('afternoon');
+				} else {
+					changeTimeOfDay('evening');
 				}
 
 				if (isDebugMode) {
@@ -143,6 +154,30 @@ var utils = {};
 					printToDebug(json);
 				}
 			});
+
+		var changeTimeOfDay = function (newTimeOfDay) {
+			if (timeOfDay != newTimeOfDay) {
+				timeOfDay = newTimeOfDay;
+			}
+			for (colorTime in timeColorBlocks) {
+				var block = timeColorBlocks[colorTime];
+				var alpha = colorTime == timeOfDay ? 1 : 0;
+				block.tween({alpha: alpha}, 100);
+			}
+		}
+
+		var timeColorBlocks = {
+			"morning": makeTimeOfDayColorBlock('rgb(150, 200, 200)'),
+			"afternoon": makeTimeOfDayColorBlock('rgb(200, 150, 50)'),
+			"evening": makeTimeOfDayColorBlock('rgb(50, 50, 100)')
+		};
+	};
+
+	var makeTimeOfDayColorBlock = function (color) {
+		return Crafty.e("2D, Canvas, Color, Tween")
+			.color(color)
+			.attr({w:SCREEN_WIDTH, h:SCREEN_HEIGHT })
+			.attr({alpha: 0});
 	};
 
 	var makeFoods = function () {
