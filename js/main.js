@@ -1,12 +1,16 @@
+
+
 (function () {
 	var SCREEN_WIDTH = 640,
-		SCREEN_HEIGHT = 480;
+		SCREEN_HEIGHT = 480,
+		FOOD_COUNT = 30;
 
 	var init = function () {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
+
 		makeScreen();
 		makeFollower();
-		makeFood();
+		makeFoods();
 	}
 
 	var makeScreen = function () {
@@ -19,10 +23,22 @@
 			});
 	};
 
-	var makeFood = function () {
+	var makeFoods = function () {
+		for (var i = 0; i < FOOD_COUNT; i++) {
+			makeRandomFood();
+		}
+	};
+
+	var makeRandomFood = function () {
+		makeFood(
+			Math.random() * SCREEN_WIDTH,
+			Math.random() * SCREEN_HEIGHT);
+	};
+
+	var makeFood = function (x, y) {
 		Crafty.e("2D, Canvas, Color")
-		.attr({x:100, y:100, w:10, h:10})
-		.color("rgb(50, 200, 50)");
+			.attr({x:x, y:y, w:10, h:10})
+			.color("rgb(50, 200, 50)");
 	};
 
 	init();
