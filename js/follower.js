@@ -5,7 +5,6 @@ var FollowerProclaimTime = 2.0;
 var FollowerFoodDrain = 0.5;
 var FollowerHappyDrain = 0.12;
 var FollowerFoodGatherDistance = 30;
-
 var FollowerSingBoost = 1;
 
 var followers = [];
@@ -18,7 +17,8 @@ makeFollower = function () {
 		xTarget = 0,
 		yTarget = 0,
 		skillTimer = 0,
-		cultNumber = 0;
+		cultNumber = 0,
+		locationAt = "none";
 
 	var follower = {};
 
@@ -54,6 +54,21 @@ makeFollower = function () {
 			//necessities
 			food -= FollowerFoodDrain * FrameRate;
 			happy -= FollowerHappyDrain * FrameRate;
+			
+			if (food <= 0)
+			{
+				//you starved!
+				sprite.destroy();
+				//TODO: remove from the followers list
+				return;
+			}
+			if (happy <= 0)
+			{
+				//you converted!
+				happy = 100;
+				//TODO: switch to the cult with the highest average happiness (BESIDES your own)
+				return;
+			}
 
 			//AI logic
 
@@ -66,14 +81,76 @@ makeFollower = function () {
 				// aiState = "travel";
 				// xTarget = 640 * Math.random();
 				// yTarget = 480 * Math.random();
-				
-				//TODO: seek out food!
-				var nearFoodArray = nearestFood();
-				xTarget = foods[nearFoodArray[0]].x;
-				yTarget = foods[nearFoodArray[0]].y;
-				aiState = "gatherFood";
 
-				//TODO: check rituals list for rituals that are based on time, location, or proximity to people
+				//check rituals list for rituals that are based on time, location, or proximity to people
+				for (var ritual in rituals)
+				{
+					//check the condition
+					var conditionSuccess = false;
+					switch(rituals[ritual].condition.type)
+					{
+					case "morning":
+						//TODO: is it morning?
+						conditionSuccess = true;
+						break;
+					case "afternoon":
+						//TODO: is it afternoon?
+						break;
+					case "evening":
+						//TODO: is it evening?
+						break;
+					case "atLocation":
+						//are you there?
+						conditionSuccess = rituals[ritual].condition.param == locationAt;
+						break;
+					}
+					
+					if (conditionSuccess)
+					{
+						switch(rituals[ritual].action.type)
+						{
+						case "gatherFood":
+							//is there food?
+							var nearFoodArray = nearestFood();
+							if (nearFoodArray[0] != -1)
+							{
+								xTarget = foods[nearFoodArray[0]].x;
+								yTarget = foods[nearFoodArray[0]].y;
+								aiState = "gatherFood";
+								break;
+							}
+							break;
+						case "travel":
+							//get the location of the given position
+							for (var loc in locations)
+							{
+								if (locations[loc].locationType == rituals[ritual].action.param)
+								{
+									xTarget = locations[loc].x;
+									yTarget = locations[loc].y;
+									aiState = "travel";
+									break;
+								}
+							}
+							break;
+						case "celebrate":
+							aiAction = "celebrate";
+							skillTimer = FollowerSingTime;
+							break;
+						case "proselytize":
+							aiAction = "proselytize";
+							skillTimer = FollowerProclaimTime;
+							break;
+						case "salvage":
+							aiAction = "salvage";
+							skillTimer = FollowerWorkTime;
+							break;
+						}
+					}
+					
+					if (aiState != "neutral")
+						break; //stop checking
+				}
 
 				break;
 			case "celebrate":
@@ -85,18 +162,18 @@ makeFollower = function () {
 				break;
 			case "proselytize":
 				skillTimer -= FrameRate;
-				if (skillTimer <= 0)
-				{
+				if (skillTimer <= 0) {
 					//you proclaimed
 					//TODO: hurt everyone else's feelings
+					aiState = "neutral";
 				}
 				break;
 			case "salvage":
 				skillTimer -= FrameRate;
-				if (skillTimer <= 0)
-				{
+				if (skillTimer <= 0) {
 					//you worked
 					//TODO: bring about the fruits of your work
+					aiState = "neutral";
 				}
 				break;
 			case "travel":

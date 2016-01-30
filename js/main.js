@@ -17,12 +17,14 @@ var actionTypes = [
 "salvage"
 ];
 
-var locations = [
-"graveyard",
-"lake"
-];
+var LocationTypes = {
+	"graveyard": "rgb(75, 75, 75)",
+	"lake": "rgb(40, 30, 200)",
+};
+var LocationSize = 120;
 
 var foods = [];
+var locations = [];
 
 var addRitual = function (
 	conditionType,
@@ -50,8 +52,22 @@ var printRituals = function() {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 		makeScreen();
+		makeLocations();
 		makeFollower();
 		makeFoods();
+	}
+	
+	var makeLocations = function () {
+		//make a list of locations
+		makeLocation(50, 50, "graveyard");
+		makeLocation(300, 75, "lake");
+	};
+	
+	var makeLocation = function (x, y, locationType) {
+		var newLoc = Crafty.e("2D, Canvas, Color")
+			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType})
+			.color(LocationTypes[locationType]);
+		locations.push(newLoc);
 	}
 
 	var makeScreen = function () {
