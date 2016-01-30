@@ -84,13 +84,30 @@ var LocationTypes = {
 	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.025, "foodChange": 0.0625},
 };
 
+var labelPopRecord = -1;
+var labelHappyRecord = -1;
+var labelFoodRecord = -1;
 var makeLabel = function() {
+	//track label values
+	var newPop = 0;
+	var newHappy = 0;
+	var newFood = 0;
+	
 	//TODO: get the text for the label
 	var text = "Hi I'm a label";
 	
-	var label = Crafty.e("2D, Canvas, Color")
+	var label = Crafty.e("2D, DOM, Text, CSS")
+		.attr({x: 0, y: 40, w: SCREEN_WIDTH})
+		.text(text)
+		.css({"text-align": "center", "color": "white"})
 		.bind("EnterFrame", function(e) {
-			
+			if (!paused && label.alpha == 1)
+			{
+				label.alpha = 0.9999;
+				label.tween({alpha: 0}, 80);
+			}
+			if (label.alpha <= 0)
+				label.destroy();
 		});
 };
 
@@ -135,6 +152,7 @@ var uiAddRitual = function () {
 var uiUnpause = function () {
 	document.getElementById('add-ritual-menu').style.display = 'none';
 	paused = false;
+	dayTimer = 0;
 };
 
 var addRitualAI = function(ai) {
@@ -172,7 +190,7 @@ var birds = [];
 var BirdSpeed = 300;
 
 
-var DayLength = 30;
+var DayLength = 25;
 var dayTimer = 0;
 var dayNumber = 1;
 
@@ -234,7 +252,6 @@ var printRituals = function() {
 		makeScreen();
 		makeLocations("moon island");
 		makeFollowers();
-		makeFoods();
 		for (var i = 0; i < bird_count; i++)
 			makeAtRandomPosition(makeBird, "");
 		setTimeout(makeUi, 0);
@@ -371,6 +388,8 @@ var printRituals = function() {
 			.bind ("EnterFrame", function(e) {
 				if (!paused)
 				{
+					if (dayTimer == 0)
+						makeFoods();
 					dayTimer += FrameRate;
 					updateTimeOfDay();
 				}
@@ -400,11 +419,13 @@ var printRituals = function() {
 		};
 
 		var advanceDay = function () {
-			dayTimer = 0;
 			dayNumber += 1;
-			makeFoods();
-			if (!document.getElementById('auto').checked) {
-				paused = true;
+			paused = true;
+			if (document.getElementById('auto').checked)
+				uiUnpause();
+			else
+			{
+				makeLabel();
 				document.getElementById('add-ritual-menu').style.display = 'block';
 			}
 		};
