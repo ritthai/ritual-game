@@ -30,13 +30,18 @@ var actionTypes = [
 
 var LocationTypes = {
 	"graveyard": "rgb(75, 75, 75)",
-	"lake": "rgb(40, 30, 200)",
+	"firepit": "rgb(200, 30, 40)",
 	"grove": "rgb(30, 70, 30)",
+	"farm": "rgb(150, 150, 30)",
+	"stone circle": "rgb(100, 100, 100)",
+	"marsh": "rgb(60, 30, 10)",
+	"village": "rgb(100, 90, 30)",
 };
 var LocationSize = 120;
 
 var DayLength = 50;
 var dayTimer = 0;
+var dayNumber = 1;
 
 var foods = [];
 var locations = [];
@@ -73,7 +78,6 @@ var utils = {};
 
 		makeScreen();
 		makeLocations();
-		makeFollower();
 		for (var i = 0; i < 50; i++) {
 			makeAtRandomPosition(makeFollower);
 		}
@@ -85,16 +89,21 @@ var utils = {};
 			}
 		}, 300);
 
-		addRitual('player', 'morning', '', 'wander', '');;
+		addRitual('player', 'morning', '', 'travel', 'graveyard');;
 		addRitual('player', 'afternoon', '', 'gatherFood', '');
-		addRitual('player', 'evening', '', 'travel', 'lake');
+		addRitual('player', 'evening', '', 'travel', 'village');
+		addRitual('player', 'atLocation', 'graveyard', 'wander', '');
 	}
 
 	var makeLocations = function () {
 		//make a list of locations
-		makeLocation(50, 50, "graveyard");
-		makeLocation(300, 75, "lake");
-		makeLocation(20, 300, "grove");
+		makeLocation(50, 25, "graveyard");
+		makeLocation(75, 175, "village");
+		makeLocation(25, 325, "grove");
+		makeLocation(400, 25, "stone circle");
+		makeLocation(425, 175, "firepit");
+		makeLocation(325, 325, "marsh");
+		makeLocation(225, 135, "farm");
 	};
 
 	//TODO: at the end of every day, before people issue new laws, make more food
@@ -117,7 +126,10 @@ var utils = {};
 			.bind ("EnterFrame", function(e) {
 				dayTimer += FrameRate;
 				if (dayTimer >= DayLength)
+				{
 					dayTimer = 0;
+					dayNumber += 1;
+				}
 
 				if (isDebugMode) {
 					var state = followers.map(function (x) { return x.getState(); });

@@ -7,6 +7,9 @@ var FollowerHappyDrain = 0.12;
 var FollowerFoodGatherDistance = 30;
 var FollowerSingBoost = 2;
 var FollowerProclaimPenalty = 2;
+var FollowerLethargyMin = 0.5;
+var FollowerLethargyMax = 6.0;
+var FollowerMaxRandomWander = 100;
 
 var followers = [];
 
@@ -20,8 +23,11 @@ makeFollower = function (x, y) {
 	var skillTimer = 0;
 	var cultIn = "player";
 	var locationAt = "none";
+	var lethargy = -1;
 
 	var follower = {};
+	
+	var followed = [];
 
 	follower.feelJoyful = function(loc, cul) {
 		if (locationAt == loc)
@@ -41,7 +47,8 @@ makeFollower = function (x, y) {
 			xTarget: xTarget,
 			yTarget: yTarget,
 			skillTimer: skillTimer,
-			cultNumber: cultNumber
+			locationAt: locationAt,
+			cultIn: cultIn
 		};
 	};
 
@@ -70,8 +77,8 @@ makeFollower = function (x, y) {
 			var nearestDist = 999999;
 			for (var loc in locations)
 			{
-				var xD = sprite.x - locations[loc].x + (LocationSize / 2);
-				var yD = sprite.y - locations[loc].y + (LocationSize / 2);
+				var xD = sprite.x - locations[loc].x - (LocationSize / 2);
+				var yD = sprite.y - locations[loc].y - (LocationSize / 2);
 				var dist = Math.sqrt(xD*xD+yD*yD);
 				if (dist < nearestDist)
 				{
@@ -118,25 +125,31 @@ makeFollower = function (x, y) {
 				{
 					//check the condition
 					var conditionSuccess = false;
+					var doOnce = false;
 					switch(rituals[cultIn][ritual].condition.type)
 					{
 					case "morning":
 						//is it morning?
 						conditionSuccess = dayTimer <= DayLength / 3;
+						doOnce = true;
 						break;
 					case "afternoon":
 						//is it afternoon?
 						conditionSuccess = dayTimer <= DayLength * 2 / 3 && dayTimer > DayLength / 3;
+						doOnce = true;
 						break;
 					case "evening":
 						//is it evening?
 						conditionSuccess = dayTimer > DayLength * 2 / 3;
+						doOnce = true;
 						break;
 					case "atLocation":
 						//are you there?
 						conditionSuccess = rituals[cultIn][ritual].condition.param == locationAt;
 						break;
 					}
+					if (doOnce && followed.length > ritual && followed[ritual] == dayNumber)
+						conditionSuccess = false;
 
 					if (conditionSuccess)
 					{
@@ -171,11 +184,12 @@ makeFollower = function (x, y) {
 								}
 							}
 							break;
-							case "wander":
-								xTarget = utils.getRandomX();
-								yTarget = utils.getRandomY();
-								aiState = "travel";
-								break;
+						case "wander":
+							xTarget = utils.getRandomX();
+							yTarget = utils.getRandomY();
+							aiState = "travel";
+							locationAt = "none";
+							break;
 						case "celebrate":
 							aiAction = "celebrate";
 							skillTimer = FollowerSingTime;
@@ -192,7 +206,33 @@ makeFollower = function (x, y) {
 					}
 
 					if (aiState != "neutral")
+					{
+						//register this ritual as followed
+						followed[ritual] = dayNumber;
+						
 						break; //stop checking
+					}
+				}
+
+				if (aiState == "neutral")
+				{
+					//there are no rituals to follow
+					//so wander somewhere at random
+					
+					if (lethargy == -1)
+						lethargy = (FollowerLethargyMax - FollowerLethargyMin) * Math.random() + FollowerLethargyMin;
+					else
+					{
+						lethargy -= FrameRate;
+						if (lethargy <= 0)
+						{
+							lethargy = -1;
+							xTarget = sprite.x + FollowerMaxRandomWander * 2 * Math.random() - FollowerMaxRandomWander;
+							yTarget = sprite.y + FollowerMaxRandomWander * 2 * Math.random() - FollowerMaxRandomWander;
+							aiState = "travel";
+							locationAt = "none";
+						}
+					}
 				}
 
 				break;
