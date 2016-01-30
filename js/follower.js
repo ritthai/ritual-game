@@ -16,6 +16,27 @@ makeFollower = function () {
 		cultNumber = 0;
 	
 	//helper functions
+	var nearestFood = function () {
+		var nearest = null;
+		var nearestDist = 0;
+		for (var food in foods)
+		{
+			if (nearest == null)
+				nearest = foods[food];
+			else
+			{
+				var xD = sprite.x - foods[food].x;
+				var yD = sprite.y - foods[food].y;
+				var dist = Math.sqrt(xD*xD+yD*yD);
+				if (dist < nearestDist)
+				{
+					nearest = foods[food];
+					nearestDist = dist;
+				}
+			}
+		}
+		return [nearest, nearestDist];
+	};
 	
 	//main loop	
 	var sprite = Crafty.e("2D, Canvas, Color")
@@ -84,6 +105,7 @@ makeFollower = function () {
 					{
 						//TODO: pick up food near your location
 						//or try again if it's all gone
+						
 					}
 					else
 					{

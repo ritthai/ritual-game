@@ -22,6 +22,8 @@ var locations = [
 "lake"
 ];
 
+var foods = [];
+
 var addRitual = function (
 	conditionType,
 	conditionParam,
@@ -75,9 +77,10 @@ var printRituals = function() {
 	};
 
 	var makeFood = function (x, y) {
-		Crafty.e("2D, Canvas, Color")
+		var food = Crafty.e("2D, Canvas, Color")
 			.attr({x:x, y:y, w:10, h:10})
 			.color("rgb(50, 200, 50)");
+		foods.push(food);
 	};
 
 	init();
