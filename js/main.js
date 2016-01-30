@@ -179,8 +179,16 @@ var printPlayerRituals = function() {
 	rituals.player.forEach(function (ritual) {
 		text += JSON.stringify(ritual) + '\n';
 	});
-	text += 'AI RITUALS:\n';
+	text += 'AI ONE RITUALS:\n';
 	rituals["ai one"].forEach(function (ritual) {
+		text += JSON.stringify(ritual) + '\n';
+	});
+	text += 'AI TWO RITUALS:\n';
+	rituals["ai two"].forEach(function (ritual) {
+		text += JSON.stringify(ritual) + '\n';
+	});
+	text += 'AI THREE RITUALS:\n';
+	rituals["ai three"].forEach(function (ritual) {
 		text += JSON.stringify(ritual) + '\n';
 	});
 	document.getElementById('rituals').textContent = text;
@@ -207,10 +215,14 @@ var printRituals = function() {
 	};
 
 	var makeFollowers = function () {
-		for (var i = 0; i < 25; i++)
+		for (var i = 0; i < 15; i++)
 			makeAtRandomPosition(makeFollower, "player");
-		for (var i = 0; i < 50; i++)
+		for (var i = 0; i < 30; i++)
 			makeAtRandomPosition(makeFollower, "ai one");
+		for (var i = 0; i < 45; i++)
+			makeAtRandomPosition(makeFollower, "ai two");
+		for (var i = 0; i < 60; i++)
+			makeAtRandomPosition(makeFollower, "ai three");
 	};
 
 	var makeLocations = function () {

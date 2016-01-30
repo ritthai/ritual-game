@@ -109,7 +109,7 @@ makeFollower = function (x, y, startCult) {
 
 	//main loop
 	var sprite = Crafty.e("2D, Canvas, Color")
-		.color((startCult == "player" ? "green" : "red"))
+		.color((startCult == "player" ? "green" : (startCult == "ai one" ? "purple" : (startCult == "ai two" ? "blue" : "red"))))
 		.attr({x:x, y:y, w:20, h:20})
 		.bind("EnterFrame", function(e){
 			
