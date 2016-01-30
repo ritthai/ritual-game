@@ -10,6 +10,22 @@ var rituals = {
 	"ai three": [],
 };
 
+var ais = {
+	"player": "none",
+	"ai one": "druid",
+	"ai two": "necromancer",
+	"ai three": "nymph",
+};
+
+var AIScripts = {
+	"druid": {good:["grove", "stone circle", "marsh"], bad:["village", "graveyard", "fire pit"], rituals:
+						[["morning", "", "gatherFood", ""],
+						["afternoon", "", "travel", "good"],
+						["atLocation", "bad", "wander", ""],
+						["bird", "", "celebrate", ""],
+						["evening", "", "celebrate", ""]]},
+};
+
 var conditionTypes = [
 	"morning",
 	"afternoon",
@@ -66,7 +82,27 @@ var uiAddRitual = function () {
 		document.getElementById('action-types').value,
 		document.getElementById('action-locations').value
 		);
+	addRitualAI("ai one");
 	paused = false;
+};
+
+var addRitualAI = function(ai) {
+	var aiScript = AIScripts[ais[ai]];
+	var good = aiRunThroughList(aiScript["good"]);
+	var bad = aiRunThroughList(aiScript["bad"]);
+	
+	var ritualOn = rituals[ai].length;
+	var ritualSelection = aiScript["rituals"][ritualOn];
+	
+	addRitual(ai, ritualSelection[0], ritualSelection[1] == "good" ? good : bad, ritualSelection[2], ritualSelection[3] == "good" ? good : bad);
+};
+
+var aiRunThroughList = function(list) {
+	for (var item in list)
+		for (var loc in locations)
+			if (locations[loc].locationType == list[item])
+				return list[item];
+	return "stone circle";
 };
 
 var uiClearRituals = function () {
@@ -107,8 +143,12 @@ var addRitual = function (
 };
 
 var printPlayerRituals = function() {
-	var text = '';
+	var text = 'PLAYER RITUALS:\n';
 	rituals.player.forEach(function (ritual) {
+		text += JSON.stringify(ritual) + '\n';
+	});
+	text += 'AI RITUALS:\n';
+	rituals["ai one"].forEach(function (ritual) {
 		text += JSON.stringify(ritual) + '\n';
 	});
 	document.getElementById('rituals').textContent = text;
