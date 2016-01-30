@@ -28,6 +28,7 @@ makeFollower = function () {
 
 	follower.getState = function () {
 		return {
+			food: food,
 			happy: happy,
 			aiState: aiState,
 			xTarget: xTarget,
