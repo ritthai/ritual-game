@@ -32,7 +32,12 @@ makeFollower = function (x, y, startCult) {
 
 	follower.feelJoyful = function(loc, cul) {
 		if (locationAt == loc)
+		{
 			happy += (cul == cultIn ? 1 : 0.5) * FollowerSingBoost;
+			if (happy > 100)
+				happy = 100;
+		}
+			
 	};
 
 	follower.feelHurt = function(loc, cul) {
@@ -240,15 +245,18 @@ makeFollower = function (x, y, startCult) {
 							locationAt = "none";
 							break;
 						case "celebrate":
-							aiAction = "celebrate";
+							getRealLocation();
+							aiState = "celebrate";
 							skillTimer = FollowerSingTime;
 							break;
 						case "proselytize":
-							aiAction = "proselytize";
+							getRealLocation();
+							aiState = "proselytize";
 							skillTimer = FollowerProclaimTime;
 							break;
 						case "salvage":
-							aiAction = "salvage";
+							getRealLocation();
+							aiState = "salvage";
 							skillTimer = FollowerWorkTime;
 							break;
 						}
@@ -302,7 +310,6 @@ makeFollower = function (x, y, startCult) {
 				break;
 			case "salvage":
 				skillTimer -= FrameRate;
-				getRealLocation();
 				if (skillTimer <= 0) {
 					//you worked
 					for (var loc in locations)
