@@ -9,44 +9,28 @@ var utils = (function (){
 		return Math.random() * SCREEN_HEIGHT;
 	};
 
-	module.getAverageHappy = function(forCult) {
-		var ofCult = 0;
-		var meter = 0;
-		for (var follower in followers)
-		{
-			var happy = followers[follower].getHappy(forCult);
-			if (happy > 0)
-			{
-				meter += happy;
-				ofCult += 1;
-			}
-		}
-		if (ofCult == 0)
-			return 0;
-		else
-			return meter / ofCult;
+	module.getAverageHappy = function(cult) {
+		return getAverage(cult, function (x) { return x.getHappy(cult); });
 	};
 
-	module.getAverageFood = function(forCult) {
-		var ofCult = 0;
-		var meter = 0;
-		for (var follower in followers)
-		{
-			var food = followers[follower].getFood(forCult);
-			if (food > 0)
-			{
-				meter += food;
-				ofCult += 1;
-			}
-		}
-		if (ofCult == 0)
-			return 0;
-		else
-			return meter / ofCult;
+	module.getAverageFood = function(cult) {
+		return getAverage(cult, function (x) { return x.getFood(cult); });
 	};
 
-	module.getFollowerCount = function(forCult) {
-		return followers.filter(function (x) { return x.getCult() === forCult; }).length;
+	var getAverage = function (cult, callback) {
+		var followers = getFollowersForCult(cult);
+		var sum = followers.reduce(function (prev, cur) {
+			return prev + callback(cur);
+		}, 0);
+		return followers.length > 0 ? sum / followers.length : 0;
+	};
+
+	module.getFollowerCount = function(cult) {
+		return getFollowersForCult(cult).length;
+	};
+
+	var getFollowersForCult = function (cult) {
+		return followers.filter(function (x) { return x.getCult() === cult; });
 	};
 
 	return module;
