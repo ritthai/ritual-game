@@ -135,12 +135,7 @@ makeFollower = function (x, y, startCult) {
 				sprite.destroy();
 
 				//remove from the followers list
-				for (var fol in followers)
-					if (followers[fol] == follower)
-					{
-						followers.splice(fol, 1);
-						break;
-					}
+				followers.splice(followers.indexOf(follower), 1);
 
 				return;
 			}
