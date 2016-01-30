@@ -11,14 +11,14 @@ var followers = [];
 
 makeFollower = function () {
 	//state variables
-	var food = 100,
-		happy = 100;
-		aiState = "neutral",
-		xTarget = 0,
-		yTarget = 0,
-		skillTimer = 0,
-		cultNumber = 0,
-		locationAt = "none";
+	var food = 100;
+	var happy = 100;
+	var aiState = "neutral";
+	var xTarget = 0;
+	var yTarget = 0;
+	var skillTimer = 0;
+	var cultNumber = 0;
+	var locationAt = "none";
 
 	var follower = {};
 
@@ -90,14 +90,16 @@ makeFollower = function () {
 					switch(rituals[ritual].condition.type)
 					{
 					case "morning":
-						//TODO: is it morning?
-						conditionSuccess = true;
+						//is it morning?
+						conditionSuccess = dayTimer <= DayLength / 3;
 						break;
 					case "afternoon":
-						//TODO: is it afternoon?
+						//is it afternoon?
+						conditionSuccess = dayTimer <= DayLength * 2 / 3 && dayTimer > DayLength / 3;
 						break;
 					case "evening":
-						//TODO: is it evening?
+						//is it evening?
+						conditionSuccess = dayTimer > DayLength * 2 / 3;
 						break;
 					case "atLocation":
 						//are you there?

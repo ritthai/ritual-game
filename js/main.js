@@ -20,8 +20,12 @@ var actionTypes = [
 var LocationTypes = {
 	"graveyard": "rgb(75, 75, 75)",
 	"lake": "rgb(40, 30, 200)",
+	"grove": "rgb(30, 70, 30)",
 };
 var LocationSize = 120;
+
+var DayLength = 50;
+var dayTimer = 0;
 
 var foods = [];
 var locations = [];
@@ -51,6 +55,8 @@ var printRituals = function() {
 	var init = function () {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+		dayTimer = 0;
+
 		makeScreen();
 		makeLocations();
 		makeFollower();
@@ -61,6 +67,7 @@ var printRituals = function() {
 		//make a list of locations
 		makeLocation(50, 50, "graveyard");
 		makeLocation(300, 75, "lake");
+		makeLocation(20, 300, "grove");
 	};
 	
 	var makeLocation = function (x, y, locationType) {
@@ -77,6 +84,11 @@ var printRituals = function() {
 			.bind("MouseMove", function(e) {
 			})
 			.bind("MouseDown", function(e) {
+			})
+			.bind ("EnterFrame", function(e) {
+				dayTimer += FrameRate;
+				if (dayTimer >= DayLength)
+					dayTimer = 0;
 			});
 	};
 
