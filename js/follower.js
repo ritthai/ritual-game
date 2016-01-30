@@ -33,7 +33,7 @@ makeFollower = function (x, y, startCult) {
 	follower.feelJoyful = function(loc, cul) {
 		if (locationAt == loc)
 		{
-			happy += (cul == cultIn ? 1 : 0.5) * FollowerSingBoost;
+			happy += (cul == cultIn ? 1 : 0.15) * FollowerSingBoost;
 			if (happy > 100)
 				happy = 100;
 		}

@@ -124,6 +124,10 @@ var addRitualAI = function(ai) {
 	var bad = aiRunThroughList(aiScript["bad"]);
 	
 	var ritualOn = rituals[ai].length;
+	
+	if (rituals[ai].length >= aiScript["rituals"].length)
+		return; //you're out of rituals to make
+	
 	var ritualSelection = aiScript["rituals"][ritualOn];
 	
 	addRitual(ai, ritualSelection[0], ritualSelection[1] == "good" ? good : bad, ritualSelection[2], ritualSelection[3] == "good" ? good : bad);
