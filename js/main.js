@@ -84,6 +84,16 @@ var LocationTypes = {
 	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.025, "foodChange": 0.0625},
 };
 
+var makeLabel = function() {
+	//TODO: get the text for the label
+	var text = "Hi I'm a label";
+	
+	var label = Crafty.e("2D, Canvas, Color")
+		.bind("EnterFrame", function(e) {
+			
+		});
+};
+
 var paused = true;
 
 var makeUi = function () {
