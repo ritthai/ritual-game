@@ -27,18 +27,20 @@ span {
 
 <script type="text/javascript" src="js/main.js"></script>
 
+<pre id="meter-info"></pre>
+
+<div id="add-ritual-menu">
 Condition: <select id="condition-types"></select> <br />
 Condition location (if applicable): <select id="condition-locations"></select> <br />
 Action type (if applicable): <select id="action-types"></select> <br />
 Action location (if applicable):<select id="action-locations"></select> <br />
-<button onclick="uiAddRitual()">Add Ritual</button>
-<button onclick="uiClearRituals()">Clear Rituals</button>
-<br />
+<button onclick="uiAddRitual()">Preach Additional Ritual</button>
+<button onclick="uiUnpause()">Continue Present Rituals</button>
+</div>
+
+<button onclick="uiClearRituals()">Banish Rituals</button>
 
 <pre id="rituals"></pre>
-
-</br>
-<pre id="meter-info"></pre>
 
 <a href="javascript:toggleDebugMode()">Toggle debug</a>
 <pre id="debug-info"></pre>

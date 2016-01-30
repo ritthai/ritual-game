@@ -26,7 +26,7 @@ var AIScripts = {
 						["bird", "", "celebrate", ""],
 						["evening", "", "celebrate", ""]]
 						},
-	
+
 	"cleric": {good:["village", "farm", "grove"], bad:["firepit", "graveyard", "marsh"], rituals:
 											[
 											["morning", "", "travel", "good"],
@@ -35,7 +35,7 @@ var AIScripts = {
 											["afternoon", "", "salvage", ""],
 											["evening", "", "salvage", ""]]
 											},
-											
+
 	"nymph": {good:["firepit", "village", "grove"], bad:["marsh", "farm", "stone circle"], rituals:
 						[
 						["morning", "", "celebrate", ""],
@@ -44,7 +44,7 @@ var AIScripts = {
 						["seeDeath", "", "gatherFood", ""],
 						["morning", "", "celebrate", ""]]
 						},
-						
+
 	"necromancer": {good:["graveyard", "marsh", "village"], bad:["grove", "farm", "firepit"], rituals:
 						[
 						["seeDeath", "", "travel", "good"],
@@ -91,8 +91,10 @@ var makeUi = function () {
 		locations.push(loc);
 	}
 	populateSelect(conditionTypes, 'condition-types');
+	populateSelect([''], 'condition-locations');
 	populateSelect(locations, 'condition-locations');
 	populateSelect(actionTypes, 'action-types');
+	populateSelect([''], 'action-locations');
 	populateSelect(locations, 'action-locations');
 };
 
@@ -116,6 +118,11 @@ var uiAddRitual = function () {
 	addRitualAI("ai one");
 	addRitualAI("ai two");
 	addRitualAI("ai three");
+	uiUnpause();
+};
+
+var uiUnpause = function () {
+	document.getElementById('add-ritual-menu').style.display = 'none';
 	paused = false;
 };
 
@@ -123,14 +130,14 @@ var addRitualAI = function(ai) {
 	var aiScript = AIScripts[ais[ai]];
 	var good = aiRunThroughList(aiScript["good"]);
 	var bad = aiRunThroughList(aiScript["bad"]);
-	
+
 	var ritualOn = rituals[ai].length;
-	
+
 	if (rituals[ai].length >= aiScript["rituals"].length)
 		return; //you're out of rituals to make
-	
+
 	var ritualSelection = aiScript["rituals"][ritualOn];
-	
+
 	addRitual(ai, ritualSelection[0], ritualSelection[1] == "good" ? good : bad, ritualSelection[2], ritualSelection[3] == "good" ? good : bad);
 };
 
@@ -172,7 +179,7 @@ var addRitual = function (
 ) {
 	if (!paused)
 		return;
-	
+
 	rituals[toCult].push({
 		condition: {type: conditionType, param: conditionParam},
 		action: {type: actionType, param: actionParam}
@@ -237,29 +244,29 @@ var printRituals = function() {
 
 	var makeLocations = function (mapName) {
 		//make a list of locations
-		
+
 		//MAP VARIANTS
 		switch(mapName)
 		{
 		case "moon island":
-			
+
 			//the first real map
 			//a symmetrical map for three cults
-			
+
 			food_count = 60;
 			people_count = 30
 			bird_count = 4;
 			cult_count = 3;
 			ais["ai one"] = "druid";
 			ais["ai two"] = "necromancer";
-			
+
 			makeLocation(20, 45, "marsh");
 			makeLocation(170, 110, "firepit");
 			makeLocation(140, 240, "grove");
-			
+
 			makeLocation(340, 120, "stone circle");
 			makeLocation(340, 280, "old manor");
-			
+
 			makeLocation(510, 110, "farm");
 			makeLocation(540, 240, "village");
 			makeLocation(660, 45, "graveyard");
@@ -386,6 +393,7 @@ var printRituals = function() {
 			dayNumber += 1;
 			makeFoods();
 			paused = true;
+			document.getElementById('add-ritual-menu').style.display = 'block';
 		};
 
 		var changeTimeOfDay = function (newTimeOfDay) {
