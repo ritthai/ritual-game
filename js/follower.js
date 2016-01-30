@@ -10,6 +10,7 @@ var FollowerProclaimPenalty = 2;
 var FollowerLethargyMin = 0.5;
 var FollowerLethargyMax = 6.0;
 var FollowerMaxRandomWander = 100;
+var FollowerBirdDistance = 70;
 
 var followers = [];
 
@@ -154,6 +155,21 @@ makeFollower = function (x, y, startCult) {
 						//are you there?
 						conditionSuccess = rituals[cultIn][ritual].condition.param == locationAt;
 						break;
+					case "bird":
+						//is there... a bird nearby?
+						doOnce = true;
+						for (var bird in birds)
+						{
+							var xD = birds[bird].x - sprite.x;
+							var yD = birds[bird].y - sprite.y;
+							var dist = Math.sqrt(xD*xD+yD*yD)
+							if (dist < FollowerBirdDistance)
+							{
+								conditionSuccess = true; //you DID see a bird! oh my god! etc etc
+								break;
+							}
+						}
+						break;
 					}
 					if (doOnce && followed.length > ritual && followed[ritual] == dayNumber)
 						conditionSuccess = false;
@@ -260,9 +276,12 @@ makeFollower = function (x, y, startCult) {
 				break;
 			case "salvage":
 				skillTimer -= FrameRate;
+				getRealLocation();
 				if (skillTimer <= 0) {
 					//you worked
-					//TODO: bring about the fruits of your work
+					for (var loc in locations)
+						if (locations[loc].locationType == locationAt)
+							locations[loc].works[cultIn] += 1;
 					aiState = "neutral";
 				}
 				break;

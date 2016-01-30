@@ -14,7 +14,8 @@ var conditionTypes = [
 	"morning",
 	"afternoon",
 	"evening",
-	"atLocation"
+	"atLocation",
+	"bird"
 ];
 
 var actionTypes = [
@@ -35,6 +36,11 @@ var LocationTypes = {
 	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0},
 };
 var LocationSize = 120;
+var LocationMaxWork = 30;
+
+var birds = [];
+var BirdSpeed = 300;
+
 
 var DayLength = 50;
 var dayTimer = 0;
@@ -76,6 +82,8 @@ var printRituals = function() {
 		for (var i = 0; i < 50; i++)
 			makeAtRandomPosition(makeFollower, "ai one");
 		makeFoods();
+		for (var i = 0; i < 3; i++)
+			makeAtRandomPosition(makeBird, "");
 
 		addRitual('player', 'morning', '', 'travel', 'graveyard');;
 		addRitual('player', 'afternoon', '', 'gatherFood', '');
@@ -83,6 +91,7 @@ var printRituals = function() {
 		addRitual('player', 'atLocation', 'graveyard', 'wander', '');
 
 		addRitual('ai one', 'evening', '', 'travel', 'graveyard');;
+		addRitual('ai one', 'bird', '', 'wander', '');
 		addRitual('ai one', 'afternoon', '', 'gatherFood', '');
 		addRitual('ai one', 'evening', '', 'gatherFood', '');
 		addRitual('ai one', 'atLocation', 'village', 'travel', 'graveyard');;
@@ -100,9 +109,67 @@ var printRituals = function() {
 	};
 
 	var makeLocation = function (x, y, locationType) {
+		var locWorks = {"player":0, "ai one":0, "ai two":0, "ai three":0};
+		
 		var newLoc = Crafty.e("2D, Canvas, Color")
-			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType})
-			.color(LocationTypes[locationType]["color"]);
+			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType, works:locWorks})
+			.color(LocationTypes[locationType]["color"])
+			.bind("EnterFrame", function(e) {
+				if (locWorks["player"] + locWorks["ai one"] + locWorks["ai two"] + locWorks["ai three"] >= LocationMaxWork)
+				{
+					var awardWorkTo = null;
+					if (locWorks["player"] >= locWorks["ai one"])
+					{
+						if (locWorks["player"] >= locWorks["ai two"])
+						{
+							if (locWorks["player"] >= locWorks["ai three"])
+								awardWorkTo = "player";
+							else
+								awardWorkTo = "ai three";	
+						}
+						else if (locWorks["ai two"] >= locWorks["ai three"])
+							awardWorkTo = "ai two";
+						else
+							awardWorkTo = "ai three";
+					}
+					else
+					{
+						if (locWorks["ai one"] >= locWorks["ai two"])
+						{
+							if (locWorks["ai one"] >= locWorks["ai three"])
+								awardWorkTo = "ai one";
+							else
+								awardWorkTo = "ai three";
+						}
+						else if (locWorks["ai two"] >= locWorks["ai three"])
+							awardWorkTo = "ai two";
+						else
+							awardWorkTo = "ai three";
+					}
+					
+					switch(locationType)
+					{
+					case "village":
+						//get a free follower
+						makeFollower(x + LocationSize / 2, y + LocationSize / 2, awardWorkTo);
+						break;
+					case "graveyard":
+						//TODO: get a jewelry item
+						break;
+					case "firepit":
+						//TODO: get a totem item
+						break;
+					default:
+						//TODO: get a generic item
+						break;
+					}
+					
+					locWorks["player"] = 0;
+					locWorks["ai one"] = 0;
+					locWorks["ai two"] = 0;
+					locWorks["ai three"] = 0;
+				}
+			});
 		locations.push(newLoc);
 	}
 
@@ -181,6 +248,26 @@ var printRituals = function() {
 			.attr({x:x, y:y, w:10, h:10})
 			.color("rgb(50, 200, 50)");
 		foods.push(food);
+	};
+	
+	var makeBird = function (x, y, unused) {
+		var angle = Math.random() * Math.PI * 2;
+		var bird = Crafty.e("2D, Canvas, Color")
+			.attr({x:x, y:y, w:10, h:10})
+			.color("rgb(240, 240, 240)")
+			.bind("EnterFrame", function(e) {
+				bird.x += Math.cos(angle) * FrameRate * BirdSpeed;
+				bird.y += Math.sin(angle) * FrameRate * BirdSpeed;
+				if (bird.x < 0)
+					bird.x += SCREEN_WIDTH;
+				if (bird.x > SCREEN_WIDTH)
+					bird.x -= SCREEN_WIDTH;
+				if (bird.y < 0)
+					bird.y += SCREEN_HEIGHT;
+				if (bird.y > SCREEN_HEIGHT)
+					bird.y -= SCREEN_HEIGHT;
+			});
+		birds.push(bird);
 	};
 
 	init();
