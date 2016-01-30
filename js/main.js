@@ -1,3 +1,6 @@
+var SCREEN_WIDTH = 640;
+var SCREEN_HEIGHT = 480;
+
 var FrameRate = (1.0 / 30);
 
 var rituals = {
@@ -7,25 +10,19 @@ var rituals = {
 	"ai three": [],
 };
 
-var isDebugMode = false;
-
-var toggleDebugMode = function () {
-		isDebugMode = !isDebugMode;
-};
-
 var conditionTypes = [
-"morning",
-"afternoon",
-"evening",
-"atLocation"
+	"morning",
+	"afternoon",
+	"evening",
+	"atLocation"
 ];
 
-var actionTypes = [
-"gatherFood",
-"celebrate",
-"travel",
-"proselytize",
-"salvage"
+	var actionTypes = [
+	"gatherFood",
+	"celebrate",
+	"travel",
+	"proselytize",
+	"salvage"
 ];
 
 var LocationTypes = {
@@ -64,12 +61,8 @@ var printRituals = function() {
 	console.log(text);
 };
 
-var utils = {};
-
 (function () {
-	var SCREEN_WIDTH = 640,
-		SCREEN_HEIGHT = 480,
-		FOOD_COUNT = 100;
+	var FOOD_COUNT = 100;
 
 	var init = function () {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -94,7 +87,7 @@ var utils = {};
 		addRitual('player', 'afternoon', '', 'gatherFood', '');
 		addRitual('player', 'evening', '', 'travel', 'village');
 		addRitual('player', 'atLocation', 'graveyard', 'wander', '');
-		
+
 		addRitual('ai one', 'evening', '', 'travel', 'graveyard');;
 		addRitual('ai one', 'afternoon', '', 'gatherFood', '');
 		addRitual('ai one', 'evening', '', 'gatherFood', '');
@@ -187,7 +180,7 @@ var utils = {};
 	};
 
 	var makeAtRandomPosition = function (callback, thirdVar) {
-		callback(getRandomX(), getRandomY(), thirdVar);
+		callback(utils.getRandomX(), utils.getRandomY(), thirdVar);
 	};
 
 	var makeFood = function (x, y, unused) {
@@ -197,21 +190,5 @@ var utils = {};
 		foods.push(food);
 	};
 
-	var getRandomX = function () {
-		return Math.random() * SCREEN_WIDTH;
-	};
-
-	var getRandomY = function () {
-		return Math.random() * SCREEN_HEIGHT;
-	};
-
-	utils.getRandomX = getRandomX;
-	utils.getRandomY = getRandomY;
-
 	init();
 }());
-
-var printToDebug = function (message) {
-	document.getElementById('debug-info').textContent;
-	document.getElementById('debug-info').textContent = message;
-};
