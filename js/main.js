@@ -80,6 +80,7 @@ var LocationTypes = {
 	"stone circle": {"color": "rgb(100, 100, 100)", "happyChange": 0, "foodChange": 0},
 	"marsh": {"color": "rgb(60, 30, 10)", "happyChange": 0, "foodChange": 0},
 	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0},
+	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.025, "foodChange": 0.0625},
 };
 
 var paused = true;
@@ -204,40 +205,64 @@ var printRituals = function() {
 };
 
 (function () {
-	var FOOD_COUNT = 100;
+	var food_count = 0;
+	var people_count = 0;
+	var bird_count = 0;
+	var cult_count = 0;
 
 	var init = function () {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 		dayTimer = 0;
 		makeScreen();
-		makeLocations();
+		makeLocations("moon island");
 		makeFollowers();
 		makeFoods();
-		for (var i = 0; i < 3; i++)
+		for (var i = 0; i < bird_count; i++)
 			makeAtRandomPosition(makeBird, "");
 		setTimeout(makeUi, 0);
 	};
 
 	var makeFollowers = function () {
-		for (var i = 0; i < 15; i++)
+		for (var i = 0; i < people_count / cult_count; i++)
 			makeAtRandomPosition(makeFollower, "player");
-		for (var i = 0; i < 30; i++)
+		for (var i = 0; i < people_count * 2 / cult_count; i++)
 			makeAtRandomPosition(makeFollower, "ai one");
-		for (var i = 0; i < 45; i++)
-			makeAtRandomPosition(makeFollower, "ai two");
-		for (var i = 0; i < 60; i++)
-			makeAtRandomPosition(makeFollower, "ai three");
+		if (cult_count > 2)
+			for (var i = 0; i < people_count * 3 / cult_count; i++)
+				makeAtRandomPosition(makeFollower, "ai two");
+		if (cult_count > 3)
+			for (var i = 0; i < people_count * 4 / cult_count; i++)
+				makeAtRandomPosition(makeFollower, "ai three");
 	};
 
-	var makeLocations = function () {
+	var makeLocations = function (mapName) {
 		//make a list of locations
-		makeLocation(60, 25, "graveyard");
-		makeLocation(135, 175, "village");
-		makeLocation(45, 325, "grove");
-		makeLocation(500, 25, "stone circle");
-		makeLocation(625, 175, "firepit");
-		makeLocation(525, 325, "marsh");
-		makeLocation(325, 135, "farm");
+		
+		//MAP VARIANTS
+		switch(mapName)
+		{
+		case "moon island":
+			
+			//the first real map
+			//a symmetrical map for three cults
+			
+			food_count = 60;
+			people_count = 30
+			bird_count = 4;
+			cult_count = 3;
+			
+			makeLocation(20, 45, "marsh");
+			makeLocation(170, 110, "firepit");
+			makeLocation(140, 240, "grove");
+			
+			makeLocation(340, 120, "stone circle");
+			makeLocation(340, 280, "old manor");
+			
+			makeLocation(510, 110, "farm");
+			makeLocation(540, 240, "village");
+			makeLocation(660, 45, "graveyard");
+			break;
+		}
 	};
 
 	var makeLocation = function (x, y, locationType) {
@@ -386,7 +411,7 @@ var printRituals = function() {
 	};
 
 	var makeFoods = function () {
-		for (var i = 0; i < FOOD_COUNT; i++) {
+		for (var i = 0; i < food_count && foods.length < food_count * 2; i++) {
 			makeAtRandomPosition(makeFood, "");
 		}
 	};
