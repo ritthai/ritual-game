@@ -43,6 +43,8 @@ var dayNumber = 1;
 var foods = [];
 var locations = [];
 
+var timeOfDay = 'morning';
+
 var addRitual = function (
 	toCult,
 	conditionType,
@@ -66,17 +68,22 @@ var printRituals = function() {
 
 	var init = function () {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
-
 		dayTimer = 0;
-
 		makeScreen();
 		makeLocations();
+		makeFollowers();
+		makeFoods();
+		addRituals();
+	};
+
+	var makeFollowers = function () {
 		for (var i = 0; i < 25; i++)
 			makeAtRandomPosition(makeFollower, "player");
 		for (var i = 0; i < 50; i++)
 			makeAtRandomPosition(makeFollower, "ai one");
-		makeFoods();
+	};
 
+	var addRituals = function () {
 		addRitual('player', 'morning', '', 'travel', 'graveyard');;
 		addRitual('player', 'afternoon', '', 'gatherFood', '');
 		addRitual('player', 'evening', '', 'travel', 'village');
@@ -86,7 +93,7 @@ var printRituals = function() {
 		addRitual('ai one', 'afternoon', '', 'gatherFood', '');
 		addRitual('ai one', 'evening', '', 'gatherFood', '');
 		addRitual('ai one', 'atLocation', 'village', 'travel', 'graveyard');;
-	}
+	};
 
 	var makeLocations = function () {
 		//make a list of locations
@@ -104,53 +111,55 @@ var printRituals = function() {
 			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType})
 			.color(LocationTypes[locationType]["color"]);
 		locations.push(newLoc);
-	}
+	};
 
 	var makeScreen = function () {
-		var timeOfDay = 'morning';
-
-		Crafty.e("Screen, 2D, Canvas, Color, Mouse, Tween")
+		Crafty.e("2D, Canvas, Color, Mouse, Tween")
 			.color('rgb(150, 200, 200)')
 			.attr({w:SCREEN_WIDTH, h:SCREEN_HEIGHT })
-			.bind("MouseMove", function(e) {
-			})
-			.bind("MouseDown", function(e) {
-			})
+			.bind("MouseMove", function(e) {})
+			.bind("MouseDown", function(e) {})
 			.bind ("EnterFrame", function(e) {
 				dayTimer += FrameRate;
-
-				if (dayTimer >= DayLength)
-				{
-					dayTimer = 0;
-					dayNumber += 1;
-					makeFoods();
-				}
-
-				if (dayTimer < DayLength / 3) {
-					changeTimeOfDay('morning');
-				} else if (dayTimer < DayLength * 2 / 3) {
-					changeTimeOfDay('afternoon');
-				} else {
-					changeTimeOfDay('evening');
-				}
-
-				if (isDebugMode) {
-					var state = followers.map(function (x) { return x.getState(); });
-					var json = JSON.stringify(state, null, 4);
-					printToDebug(json);
-				}
+				updateTimeOfDay();
+				printDebugInfo();
 			});
 
-		var changeTimeOfDay = function (newTimeOfDay) {
-			if (timeOfDay != newTimeOfDay) {
-				timeOfDay = newTimeOfDay;
+		var printDebugInfo = function () {
+			if (!isDebugMode) { return; }
+			var state = followers.map(function (x) { return x.getState(); });
+			var json = JSON.stringify(state, null, 4);
+			printToDebug(json);
+		};
+
+		var updateTimeOfDay = function () {
+			if (dayTimer >= DayLength) {
+				advanceDay();
 			}
+			if (dayTimer < DayLength / 3) {
+				changeTimeOfDay('morning');
+			} else if (dayTimer < DayLength * 2 / 3) {
+				changeTimeOfDay('afternoon');
+			} else {
+				changeTimeOfDay('evening');
+			}
+		};
+
+		var advanceDay = function () {
+			dayTimer = 0;
+			dayNumber += 1;
+			makeFoods();
+		};
+
+		var changeTimeOfDay = function (newTimeOfDay) {
+			if (timeOfDay == newTimeOfDay) { return; }
+			timeOfDay = newTimeOfDay;
 			for (colorTime in timeColorBlocks) {
 				var block = timeColorBlocks[colorTime];
 				var alpha = colorTime == timeOfDay ? 1 : 0;
 				block.tween({alpha: alpha}, 100);
 			}
-		}
+		};
 
 		var timeColorBlocks = {
 			"morning": makeTimeOfDayColorBlock('rgb(150, 200, 200)'),
@@ -170,10 +179,6 @@ var printRituals = function() {
 		for (var i = 0; i < FOOD_COUNT; i++) {
 			makeAtRandomPosition(makeFood, "");
 		}
-	};
-
-	var makeAtRandomPosition = function (callback, thirdVar) {
-		callback(utils.getRandomX(), utils.getRandomY(), thirdVar);
 	};
 
 	var makeFood = function (x, y, unused) {
