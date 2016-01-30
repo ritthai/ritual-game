@@ -74,7 +74,7 @@ var actionTypes = [
 
 var LocationTypes = {
 	"graveyard": {"color": "rgb(75, 75, 75)", "happyChange": -0.1, "foodChange": 0},
-	"firepit": {"color": "rgb(200, 30, 40)", "happyChange": 0, "foodChange": -0.25},
+	"firepit": {"color": "rgb(200, 30, 40)", "happyChange": 0, "foodChange": -0.25, "image": "images/fire-place.png"},
 	"grove": {"color": "rgb(30, 70, 30)", "happyChange": 0.1, "foodChange": 0},
 	"farm": {"color": "rgb(150, 150, 30)", "happyChange": 0, "foodChange": 0.25},
 	"stone circle": {"color": "rgb(100, 100, 100)", "happyChange": 0, "foodChange": 0},
@@ -239,9 +239,21 @@ var printRituals = function() {
 	var makeLocation = function (x, y, locationType) {
 		var locWorks = {"player":0, "ai one":0, "ai two":0, "ai three":0};
 
-		var newLoc = Crafty.e("2D, Canvas, Color")
-			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType, works:locWorks})
-			.color(LocationTypes[locationType]["color"])
+		var loc = LocationTypes[locationType];
+		var newLoc;
+		if (loc["image"]) {
+			newLoc = Crafty.e("2D, Canvas, Image");
+		} else {
+			newLoc = Crafty.e("2D, Canvas, Color");
+		}
+		newLoc = newLoc
+			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType, works:locWorks});
+		if (loc["image"]) {
+			newLoc = newLoc.image(loc["image"]);
+		} else {
+			newLoc = newLoc.color(loc["color"]);
+		}
+		newLoc = newLoc
 			.bind("EnterFrame", function(e) {
 				if (locWorks["player"] + locWorks["ai one"] + locWorks["ai two"] + locWorks["ai three"] >= LocationMaxWork)
 				{

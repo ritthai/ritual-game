@@ -44,13 +44,13 @@ makeFollower = function (x, y, startCult) {
 		if (locationAt == loc && cultIn != cul)
 			happy -= FollowerProclaimPenalty;
 	};
-	
+
 	follower.getHappy = function(cul) {
 		if (cul == cultIn)
 			return happy;
 		return 0;
 	}
-	
+
 	follower.getFood = function(cul) {
 		if (cul == cultIn)
 			return food;
@@ -139,7 +139,7 @@ makeFollower = function (x, y, startCult) {
 			{
 				//you converted!
 				happy = 100;
-				
+
 				//switch to the happiest cult that's not yours
 				var bestOtherCult = null;
 				if (cultIn != "player")
@@ -151,9 +151,9 @@ makeFollower = function (x, y, startCult) {
 				if (cultIn != "ai three" && utils.getAverageHappy("ai three") > utils.getAverageHappy(bestOtherCult))
 					bestOtherCult = "ai three";
 				cultIn = bestOtherCult;
-				
+
 				//TODO: change sprite color
-				
+
 				return;
 			}
 
