@@ -111,9 +111,13 @@ makeFollower = function (x, y, startCult) {
 		}
 	}
 
+	var getCultColor = function (cult) {
+		return (cult == "player" ? "green" : (cult == "ai one" ? "purple" : (cult == "ai two" ? "blue" : "red")));
+	};
+
 	//main loop
 	var sprite = Crafty.e("2D, Canvas, Color")
-		.color((startCult == "player" ? "green" : (startCult == "ai one" ? "purple" : (startCult == "ai two" ? "blue" : "red"))))
+		.color(getCultColor(startCult))
 		.attr({x:x, y:y, w:20, h:20})
 		.bind("EnterFrame", function(e){
 
@@ -154,10 +158,9 @@ makeFollower = function (x, y, startCult) {
 					bestOtherCult = "ai two";
 				if (cultIn != "ai three" && utils.getAverageHappy("ai three") > utils.getAverageHappy(bestOtherCult))
 					bestOtherCult = "ai three";
+
 				cultIn = bestOtherCult;
-
-				//TODO: change sprite color
-
+				sprite.color(getCultColor(cultIn));
 				return;
 			}
 
