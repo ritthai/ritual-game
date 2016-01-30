@@ -4,6 +4,7 @@ var FollowerWorkTime = 10.0;
 var FollowerProclaimTime = 2.0;
 var FollowerFoodDrain = 0.5;
 var FollowerHappyDrain = 0.12;
+var FollowerFoodGatherDistance = 30;
 
 var FollowerSingBoost = 1;
 
@@ -13,7 +14,7 @@ makeFollower = function () {
 	//state variables
 	var food = 100,
 		happy = 100;
-		aiState = "travel",
+		aiState = "neutral",
 		xTarget = 0,
 		yTarget = 0,
 		skillTimer = 0,
@@ -29,22 +30,17 @@ makeFollower = function () {
 
 	//helper functions
 	var nearestFood = function () {
-		var nearest = null;
+		var nearest = -1;
 		var nearestDist = 0;
 		for (var food in foods)
 		{
-			if (nearest == null)
-				nearest = foods[food];
-			else
+			var xD = sprite.x - foods[food].x;
+			var yD = sprite.y - foods[food].y;
+			var dist = Math.sqrt(xD*xD+yD*yD);
+			if (nearest == -1 || dist < nearestDist)
 			{
-				var xD = sprite.x - foods[food].x;
-				var yD = sprite.y - foods[food].y;
-				var dist = Math.sqrt(xD*xD+yD*yD);
-				if (dist < nearestDist)
-				{
-					nearest = foods[food];
-					nearestDist = dist;
-				}
+				nearest = food;
+				nearestDist = dist;
 			}
 		}
 		return [nearest, nearestDist];
@@ -66,9 +62,16 @@ makeFollower = function () {
 			case "neutral":
 				//get a new AI state
 				//this can be based on
-				aiState = "travel";
-				xTarget = 640 * Math.random();
-				yTarget = 480 * Math.random();
+				
+				// aiState = "travel";
+				// xTarget = 640 * Math.random();
+				// yTarget = 480 * Math.random();
+				
+				//TODO: seek out food!
+				var nearFoodArray = nearestFood();
+				xTarget = foods[nearFoodArray[0]].x;
+				yTarget = foods[nearFoodArray[0]].y;
+				aiState = "gatherFood";
 
 				//TODO: check rituals list for rituals that are based on time, location, or proximity to people
 
@@ -77,7 +80,7 @@ makeFollower = function () {
 				skillTimer -= FrameRate;
 				if (skillTimer <= 0) {
 					followers.forEach(function (x) { x.feelJoyful() });
-					// TODO: reset skill
+					aiState = "neutral";
 				}
 				break;
 			case "proselytize":
@@ -116,7 +119,27 @@ makeFollower = function () {
 					{
 						//TODO: pick up food near your location
 						//or try again if it's all gone
-						
+						var nearFoodArray = nearestFood();
+						if (nearFoodArray[0] == -1)
+						{
+							//give up on getting food, it doesn't exist
+							aiState = "neutral";
+						}
+						if (nearFoodArray[1] <= FollowerFoodGatherDistance)
+						{
+							//you found food!
+							food = 100;
+							aiState = "neutral";
+							
+							foods[nearFoodArray[0]].destroy();
+							foods.splice(nearFoodArray[0], 1);
+						}
+						else
+						{
+							//go to that food
+							xTarget = foods[nearFoodArray[0]].x;
+							yTarget = foods[nearFoodArray[1]].y;
+						}
 					}
 					else
 					{
