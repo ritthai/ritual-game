@@ -3,7 +3,7 @@ var FollowerSingTime = 4.0;
 var FollowerWorkTime = 10.0;
 var FollowerProclaimTime = 2.0;
 var FollowerFoodDrain = 0.5;
-var FollowerHappyDrain = 0.12;
+var FollowerHappyDrain = 0.15;
 var FollowerFoodGatherDistance = 30;
 var FollowerSingBoost = 2;
 var FollowerProclaimPenalty = 2;
@@ -111,6 +111,13 @@ makeFollower = function (x, y, startCult) {
 				happy = 100;
 				//TODO: switch to the cult with the highest average happiness (BESIDES your own)
 				return;
+			}
+			
+			if (locationAt != "none")
+			{
+				//location bonuses and penalties
+				happy += LocationTypes[locationAt]["happyChange"] * FrameRate;
+				food += LocationTypes[locationAt]["foodChange"] * FrameRate;
 			}
 
 			//AI logic

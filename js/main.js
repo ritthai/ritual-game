@@ -29,13 +29,13 @@ var actionTypes = [
 ];
 
 var LocationTypes = {
-	"graveyard": "rgb(75, 75, 75)",
-	"firepit": "rgb(200, 30, 40)",
-	"grove": "rgb(30, 70, 30)",
-	"farm": "rgb(150, 150, 30)",
-	"stone circle": "rgb(100, 100, 100)",
-	"marsh": "rgb(60, 30, 10)",
-	"village": "rgb(100, 90, 30)",
+	"graveyard": {"color": "rgb(75, 75, 75)", "happyChange": -0.1, "foodChange": 0},
+	"firepit": {"color": "rgb(200, 30, 40)", "happyChange": 0, "foodChange": -0.25},
+	"grove": {"color": "rgb(30, 70, 30)", "happyChange": 0.1, "foodChange": 0},
+	"farm": {"color": "rgb(150, 150, 30)", "happyChange": 0, "foodChange": 0.25},
+	"stone circle": {"color": "rgb(100, 100, 100)", "happyChange": 0, "foodChange": 0},
+	"marsh": {"color": "rgb(60, 30, 10)", "happyChange": 0, "foodChange": 0},
+	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0},
 };
 var LocationSize = 120;
 
@@ -117,7 +117,7 @@ var utils = {};
 	var makeLocation = function (x, y, locationType) {
 		var newLoc = Crafty.e("2D, Canvas, Color")
 			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType})
-			.color(LocationTypes[locationType]);
+			.color(LocationTypes[locationType]["color"]);
 		locations.push(newLoc);
 	}
 
