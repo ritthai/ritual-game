@@ -1,3 +1,5 @@
+var FrameRate = (1.0 / 30);
+
 (function () {
 	var SCREEN_WIDTH = 640,
 		SCREEN_HEIGHT = 480;
