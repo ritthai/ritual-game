@@ -135,6 +135,13 @@ makeFollower = function (x, y, startCult) {
 		}
 	};
 
+	var applyLocationBonusAndPenalties = function () {
+		if (locationAt === "none") { return; }
+		var loc = LocationTypes[locationAt];
+		happy += loc["happyChange"] * FrameRate;
+		food += loc["foodChange"] * FrameRate;
+	};
+
 	var getHappiestOtherCult = function () {
 		var cults = ['player', 'ai one', 'ai two', 'ai three'];
 		var bestOtherCult = '';
@@ -154,16 +161,9 @@ makeFollower = function (x, y, startCult) {
 			if (paused) return;
 
 			handleNecessities();
-
-			if (locationAt != "none")
-			{
-				//location bonuses and penalties
-				happy += LocationTypes[locationAt]["happyChange"] * FrameRate;
-				food += LocationTypes[locationAt]["foodChange"] * FrameRate;
-			}
+			applyLocationBonusAndPenalties();
 
 			//AI logic
-
 			switch (aiState)
 			{
 			case "neutral":
