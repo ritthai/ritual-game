@@ -10,7 +10,7 @@ var FollowerProclaimPenalty = 2;
 
 var followers = [];
 
-makeFollower = function () {
+makeFollower = function (x, y) {
 	//state variables
 	var food = 100;
 	var happy = 100;
@@ -31,6 +31,18 @@ makeFollower = function () {
 	follower.feelHurt = function(loc, cul) {
 		if (locationAt == loc && cultIn != cul)
 			happy -= FollowerProclaimPenalty;
+	};
+
+	follower.getState = function () {
+		return {
+			food: food,
+			happy: happy,
+			aiState: aiState,
+			xTarget: xTarget,
+			yTarget: yTarget,
+			skillTimer: skillTimer,
+			cultNumber: cultNumber
+		};
 	};
 
 	followers.push(follower);
@@ -54,11 +66,11 @@ makeFollower = function () {
 		}
 		return [nearest, nearestDist];
 	};
-	
-	//main loop	
+
+	//main loop
 	var sprite = Crafty.e("2D, Canvas, Color")
 		.color("green")
-		.attr({x:10, y:10, w:20, h:20})
+		.attr({x:x, y:y, w:20, h:20})
 		.bind("EnterFrame", function(e){
 			//necessities
 			food -= FollowerFoodDrain * FrameRate;
@@ -86,7 +98,7 @@ makeFollower = function () {
 			case "neutral":
 				//get a new AI state
 				//this can be based on
-				
+
 				// aiState = "travel";
 				// xTarget = 640 * Math.random();
 				// yTarget = 480 * Math.random();
@@ -218,7 +230,7 @@ makeFollower = function () {
 							//you found food!
 							food = 100;
 							aiState = "neutral";
-							
+
 							foods[nearFoodArray[0]].destroy();
 							foods.splice(nearFoodArray[0], 1);
 						}
@@ -226,7 +238,7 @@ makeFollower = function () {
 						{
 							//go to that food
 							xTarget = foods[nearFoodArray[0]].x;
-							yTarget = foods[nearFoodArray[1]].y;
+							yTarget = foods[nearFoodArray[0]].y;
 						}
 					}
 					else

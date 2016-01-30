@@ -7,6 +7,12 @@ var rituals = {
 	"ai three": [],
 };
 
+var isDebugMode = false;
+
+var toggleDebugMode = function () {
+		isDebugMode = !isDebugMode;
+};
+
 var conditionTypes = [
 "morning",
 "afternoon",
@@ -56,7 +62,7 @@ var printRituals = function() {
 (function () {
 	var SCREEN_WIDTH = 640,
 		SCREEN_HEIGHT = 480,
-		FOOD_COUNT = 30;
+		FOOD_COUNT = 100;
 
 	var init = function () {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -66,7 +72,16 @@ var printRituals = function() {
 		makeScreen();
 		makeLocations();
 		makeFollower();
+		for (var i = 0; i < 50; i++) {
+			makeAtRandomPosition(makeFollower);
+		}
 		makeFoods();
+		setInterval(function(){
+			if (foods.length >= FOOD_COUNT) { return; }
+			for (var i = 0; i < 20; i++) {
+				makeAtRandomPosition(makeFood);
+			}
+		}, 300);
 	}
 	
 	var makeLocations = function () {
@@ -97,19 +112,26 @@ var printRituals = function() {
 				dayTimer += FrameRate;
 				if (dayTimer >= DayLength)
 					dayTimer = 0;
+
+				if (isDebugMode) {
+					var state = followers.map(function (x) { return x.getState(); });
+					var json = JSON.stringify(state, null, 4);
+					printToDebug(json);
+				}
 			});
 	};
 
 	var makeFoods = function () {
 		for (var i = 0; i < FOOD_COUNT; i++) {
-			makeRandomFood();
+			makeAtRandomPosition(makeFood);
 		}
 	};
 
-	var makeRandomFood = function () {
-		makeFood(
+	var makeAtRandomPosition = function (callback) {
+		callback(
 			Math.random() * SCREEN_WIDTH,
-			Math.random() * SCREEN_HEIGHT);
+			Math.random() * SCREEN_HEIGHT
+		);
 	};
 
 	var makeFood = function (x, y) {
@@ -121,3 +143,8 @@ var printRituals = function() {
 
 	init();
 }());
+
+var printToDebug = function (message) {
+	document.getElementById('debug-info').textContent;
+	document.getElementById('debug-info').textContent = message;
+};
