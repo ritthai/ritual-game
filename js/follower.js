@@ -13,7 +13,7 @@ var FollowerMaxRandomWander = 100;
 
 var followers = [];
 
-makeFollower = function (x, y) {
+makeFollower = function (x, y, startCult) {
 	//state variables
 	var food = 100;
 	var happy = 100;
@@ -21,7 +21,7 @@ makeFollower = function (x, y) {
 	var xTarget = 0;
 	var yTarget = 0;
 	var skillTimer = 0;
-	var cultIn = "player";
+	var cultIn = startCult;
 	var locationAt = "none";
 	var lethargy = -1;
 
@@ -91,7 +91,7 @@ makeFollower = function (x, y) {
 
 	//main loop
 	var sprite = Crafty.e("2D, Canvas, Color")
-		.color("green")
+		.color((startCult == "player" ? "green" : "red"))
 		.attr({x:x, y:y, w:20, h:20})
 		.bind("EnterFrame", function(e){
 			//necessities

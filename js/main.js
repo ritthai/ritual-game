@@ -78,14 +78,15 @@ var utils = {};
 
 		makeScreen();
 		makeLocations();
-		for (var i = 0; i < 50; i++) {
-			makeAtRandomPosition(makeFollower);
-		}
+		for (var i = 0; i < 25; i++)
+			makeAtRandomPosition(makeFollower, "player");
+		for (var i = 0; i < 50; i++)
+			makeAtRandomPosition(makeFollower, "ai one");
 		makeFoods();
 		setInterval(function(){
 			if (foods.length >= FOOD_COUNT) { return; }
 			for (var i = 0; i < 20; i++) {
-				makeAtRandomPosition(makeFood);
+				makeAtRandomPosition(makeFood, "");
 			}
 		}, 300);
 
@@ -93,6 +94,11 @@ var utils = {};
 		addRitual('player', 'afternoon', '', 'gatherFood', '');
 		addRitual('player', 'evening', '', 'travel', 'village');
 		addRitual('player', 'atLocation', 'graveyard', 'wander', '');
+		
+		addRitual('ai one', 'evening', '', 'travel', 'graveyard');;
+		addRitual('ai one', 'afternoon', '', 'gatherFood', '');
+		addRitual('ai one', 'evening', '', 'gatherFood', '');
+		addRitual('ai one', 'atLocation', 'village', 'travel', 'graveyard');;
 	}
 
 	var makeLocations = function () {
@@ -141,15 +147,15 @@ var utils = {};
 
 	var makeFoods = function () {
 		for (var i = 0; i < FOOD_COUNT; i++) {
-			makeAtRandomPosition(makeFood);
+			makeAtRandomPosition(makeFood, "");
 		}
 	};
 
-	var makeAtRandomPosition = function (callback) {
-		callback(getRandomX(), getRandomY());
+	var makeAtRandomPosition = function (callback, thirdVar) {
+		callback(getRandomX(), getRandomY(), thirdVar);
 	};
 
-	var makeFood = function (x, y) {
+	var makeFood = function (x, y, unused) {
 		var food = Crafty.e("2D, Canvas, Color")
 			.attr({x:x, y:y, w:10, h:10})
 			.color("rgb(50, 200, 50)");
