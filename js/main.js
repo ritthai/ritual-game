@@ -190,6 +190,7 @@ var printRituals = function() {
 				dayTimer += FrameRate;
 				updateTimeOfDay();
 				printDebugInfo();
+				printMeters();
 			});
 
 		var printDebugInfo = function () {

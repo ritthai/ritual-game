@@ -39,6 +39,18 @@ makeFollower = function (x, y, startCult) {
 		if (locationAt == loc && cultIn != cul)
 			happy -= FollowerProclaimPenalty;
 	};
+	
+	follower.getHappy = function(cul) {
+		if (cul == cultIn)
+			return happy;
+		return 0;
+	}
+	
+	follower.getFood = function(cul) {
+		if (cul == cultIn)
+			return food;
+		return 0;
+	}
 
 	follower.getState = function () {
 		return {
