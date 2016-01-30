@@ -26,6 +26,17 @@ makeFollower = function () {
 		happy += FollowerSingBoost;
 	};
 
+	follower.getState = function () {
+		return {
+			happy: happy,
+			aiState: aiState,
+			xTarget: xTarget,
+			yTarget: yTarget,
+			skillTimer: skillTimer,
+			cultNumber: cultNumber
+		};
+	};
+
 	followers.push(follower);
 
 	//helper functions
@@ -45,8 +56,8 @@ makeFollower = function () {
 		}
 		return [nearest, nearestDist];
 	};
-	
-	//main loop	
+
+	//main loop
 	var sprite = Crafty.e("2D, Canvas, Color")
 		.color("green")
 		.attr({x:10, y:10, w:20, h:20})
@@ -62,11 +73,11 @@ makeFollower = function () {
 			case "neutral":
 				//get a new AI state
 				//this can be based on
-				
+
 				// aiState = "travel";
 				// xTarget = 640 * Math.random();
 				// yTarget = 480 * Math.random();
-				
+
 				//TODO: seek out food!
 				var nearFoodArray = nearestFood();
 				xTarget = foods[nearFoodArray[0]].x;
@@ -130,7 +141,7 @@ makeFollower = function () {
 							//you found food!
 							food = 100;
 							aiState = "neutral";
-							
+
 							foods[nearFoodArray[0]].destroy();
 							foods.splice(nearFoodArray[0], 1);
 						}

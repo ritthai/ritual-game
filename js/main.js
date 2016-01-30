@@ -61,6 +61,11 @@ var printRituals = function() {
 			.bind("MouseMove", function(e) {
 			})
 			.bind("MouseDown", function(e) {
+			})
+			.bind("EnterFrame", function(e) {
+				var state = followers[0].getState();
+				var json = JSON.stringify(state, null, 4);
+				printToDebug(json);
 			});
 	};
 
@@ -85,3 +90,8 @@ var printRituals = function() {
 
 	init();
 }());
+
+var printToDebug = function (message) {
+	document.getElementById('debug-info').textContent;
+	document.getElementById('debug-info').textContent = message;
+};
