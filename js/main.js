@@ -4,6 +4,8 @@
 
 	var init = function () {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
+		
+		makeFollower();
 	}
 
 	init();
