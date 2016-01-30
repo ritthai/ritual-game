@@ -1,4 +1,41 @@
+var rituals = [];
 
+var conditionTypes = [
+"morning",
+"afternoon",
+"evening",
+"atLocation"
+];
+
+var actionTypes = [
+"gatherFood",
+"celebrate",
+"travel",
+"proselytize",
+"salvage"
+];
+
+var locations = [
+"graveyard",
+"lake"
+];
+
+var addRitual = function (
+	conditionType,
+	conditionParam,
+	actionType,
+	actionParam
+) {
+	rituals.push({
+		condition: {type: conditionType, param: conditionParam},
+		action: {type: actionType, param: actionParam}
+	});
+};
+
+var printRituals = function() {
+	var text = JSON.stringify(rituals, null, 4);
+	console.log(text);
+};
 
 (function () {
 	var SCREEN_WIDTH = 640,
