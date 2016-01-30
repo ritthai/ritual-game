@@ -5,7 +5,8 @@ var FollowerProclaimTime = 2.0;
 var FollowerFoodDrain = 0.5;
 var FollowerHappyDrain = 0.12;
 var FollowerFoodGatherDistance = 30;
-var FollowerSingBoost = 1;
+var FollowerSingBoost = 2;
+var FollowerProclaimPenalty = 2;
 
 var followers = [];
 
@@ -17,16 +18,24 @@ makeFollower = function () {
 	var xTarget = 0;
 	var yTarget = 0;
 	var skillTimer = 0;
-	var cultNumber = 0;
+	var cultIn = "player";
 	var locationAt = "none";
 
 	var follower = {};
 
-	follower.feelJoyful = function() {
-		happy += FollowerSingBoost;
+	follower.feelJoyful = function(loc, cul) {
+		if (locationAt == loc)
+			happy += (cul == cultIn ? 1 : 0.5) * FollowerSingBoost;
+	};
+	
+	follower.feelHurt = function(loc, cul) {
+		if (locationAt == loc && cultIn != cul)
+			happy -= FollowerProclaimPenalty;
 	};
 
 	followers.push(follower);
+	
+	//TODO: you should start at SOME location or another, not just at "none"
 
 	//helper functions
 	var nearestFood = function () {
@@ -83,11 +92,11 @@ makeFollower = function () {
 				// yTarget = 480 * Math.random();
 
 				//check rituals list for rituals that are based on time, location, or proximity to people
-				for (var ritual in rituals)
+				for (var ritual in rituals[cultIn])
 				{
 					//check the condition
 					var conditionSuccess = false;
-					switch(rituals[ritual].condition.type)
+					switch(rituals[cultIn][ritual].condition.type)
 					{
 					case "morning":
 						//is it morning?
@@ -103,13 +112,13 @@ makeFollower = function () {
 						break;
 					case "atLocation":
 						//are you there?
-						conditionSuccess = rituals[ritual].condition.param == locationAt;
+						conditionSuccess = rituals[cultIn][ritual].condition.param == locationAt;
 						break;
 					}
 					
 					if (conditionSuccess)
 					{
-						switch(rituals[ritual].action.type)
+						switch(rituals[cultIn][ritual].action.type)
 						{
 						case "gatherFood":
 							//is there food?
@@ -126,7 +135,7 @@ makeFollower = function () {
 							//get the location of the given position
 							for (var loc in locations)
 							{
-								if (locations[loc].locationType == rituals[ritual].action.param)
+								if (locations[loc].locationType == rituals[cultIn][ritual].action.param)
 								{
 									xTarget = locations[loc].x;
 									yTarget = locations[loc].y;
@@ -158,7 +167,7 @@ makeFollower = function () {
 			case "celebrate":
 				skillTimer -= FrameRate;
 				if (skillTimer <= 0) {
-					followers.forEach(function (x) { x.feelJoyful() });
+					followers.forEach(function (x) { x.feelJoyful(locationAt, cultIn) });
 					aiState = "neutral";
 				}
 				break;
@@ -166,7 +175,7 @@ makeFollower = function () {
 				skillTimer -= FrameRate;
 				if (skillTimer <= 0) {
 					//you proclaimed
-					//TODO: hurt everyone else's feelings
+					followers.forEach(function (x) { x.feelHurt(locationAt, cultIn) });
 					aiState = "neutral";
 				}
 				break;

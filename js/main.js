@@ -1,6 +1,11 @@
 var FrameRate = (1.0 / 30);
 
-var rituals = [];
+var rituals = {
+	"player": [],
+	"ai one": [],
+	"ai two": [],
+	"ai three": [],
+};
 
 var conditionTypes = [
 "morning",
@@ -31,12 +36,13 @@ var foods = [];
 var locations = [];
 
 var addRitual = function (
+	toCult,
 	conditionType,
 	conditionParam,
 	actionType,
 	actionParam
 ) {
-	rituals.push({
+	rituals[toCult].push({
 		condition: {type: conditionType, param: conditionParam},
 		action: {type: actionType, param: actionParam}
 	});
@@ -69,6 +75,8 @@ var printRituals = function() {
 		makeLocation(300, 75, "lake");
 		makeLocation(20, 300, "grove");
 	};
+	
+	//TODO: at the end of every day, before people issue new laws, make more food
 	
 	var makeLocation = function (x, y, locationType) {
 		var newLoc = Crafty.e("2D, Canvas, Color")
