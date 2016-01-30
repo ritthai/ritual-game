@@ -213,6 +213,10 @@ makeFollower = function (x, y, startCult) {
 							}
 						}
 						break;
+					case "seeDeath":
+						doOnce = true;
+						//TODO: this activates if someone has died in your area recently
+						break;
 					}
 					if (doOnce && followed.length > ritual && followed[ritual] == dayNumber)
 						conditionSuccess = false;
@@ -270,6 +274,9 @@ makeFollower = function (x, y, startCult) {
 							getRealLocation();
 							aiState = "salvage";
 							skillTimer = FollowerWorkTime;
+							break;
+						default:
+							console.log("ERROR: unknown result " + rituals[cultIn][ritual].action.type);
 							break;
 						}
 					}

@@ -19,11 +19,40 @@ var ais = {
 
 var AIScripts = {
 	"druid": {good:["grove", "stone circle", "marsh"], bad:["village", "graveyard", "fire pit"], rituals:
-						[["morning", "", "gatherFood", ""],
+						[
+						["morning", "", "gatherFood", ""],
 						["afternoon", "", "travel", "good"],
 						["atLocation", "bad", "wander", ""],
 						["bird", "", "celebrate", ""],
-						["evening", "", "celebrate", ""]]},
+						["evening", "", "celebrate", ""]]
+						},
+	
+	"cleric": {good:["village", "farm", "grove"], bad:["firepit", "graveyard", "marsh"], rituals:
+											[
+											["morning", "", "travel", "good"],
+											["morning", "", "salvage", ""],
+											["afternoon", "", "gatherFood", ""],
+											["afternoon", "", "salvage", ""],
+											["evening", "", "salvage", ""]]
+											},
+											
+	"nymph": {good:["firepit", "village", "grove"], bad:["marsh", "farm", "stone circle"], rituals:
+						[
+						["morning", "", "celebrate", ""],
+						["afternoon", "", "celebrate", ""],
+						["evening", "", "celebrate", ""],
+						["seeDeath", "", "gatherFood", ""],
+						["morning", "", "celebrate", ""]]
+						},
+						
+	"necromancer": {good:["graveyard", "marsh", "village"], bad:["grove", "farm", "fire pit"], rituals:
+						[
+						["seeDeath", "", "travel", "good"],
+						["atLocation", "good", "salvage", ""],
+						["evening", "", "gatherFood", ""],
+						["atLocation", "bad", "proselytize", ""],
+						["bird", "", "wander", ""]]
+						},
 };
 
 var conditionTypes = [
@@ -31,7 +60,8 @@ var conditionTypes = [
 	"afternoon",
 	"evening",
 	"atLocation",
-	"bird"
+	"bird",
+	"seeDeath"
 ];
 
 var actionTypes = [
@@ -83,6 +113,8 @@ var uiAddRitual = function () {
 		document.getElementById('action-locations').value
 		);
 	addRitualAI("ai one");
+	addRitualAI("ai two");
+	addRitualAI("ai three");
 	paused = false;
 };
 
