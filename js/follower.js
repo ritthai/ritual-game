@@ -210,6 +210,26 @@ makeFollower = function (x, y, startCult) {
 		return [conditionSuccess, doOnce];
 	};
 
+	var neutralWander = function () {
+		if (aiState == "neutral") {
+			//there are no rituals to follow
+			//so wander somewhere at random
+
+			if (lethargy == -1)
+				lethargy = (FollowerLethargyMax - FollowerLethargyMin) * Math.random() + FollowerLethargyMin;
+			else {
+				lethargy -= FrameRate;
+				if (lethargy <= 0) {
+					lethargy = -1;
+					xTarget = sprite.x + FollowerMaxRandomWander * 2 * Math.random() - FollowerMaxRandomWander;
+					yTarget = sprite.y + FollowerMaxRandomWander * 2 * Math.random() - FollowerMaxRandomWander;
+					aiState = "travel";
+					locationAt = "none";
+				}
+			}
+		}
+	};
+
 	var handleAiNeutral = function () {
 		getRealLocation();
 
@@ -291,26 +311,7 @@ makeFollower = function (x, y, startCult) {
 			}
 		}
 
-		if (aiState == "neutral")
-		{
-			//there are no rituals to follow
-			//so wander somewhere at random
-
-			if (lethargy == -1)
-				lethargy = (FollowerLethargyMax - FollowerLethargyMin) * Math.random() + FollowerLethargyMin;
-			else
-			{
-				lethargy -= FrameRate;
-				if (lethargy <= 0)
-				{
-					lethargy = -1;
-					xTarget = sprite.x + FollowerMaxRandomWander * 2 * Math.random() - FollowerMaxRandomWander;
-					yTarget = sprite.y + FollowerMaxRandomWander * 2 * Math.random() - FollowerMaxRandomWander;
-					aiState = "travel";
-					locationAt = "none";
-				}
-			}
-		}
+		neutralWander()
 	};
 
 	var performAiLogic = function () {
