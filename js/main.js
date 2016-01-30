@@ -1,5 +1,5 @@
-var SCREEN_WIDTH = 640;
-var SCREEN_HEIGHT = 480;
+var SCREEN_WIDTH = 800;
+var SCREEN_HEIGHT = 500;
 
 var FrameRate = (1.0 / 30);
 
@@ -18,7 +18,7 @@ var ais = {
 };
 
 var AIScripts = {
-	"druid": {good:["grove", "stone circle", "marsh"], bad:["village", "graveyard", "fire pit"], rituals:
+	"druid": {good:["grove", "stone circle", "marsh"], bad:["village", "graveyard", "firepit"], rituals:
 						[
 						["morning", "", "gatherFood", ""],
 						["afternoon", "", "travel", "good"],
@@ -45,7 +45,7 @@ var AIScripts = {
 						["morning", "", "celebrate", ""]]
 						},
 						
-	"necromancer": {good:["graveyard", "marsh", "village"], bad:["grove", "farm", "fire pit"], rituals:
+	"necromancer": {good:["graveyard", "marsh", "village"], bad:["grove", "farm", "firepit"], rituals:
 						[
 						["seeDeath", "", "travel", "good"],
 						["atLocation", "good", "salvage", ""],
@@ -231,13 +231,13 @@ var printRituals = function() {
 
 	var makeLocations = function () {
 		//make a list of locations
-		makeLocation(50, 25, "graveyard");
-		makeLocation(75, 175, "village");
-		makeLocation(25, 325, "grove");
-		makeLocation(400, 25, "stone circle");
-		makeLocation(425, 175, "firepit");
-		makeLocation(325, 325, "marsh");
-		makeLocation(225, 135, "farm");
+		makeLocation(60, 25, "graveyard");
+		makeLocation(135, 175, "village");
+		makeLocation(45, 325, "grove");
+		makeLocation(500, 25, "stone circle");
+		makeLocation(625, 175, "firepit");
+		makeLocation(525, 325, "marsh");
+		makeLocation(325, 135, "farm");
 	};
 
 	var makeLocation = function (x, y, locationType) {
