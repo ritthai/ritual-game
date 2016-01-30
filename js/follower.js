@@ -340,61 +340,64 @@ makeFollower = function (x, y, startCult) {
 				break;
 			case "travel":
 			case "gatherFood":
+				aiTravelGatherFood();
+				break;
+			}
+		});
 
-				//TODO: check rituals list for rituals that are based on location or proximity to moving things
+	var aiTravelGatherFood = function () {
+		//TODO: check rituals list for rituals that are based on location or proximity to moving things
 
-				//walk there at constant speed
-				var speedAdjusted = ((FollowerSpeed - FollowerSpeedStarving) * food * 0.01 + FollowerSpeedStarving) * FrameRate;
-				var xDif = xTarget - sprite.x;
-				var yDif = yTarget - sprite.y;
-				var dif = Math.sqrt(xDif*xDif+yDif*yDif);
+		//walk there at constant speed
+		var speedAdjusted = ((FollowerSpeed - FollowerSpeedStarving) * food * 0.01 + FollowerSpeedStarving) * FrameRate;
+		var xDif = xTarget - sprite.x;
+		var yDif = yTarget - sprite.y;
+		var dif = Math.sqrt(xDif*xDif+yDif*yDif);
 
-				if (dif <= speedAdjusted)
+		if (dif <= speedAdjusted)
+		{
+			sprite.x = xTarget;
+			sprite.y = yTarget;
+
+			if (aiState == "gatherFood")
+			{
+				//TODO: pick up food near your location
+				//or try again if it's all gone
+				var nearFoodArray = nearestFood();
+				if (nearFoodArray[0] == -1)
 				{
-					sprite.x = xTarget;
-					sprite.y = yTarget;
+					//give up on getting food, it doesn't exist
+					aiState = "neutral";
+				}
+				if (nearFoodArray[1] <= FollowerFoodGatherDistance)
+				{
+					//you found food!
+					food = 100;
+					aiState = "neutral";
 
-					if (aiState == "gatherFood")
-					{
-						//TODO: pick up food near your location
-						//or try again if it's all gone
-						var nearFoodArray = nearestFood();
-						if (nearFoodArray[0] == -1)
-						{
-							//give up on getting food, it doesn't exist
-							aiState = "neutral";
-						}
-						if (nearFoodArray[1] <= FollowerFoodGatherDistance)
-						{
-							//you found food!
-							food = 100;
-							aiState = "neutral";
-
-							if (nearFoodArray[0] != -1) {
-								foods[nearFoodArray[0]].destroy();
-								foods.splice(nearFoodArray[0], 1);
-							}
-						}
-						else
-						{
-							//go to that food
-							xTarget = foods[nearFoodArray[0]].x;
-							yTarget = foods[nearFoodArray[0]].y;
-						}
-					}
-					else
-					{
-						//you've reached the destination, so you can return to being neutral
-						aiState = "neutral";
+					if (nearFoodArray[0] != -1) {
+						foods[nearFoodArray[0]].destroy();
+						foods.splice(nearFoodArray[0], 1);
 					}
 				}
 				else
 				{
-					sprite.x += speedAdjusted * xDif / dif;
-					sprite.y += speedAdjusted * yDif / dif;
+					//go to that food
+					xTarget = foods[nearFoodArray[0]].x;
+					yTarget = foods[nearFoodArray[0]].y;
 				}
-				break;
 			}
-		});
+			else
+			{
+				//you've reached the destination, so you can return to being neutral
+				aiState = "neutral";
+			}
+		}
+		else
+		{
+			sprite.x += speedAdjusted * xDif / dif;
+			sprite.y += speedAdjusted * yDif / dif;
+		}
+	};
 
 };
