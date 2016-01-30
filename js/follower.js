@@ -46,8 +46,6 @@ makeFollower = function (x, y) {
 	};
 
 	followers.push(follower);
-	
-	//TODO: you should start at SOME location or another, not just at "none"
 
 	//helper functions
 	var nearestFood = function () {
@@ -66,6 +64,23 @@ makeFollower = function (x, y) {
 		}
 		return [nearest, nearestDist];
 	};
+	var getRealLocation = function() {
+		if (locationAt == "none")
+		{
+			var nearestDist = 999999;
+			for (var loc in locations)
+			{
+				var xD = sprite.x - locations[loc].x + (LocationSize / 2);
+				var yD = sprite.y - locations[loc].y + (LocationSize / 2);
+				var dist = Math.sqrt(xD*xD+yD*yD);
+				if (dist < nearestDist)
+				{
+					locationAt = locations[loc].locationType;
+					nearestDist = dist;
+				}
+			}
+		}
+	}
 
 	//main loop
 	var sprite = Crafty.e("2D, Canvas, Color")
@@ -96,13 +111,8 @@ makeFollower = function (x, y) {
 			switch (aiState)
 			{
 			case "neutral":
-				//get a new AI state
-				//this can be based on
-
-				// aiState = "travel";
-				// xTarget = 640 * Math.random();
-				// yTarget = 480 * Math.random();
-
+				getRealLocation();
+				
 				//check rituals list for rituals that are based on time, location, or proximity to people
 				for (var ritual in rituals[cultIn])
 				{
@@ -140,19 +150,24 @@ makeFollower = function (x, y) {
 								xTarget = foods[nearFoodArray[0]].x;
 								yTarget = foods[nearFoodArray[0]].y;
 								aiState = "gatherFood";
+								locationAt = "none";
 								break;
 							}
 							break;
 						case "travel":
 							//get the location of the given position
-							for (var loc in locations)
+							if (locationAt != rituals[cultIn][ritual].action.param)
 							{
-								if (locations[loc].locationType == rituals[cultIn][ritual].action.param)
+								for (var loc in locations)
 								{
-									xTarget = locations[loc].x;
-									yTarget = locations[loc].y;
-									aiState = "travel";
-									break;
+									if (locations[loc].locationType == rituals[cultIn][ritual].action.param)
+									{
+										xTarget = locations[loc].x + Math.random() * LocationSize;
+										yTarget = locations[loc].y + Math.random() * LocationSize;
+										aiState = "travel";
+										locationAt = "none";
+										break;
+									}
 								}
 							}
 							break;
