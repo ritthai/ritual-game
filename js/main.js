@@ -69,7 +69,8 @@ var actionTypes = [
 	"celebrate",
 	"travel",
 	"proselytize",
-	"salvage"
+	"salvage",
+	"wander"
 ];
 
 var LocationTypes = {
@@ -392,8 +393,10 @@ var printRituals = function() {
 			dayTimer = 0;
 			dayNumber += 1;
 			makeFoods();
-			paused = true;
-			document.getElementById('add-ritual-menu').style.display = 'block';
+			if (!document.getElementById('auto').checked) {
+				paused = true;
+				document.getElementById('add-ritual-menu').style.display = 'block';
+			}
 		};
 
 		var changeTimeOfDay = function (newTimeOfDay) {
