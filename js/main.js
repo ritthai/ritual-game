@@ -37,7 +37,6 @@ var LocationTypes = {
 };
 
 var makeUi = function () {
-	populateSelect(conditionTypes, 'condition-types');
 	var locations = [];
 	for (var loc in LocationTypes) {
 		locations.push(loc);
