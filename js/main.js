@@ -6,6 +6,7 @@
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 		makeScreen();
 		makeFollower();
+		makeFood();
 	}
 
 	var makeScreen = function () {
@@ -16,6 +17,12 @@
 			})
 			.bind("MouseDown", function(e) {
 			});
+	};
+
+	var makeFood = function () {
+		Crafty.e("2D, Canvas, Color")
+		.attr({x:100, y:100, w:10, h:10})
+		.color("rgb(50, 200, 50)");
 	};
 
 	init();
