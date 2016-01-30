@@ -1,12 +1,3 @@
-var FollowerAIAction = {
-	MOVE: 1,
-	SING: 2,
-	SEARCHFOOD: 3,
-	PROCLAIM: 4,
-	WORK: 5,
-	NEUTRAL: 6
-};
-
 var FollowerSpeed = 200;
 var FollowerSingTime = 4.0;
 var FollowerWorkTime = 10.0;
@@ -18,12 +9,15 @@ makeFollower = function () {
 	//state variables
 	var food = 100,
 		happy = 100;
-		aiState = FollowerAIAction.NEUTRAL,
+		aiState = "travel",
 		xTarget = 0,
 		yTarget = 0,
 		skillTimer = 0,
 		cultNumber = 0;
-	//follower constants
+	
+	//helper functions
+	
+	//main loop	
 	var sprite = Crafty.e("2D, Canvas, Color")
 		.color("green")
 		.attr({x:10, y:10, w:20, h:20})
@@ -36,17 +30,17 @@ makeFollower = function () {
 			
 			switch (aiState)
 			{
-			case FollowerAIAction.NEUTRAL:
+			case "neutral":
 				//get a new AI state
 				//this can be based on 
-				aiState = FollowerAIAction.MOVE;
+				aiState = "travel";
 				xTarget = 640 * Math.random();
 				yTarget = 480 * Math.random();
 				
 				//TODO: check rituals list for rituals that are based on time, location, or proximity to people
 				
 				break;
-			case FollowerAIAction.SING:
+			case "celebrate":
 				skillTimer -= FrameRate;
 				if (skillTimer <= 0)
 				{
@@ -54,7 +48,7 @@ makeFollower = function () {
 					//TODO: make everyone joyful
 				}
 				break;
-			case FollowerAIAction.PROCLAIM:
+			case "proselytize":
 				skillTimer -= FrameRate;
 				if (skillTimer <= 0)
 				{
@@ -62,7 +56,7 @@ makeFollower = function () {
 					//TODO: hurt everyone else's feelings
 				}
 				break;
-			case FollowerAIAction.WORK:
+			case "salvage":
 				skillTimer -= FrameRate;
 				if (skillTimer <= 0)
 				{
@@ -70,8 +64,8 @@ makeFollower = function () {
 					//TODO: bring about the fruits of your work
 				}
 				break;
-			case FollowerAIAction.MOVE:
-			case FollowerAIAction.SEARCHFOOD:
+			case "travel":
+			case "gatherFood":
 				
 				//TODO: check rituals list for rituals that are based on location or proximity to moving things
 				
@@ -86,8 +80,16 @@ makeFollower = function () {
 					sprite.x = xTarget;
 					sprite.y = yTarget;
 					
-					//you've reached the destination, so you can return to being neutral
-					aiState = FollowerAIAction.NEUTRAL;
+					if (aiState == "gatherFood")
+					{
+						//TODO: pick up food near your location
+						//or try again if it's all gone
+					}
+					else
+					{
+						//you've reached the destination, so you can return to being neutral
+						aiState = "neutral";
+					}
 				}
 				else
 				{
