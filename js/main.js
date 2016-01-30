@@ -66,6 +66,11 @@ var uiAddRitual = function () {
 		);
 };
 
+var uiClearRituals = function () {
+	var list = rituals.player;
+	list.splice(0, list.length);
+};
+
 var LocationSize = 120;
 var LocationMaxWork = 30;
 
