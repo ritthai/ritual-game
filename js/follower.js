@@ -10,10 +10,10 @@ var FollowerSingBoost = 1;
 
 var followers = [];
 
-makeFollower = function () {
+makeFollower = function (x, y) {
 	//state variables
 	var food = 100,
-		happy = 100;
+		happy = 100,
 		aiState = "neutral",
 		xTarget = 0,
 		yTarget = 0,
@@ -61,7 +61,7 @@ makeFollower = function () {
 	//main loop
 	var sprite = Crafty.e("2D, Canvas, Color")
 		.color("green")
-		.attr({x:10, y:10, w:20, h:20})
+		.attr({x:x, y:y, w:20, h:20})
 		.bind("EnterFrame", function(e){
 			//necessities
 			food -= FollowerFoodDrain * FrameRate;
@@ -150,7 +150,7 @@ makeFollower = function () {
 						{
 							//go to that food
 							xTarget = foods[nearFoodArray[0]].x;
-							yTarget = foods[nearFoodArray[1]].y;
+							yTarget = foods[nearFoodArray[0]].y;
 						}
 					}
 					else

@@ -1,5 +1,11 @@
 var FrameRate = (1.0 / 30);
 
+var isDebugMode = false;
+
+var toggleDebugMode = function () {
+		isDebugMode = !isDebugMode;
+};
+
 var rituals = [];
 
 var conditionTypes = [
@@ -44,14 +50,22 @@ var printRituals = function() {
 (function () {
 	var SCREEN_WIDTH = 640,
 		SCREEN_HEIGHT = 480,
-		FOOD_COUNT = 30;
+		FOOD_COUNT = 100;
 
 	var init = function () {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 		makeScreen();
-		makeFollower();
+		for (var i = 0; i < 50; i++) {
+			makeAtRandomPosition(makeFollower);
+		}
 		makeFoods();
+		setInterval(function(){
+			if (foods.length >= FOOD_COUNT) { return; }
+			for (var i = 0; i < 20; i++) {
+				makeAtRandomPosition(makeFood);
+			}
+		}, 300);
 	}
 
 	var makeScreen = function () {
@@ -63,22 +77,25 @@ var printRituals = function() {
 			.bind("MouseDown", function(e) {
 			})
 			.bind("EnterFrame", function(e) {
-				var state = followers[0].getState();
-				var json = JSON.stringify(state, null, 4);
-				printToDebug(json);
+				if (isDebugMode) {
+					var state = followers.map(function (x) { return x.getState(); });
+					var json = JSON.stringify(state, null, 4);
+					printToDebug(json);
+				}
 			});
 	};
 
 	var makeFoods = function () {
 		for (var i = 0; i < FOOD_COUNT; i++) {
-			makeRandomFood();
+			makeAtRandomPosition(makeFood);
 		}
 	};
 
-	var makeRandomFood = function () {
-		makeFood(
+	var makeAtRandomPosition = function (callback) {
+		callback(
 			Math.random() * SCREEN_WIDTH,
-			Math.random() * SCREEN_HEIGHT);
+			Math.random() * SCREEN_HEIGHT
+		);
 	};
 
 	var makeFood = function (x, y) {
