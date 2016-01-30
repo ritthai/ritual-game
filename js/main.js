@@ -35,6 +35,38 @@ var LocationTypes = {
 	"marsh": {"color": "rgb(60, 30, 10)", "happyChange": 0, "foodChange": 0},
 	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0},
 };
+
+var makeUi = function () {
+	populateSelect(conditionTypes, 'condition-types');
+	var locations = [];
+	for (var loc in LocationTypes) {
+		locations.push(loc);
+	}
+	populateSelect(conditionTypes, 'condition-types');
+	populateSelect(locations, 'condition-locations');
+	populateSelect(actionTypes, 'action-types');
+	populateSelect(locations, 'action-locations');
+};
+
+var populateSelect = function (list, id) {
+	list.forEach(function (x) {
+		var option = document.createElement('option');
+		var content = document.createTextNode(x);
+		option.appendChild(content);
+		option.setAttribute('value', x);
+		document.getElementById(id).appendChild(option);
+	});
+};
+
+var uiAddRitual = function () {
+	addRitual('player',
+		document.getElementById('condition-types').value,
+		document.getElementById('condition-locations').value,
+		document.getElementById('action-types').value,
+		document.getElementById('action-locations').value
+		);
+};
+
 var LocationSize = 120;
 var LocationMaxWork = 30;
 
@@ -64,6 +96,14 @@ var addRitual = function (
 	});
 };
 
+var printPlayerRituals = function() {
+	var text = '';
+	rituals.player.forEach(function (ritual) {
+		text += JSON.stringify(ritual) + '\n';
+	});
+	document.getElementById('rituals').textContent = text;
+};
+
 var printRituals = function() {
 	var text = JSON.stringify(rituals, null, 4);
 	console.log(text);
@@ -82,6 +122,7 @@ var printRituals = function() {
 		addRituals();
 		for (var i = 0; i < 3; i++)
 			makeAtRandomPosition(makeBird, "");
+		setTimeout(makeUi, 0);
 	};
 
 	var makeFollowers = function () {
@@ -92,7 +133,7 @@ var printRituals = function() {
 	};
 
 	var addRituals = function () {
-		addRitual('player', 'morning', '', 'travel', 'graveyard');;
+		addRitual('player', 'morning', '', 'travel', 'graveyard');
 		addRitual('player', 'afternoon', '', 'gatherFood', '');
 		addRitual('player', 'evening', '', 'travel', 'village');
 		addRitual('player', 'atLocation', 'graveyard', 'wander', '');
@@ -101,7 +142,7 @@ var printRituals = function() {
 		addRitual('ai one', 'bird', '', 'wander', '');
 		addRitual('ai one', 'afternoon', '', 'gatherFood', '');
 		addRitual('ai one', 'evening', '', 'gatherFood', '');
-		addRitual('ai one', 'atLocation', 'village', 'travel', 'graveyard');;
+		addRitual('ai one', 'atLocation', 'village', 'travel', 'graveyard');
 	};
 
 	var makeLocations = function () {
@@ -117,7 +158,7 @@ var printRituals = function() {
 
 	var makeLocation = function (x, y, locationType) {
 		var locWorks = {"player":0, "ai one":0, "ai two":0, "ai three":0};
-		
+
 		var newLoc = Crafty.e("2D, Canvas, Color")
 			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType, works:locWorks})
 			.color(LocationTypes[locationType]["color"])
@@ -132,7 +173,7 @@ var printRituals = function() {
 							if (locWorks["player"] >= locWorks["ai three"])
 								awardWorkTo = "player";
 							else
-								awardWorkTo = "ai three";	
+								awardWorkTo = "ai three";
 						}
 						else if (locWorks["ai two"] >= locWorks["ai three"])
 							awardWorkTo = "ai two";
@@ -153,7 +194,7 @@ var printRituals = function() {
 						else
 							awardWorkTo = "ai three";
 					}
-					
+
 					switch(locationType)
 					{
 					case "village":
@@ -170,7 +211,7 @@ var printRituals = function() {
 						//TODO: get a generic item
 						break;
 					}
-					
+
 					locWorks["player"] = 0;
 					locWorks["ai one"] = 0;
 					locWorks["ai two"] = 0;
@@ -191,6 +232,7 @@ var printRituals = function() {
 				updateTimeOfDay();
 				printDebugInfo();
 				printMeters();
+				printPlayerRituals();
 			});
 
 		var printDebugInfo = function () {
@@ -255,7 +297,7 @@ var printRituals = function() {
 			.color("rgb(50, 200, 50)");
 		foods.push(food);
 	};
-	
+
 	var makeBird = function (x, y, unused) {
 		var angle = Math.random() * Math.PI * 2;
 		var bird = Crafty.e("2D, Canvas, Color")
