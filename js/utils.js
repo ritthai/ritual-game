@@ -12,4 +12,6 @@ var utils = (function (){
 	return module;
 }());
 
-var i = 0;
+var makeAtRandomPosition = function (callback, thirdVar) {
+	callback(utils.getRandomX(), utils.getRandomY(), thirdVar);
+};
