@@ -112,7 +112,7 @@ makeFollower = function (x, y, startCult) {
 				//TODO: switch to the cult with the highest average happiness (BESIDES your own)
 				return;
 			}
-			
+
 			if (locationAt != "none")
 			{
 				//location bonuses and penalties
@@ -298,8 +298,10 @@ makeFollower = function (x, y, startCult) {
 							food = 100;
 							aiState = "neutral";
 
-							foods[nearFoodArray[0]].destroy();
-							foods.splice(nearFoodArray[0], 1);
+							if (nearFoodArray[0] != -1) {
+								foods[nearFoodArray[0]].destroy();
+								foods.splice(nearFoodArray[0], 1);
+							}
 						}
 						else
 						{

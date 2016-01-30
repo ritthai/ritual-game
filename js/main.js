@@ -17,7 +17,7 @@ var conditionTypes = [
 	"atLocation"
 ];
 
-	var actionTypes = [
+var actionTypes = [
 	"gatherFood",
 	"celebrate",
 	"travel",
@@ -76,12 +76,6 @@ var printRituals = function() {
 		for (var i = 0; i < 50; i++)
 			makeAtRandomPosition(makeFollower, "ai one");
 		makeFoods();
-		setInterval(function(){
-			if (foods.length >= FOOD_COUNT) { return; }
-			for (var i = 0; i < 20; i++) {
-				makeAtRandomPosition(makeFood, "");
-			}
-		}, 300);
 
 		addRitual('player', 'morning', '', 'travel', 'graveyard');;
 		addRitual('player', 'afternoon', '', 'gatherFood', '');
@@ -104,8 +98,6 @@ var printRituals = function() {
 		makeLocation(325, 325, "marsh");
 		makeLocation(225, 135, "farm");
 	};
-
-	//TODO: at the end of every day, before people issue new laws, make more food
 
 	var makeLocation = function (x, y, locationType) {
 		var newLoc = Crafty.e("2D, Canvas, Color")
@@ -131,6 +123,7 @@ var printRituals = function() {
 				{
 					dayTimer = 0;
 					dayNumber += 1;
+					makeFoods();
 				}
 
 				if (dayTimer < DayLength / 3) {
