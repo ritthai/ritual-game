@@ -59,6 +59,8 @@ var printRituals = function() {
 	console.log(text);
 };
 
+var utils = {};
+
 (function () {
 	var SCREEN_WIDTH = 640,
 		SCREEN_HEIGHT = 480,
@@ -82,17 +84,21 @@ var printRituals = function() {
 				makeAtRandomPosition(makeFood);
 			}
 		}, 300);
+
+		addRitual('player', 'morning', '', 'wander', '');;
+		addRitual('player', 'afternoon', '', 'gatherFood', '');
+		addRitual('player', 'evening', '', 'travel', 'lake');
 	}
-	
+
 	var makeLocations = function () {
 		//make a list of locations
 		makeLocation(50, 50, "graveyard");
 		makeLocation(300, 75, "lake");
 		makeLocation(20, 300, "grove");
 	};
-	
+
 	//TODO: at the end of every day, before people issue new laws, make more food
-	
+
 	var makeLocation = function (x, y, locationType) {
 		var newLoc = Crafty.e("2D, Canvas, Color")
 			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType})
@@ -128,10 +134,7 @@ var printRituals = function() {
 	};
 
 	var makeAtRandomPosition = function (callback) {
-		callback(
-			Math.random() * SCREEN_WIDTH,
-			Math.random() * SCREEN_HEIGHT
-		);
+		callback(getRandomX(), getRandomY());
 	};
 
 	var makeFood = function (x, y) {
@@ -140,6 +143,17 @@ var printRituals = function() {
 			.color("rgb(50, 200, 50)");
 		foods.push(food);
 	};
+
+	var getRandomX = function () {
+		return Math.random() * SCREEN_WIDTH;
+	};
+
+	var getRandomY = function () {
+		return Math.random() * SCREEN_HEIGHT;
+	};
+
+	utils.getRandomX = getRandomX;
+	utils.getRandomY = getRandomY;
 
 	init();
 }());

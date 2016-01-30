@@ -27,7 +27,7 @@ makeFollower = function (x, y) {
 		if (locationAt == loc)
 			happy += (cul == cultIn ? 1 : 0.5) * FollowerSingBoost;
 	};
-	
+
 	follower.feelHurt = function(loc, cul) {
 		if (locationAt == loc && cultIn != cul)
 			happy -= FollowerProclaimPenalty;
@@ -90,7 +90,7 @@ makeFollower = function (x, y) {
 			//necessities
 			food -= FollowerFoodDrain * FrameRate;
 			happy -= FollowerHappyDrain * FrameRate;
-			
+
 			if (food <= 0)
 			{
 				//you starved!
@@ -137,7 +137,7 @@ makeFollower = function (x, y) {
 						conditionSuccess = rituals[cultIn][ritual].condition.param == locationAt;
 						break;
 					}
-					
+
 					if (conditionSuccess)
 					{
 						switch(rituals[cultIn][ritual].action.type)
@@ -171,6 +171,11 @@ makeFollower = function (x, y) {
 								}
 							}
 							break;
+							case "wander":
+								xTarget = utils.getRandomX();
+								yTarget = utils.getRandomY();
+								aiState = "travel";
+								break;
 						case "celebrate":
 							aiAction = "celebrate";
 							skillTimer = FollowerSingTime;
@@ -185,7 +190,7 @@ makeFollower = function (x, y) {
 							break;
 						}
 					}
-					
+
 					if (aiState != "neutral")
 						break; //stop checking
 				}
