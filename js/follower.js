@@ -37,7 +37,7 @@ makeFollower = function (x, y, startCult) {
 			if (happy > 100)
 				happy = 100;
 		}
-			
+
 	};
 
 	follower.feelHurt = function(loc, cul) {
@@ -56,6 +56,10 @@ makeFollower = function (x, y, startCult) {
 			return food;
 		return 0;
 	}
+
+	follower.getCult = function() {
+		return cultIn;
+	};
 
 	follower.getState = function () {
 		return {
@@ -107,15 +111,19 @@ makeFollower = function (x, y, startCult) {
 		}
 	}
 
+	var getCultColor = function (cult) {
+		return (cult == "player" ? "green" : (cult == "ai one" ? "purple" : (cult == "ai two" ? "blue" : "red")));
+	};
+
 	//main loop
 	var sprite = Crafty.e("2D, Canvas, Color")
-		.color((startCult == "player" ? "green" : (startCult == "ai one" ? "purple" : (startCult == "ai two" ? "blue" : "red"))))
+		.color(getCultColor(startCult))
 		.attr({x:x, y:y, w:20, h:20})
 		.bind("EnterFrame", function(e){
-			
+
 			if (paused)
 				return;
-			
+
 			//necessities
 			food -= FollowerFoodDrain * FrameRate;
 			happy -= FollowerHappyDrain * FrameRate;
@@ -124,7 +132,7 @@ makeFollower = function (x, y, startCult) {
 			{
 				//you starved!
 				sprite.destroy();
-				
+
 				//remove from the followers list
 				for (var fol in followers)
 					if (followers[fol] == follower)
@@ -132,7 +140,7 @@ makeFollower = function (x, y, startCult) {
 						followers.splice(fol, 1);
 						break;
 					}
-				
+
 				return;
 			}
 			if (happy <= 0)
@@ -150,10 +158,9 @@ makeFollower = function (x, y, startCult) {
 					bestOtherCult = "ai two";
 				if (cultIn != "ai three" && utils.getAverageHappy("ai three") > utils.getAverageHappy(bestOtherCult))
 					bestOtherCult = "ai three";
+
 				cultIn = bestOtherCult;
-
-				//TODO: change sprite color
-
+				sprite.color(getCultColor(cultIn));
 				return;
 			}
 
