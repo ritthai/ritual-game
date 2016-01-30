@@ -122,7 +122,21 @@ makeFollower = function (x, y, startCult) {
 			{
 				//you converted!
 				happy = 100;
-				//TODO: switch to the cult with the highest average happiness (BESIDES your own)
+				
+				//switch to the happiest cult that's not yours
+				var bestOtherCult = null;
+				if (cultIn != "player")
+					bestOtherCult = "player";
+				if (cultIn != "ai one" && utils.getAverageHappy("ai one") > utils.getAverageHappy(bestOtherCult))
+					bestOtherCult = "ai one";
+				if (cultIn != "ai two" && utils.getAverageHappy("ai two") > utils.getAverageHappy(bestOtherCult))
+					bestOtherCult = "ai two";
+				if (cultIn != "ai three" && utils.getAverageHappy("ai three") > utils.getAverageHappy(bestOtherCult))
+					bestOtherCult = "ai three";
+				cultIn = bestOtherCult;
+				
+				//TODO: change sprite color
+				
 				return;
 			}
 

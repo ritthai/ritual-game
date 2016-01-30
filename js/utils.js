@@ -49,7 +49,6 @@ var utils = (function (){
 }());
 
 var printMeters = function() {
-	document.getElementById('meter-info').textContent;
 	document.getElementById('meter-info').textContent = "FOOD = " + utils.getAverageFood("player").toFixed(1) + ", HAPPY = " + utils.getAverageHappy("player").toFixed(1);
 }
 
