@@ -112,6 +112,10 @@ makeFollower = function (x, y, startCult) {
 		.color((startCult == "player" ? "green" : "red"))
 		.attr({x:x, y:y, w:20, h:20})
 		.bind("EnterFrame", function(e){
+			
+			if (paused)
+				return;
+			
 			//necessities
 			food -= FollowerFoodDrain * FrameRate;
 			happy -= FollowerHappyDrain * FrameRate;
@@ -120,7 +124,15 @@ makeFollower = function (x, y, startCult) {
 			{
 				//you starved!
 				sprite.destroy();
-				//TODO: remove from the followers list
+				
+				//remove from the followers list
+				for (var fol in followers)
+					if (followers[fol] == follower)
+					{
+						followers.splice(fol, 1);
+						break;
+					}
+				
 				return;
 			}
 			if (happy <= 0)

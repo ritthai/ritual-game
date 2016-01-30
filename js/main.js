@@ -36,6 +36,8 @@ var LocationTypes = {
 	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0},
 };
 
+var paused = true;
+
 var makeUi = function () {
 	var locations = [];
 	for (var loc in LocationTypes) {
@@ -64,6 +66,7 @@ var uiAddRitual = function () {
 		document.getElementById('action-types').value,
 		document.getElementById('action-locations').value
 		);
+	paused = false;
 };
 
 var uiClearRituals = function () {
@@ -78,7 +81,7 @@ var birds = [];
 var BirdSpeed = 300;
 
 
-var DayLength = 50;
+var DayLength = 30;
 var dayTimer = 0;
 var dayNumber = 1;
 
@@ -94,6 +97,9 @@ var addRitual = function (
 	actionType,
 	actionParam
 ) {
+	if (!paused)
+		return;
+	
 	rituals[toCult].push({
 		condition: {type: conditionType, param: conditionParam},
 		action: {type: actionType, param: actionParam}
@@ -123,7 +129,6 @@ var printRituals = function() {
 		makeLocations();
 		makeFollowers();
 		makeFoods();
-		addRituals();
 		for (var i = 0; i < 3; i++)
 			makeAtRandomPosition(makeBird, "");
 		setTimeout(makeUi, 0);
@@ -134,19 +139,6 @@ var printRituals = function() {
 			makeAtRandomPosition(makeFollower, "player");
 		for (var i = 0; i < 50; i++)
 			makeAtRandomPosition(makeFollower, "ai one");
-	};
-
-	var addRituals = function () {
-		addRitual('player', 'morning', '', 'travel', 'graveyard');
-		addRitual('player', 'afternoon', '', 'gatherFood', '');
-		addRitual('player', 'evening', '', 'travel', 'village');
-		addRitual('player', 'atLocation', 'graveyard', 'wander', '');
-
-		addRitual('ai one', 'evening', '', 'travel', 'graveyard');;
-		addRitual('ai one', 'bird', '', 'wander', '');
-		addRitual('ai one', 'afternoon', '', 'gatherFood', '');
-		addRitual('ai one', 'evening', '', 'gatherFood', '');
-		addRitual('ai one', 'atLocation', 'village', 'travel', 'graveyard');
 	};
 
 	var makeLocations = function () {
@@ -232,10 +224,13 @@ var printRituals = function() {
 			.bind("MouseMove", function(e) {})
 			.bind("MouseDown", function(e) {})
 			.bind ("EnterFrame", function(e) {
-				dayTimer += FrameRate;
-				updateTimeOfDay();
-				printDebugInfo();
+				if (!paused)
+				{
+					dayTimer += FrameRate;
+					updateTimeOfDay();
+				}
 				printMeters();
+				printDebugInfo();
 				printPlayerRituals();
 			});
 
@@ -263,6 +258,7 @@ var printRituals = function() {
 			dayTimer = 0;
 			dayNumber += 1;
 			makeFoods();
+			paused = true;
 		};
 
 		var changeTimeOfDay = function (newTimeOfDay) {
@@ -308,16 +304,19 @@ var printRituals = function() {
 			.attr({x:x, y:y, w:10, h:10})
 			.color("rgb(240, 240, 240)")
 			.bind("EnterFrame", function(e) {
-				bird.x += Math.cos(angle) * FrameRate * BirdSpeed;
-				bird.y += Math.sin(angle) * FrameRate * BirdSpeed;
-				if (bird.x < 0)
-					bird.x += SCREEN_WIDTH;
-				if (bird.x > SCREEN_WIDTH)
-					bird.x -= SCREEN_WIDTH;
-				if (bird.y < 0)
-					bird.y += SCREEN_HEIGHT;
-				if (bird.y > SCREEN_HEIGHT)
-					bird.y -= SCREEN_HEIGHT;
+				if (!paused)
+				{
+					bird.x += Math.cos(angle) * FrameRate * BirdSpeed;
+					bird.y += Math.sin(angle) * FrameRate * BirdSpeed;
+					if (bird.x < 0)
+						bird.x += SCREEN_WIDTH;
+					if (bird.x > SCREEN_WIDTH)
+						bird.x -= SCREEN_WIDTH;
+					if (bird.y < 0)
+						bird.y += SCREEN_HEIGHT;
+					if (bird.y > SCREEN_HEIGHT)
+						bird.y -= SCREEN_HEIGHT;
+				}
 			});
 		birds.push(bird);
 	};
