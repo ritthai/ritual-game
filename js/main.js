@@ -207,7 +207,7 @@ var makeUi = function () {
 	populateSelect(cults, 'follower-cult');
 	
 	
-	//sample starting items
+	//TODO: remove these! they're just for testing
 	makeItem("stolen jewelry", "player");
 	makeItem("wild totem", "player");
 	makeItem("bag of food", "player");
