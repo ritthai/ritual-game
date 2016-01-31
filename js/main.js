@@ -61,11 +61,11 @@ var AIScripts = {
 
 	"nymph": {good:["firepit", "village", "grove"], bad:["marsh", "farm", "stone circle"], rituals:
 						[
-						["morning", "", "celebrate", ""],
-						["afternoon", "", "celebrate", ""],
-						["evening", "", "celebrate", ""],
+						["morning", "", "travel", "good"],
+						["atLocation", "good", "celebrate", ""],
+						["afternoon", "", "wander", ""],
 						["seeDeath", "", "gatherFood", ""],
-						["morning", "", "celebrate", ""]]
+						["atLocation", "bad", "gatherFood", ""]]
 						},
 
 	"necromancer": {good:["graveyard", "marsh", "village"], bad:["grove", "farm", "firepit"], rituals:
