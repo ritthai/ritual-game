@@ -104,31 +104,39 @@ var makeLabel = function(dontMake) {
 			textElements.push("You gained " + (newPop - labelPopRecord).toFixed(0) + " followers that day.");
 		else if (newPop < labelPopRecord)
 			textElements.push("You lost " + (labelPopRecord - newPop).toFixed(0) + " followers that day.");
-		if (newFood < labelFoodRecord)
-			textElements.push("Your followers became " + (labelFoodRecord - newFood).toFixed(1) + "% hungrier that day.");
-		else if (newFood > labelFoodRecord)
-			textElements.push("Your followers became " + (newFood - labelFoodRecord).toFixed(1) + "% more well-fed that day.");
-		if (newHappy < labelHappyRecord)
-			textElements.push("Your followers became " + (labelHappyRecord - newHappy).toFixed(1) + "% more miserable that day.");
-		else if (newHappy > labelHappyRecord)
-			textElements.push("Your followers became " + (newHappy - labelHappyRecord).toFixed(1) + "% happier that day.");
+		if (Math.abs(newFood - labelFoodRecord) > 0.1)
+		{
+			if (newFood < labelFoodRecord)
+				textElements.push("Your followers became " + (labelFoodRecord - newFood).toFixed(1) + "% hungrier that day.");
+			else
+				textElements.push("Your followers became " + (newFood - labelFoodRecord).toFixed(1) + "% more well-fed that day.");
+		}
+		if (Math.abs(newHappy - labelHappyRecord) > 0.1)
+		{
+			if (newHappy < labelHappyRecord)
+				textElements.push("Your followers became " + (labelHappyRecord - newHappy).toFixed(1) + "% more miserable that day.");
+			else
+				textElements.push("Your followers became " + (newHappy - labelHappyRecord).toFixed(1) + "% happier that day.");
+		}
 		
 		var text = "You survived to day " + dayNumber + "!";
 		if (textElements.length > 0)
 			text += "<br/>" + textElements.join("<br/>");
 	
-		var label = Crafty.e("2D, DOM, Text, CSS")
+		var textLabel = Crafty.e("2D, DOM, Text, CSS, Tween")
 			.attr({x: 0, y: 40, w: SCREEN_WIDTH})
 			.text(text)
-			.css({"text-align": "center", "color": "white"})
+			.textFont({size: "20px"})
+			.unselectable()
+			.css({"text-align": "center", "color": "white", "text-shadow": "0px 3px #000000"})
 			.bind("EnterFrame", function(e) {
-				if (!paused && label.alpha == 1)
+				if (!paused && textLabel.alpha == 1)
 				{
-					label.alpha = 0.9999;
-					label.tween({alpha: 0}, 80);
+					textLabel.alpha = 0.9999;
+					textLabel.tween({alpha: 0}, 1000);
 				}
-				if (label.alpha <= 0)
-					label.destroy();
+				if (textLabel.alpha <= 0)
+					textLabel.destroy();
 			});
 	}
 	
@@ -172,13 +180,19 @@ var uiAddRitual = function () {
 	addRitualAI("ai one");
 	addRitualAI("ai two");
 	addRitualAI("ai three");
-	uiUnpause();
+	uiUnpauseInner();
 };
 
-var uiUnpause = function () {
+var uiUnpauseInner = function () {
 	document.getElementById('add-ritual-menu').style.display = 'none';
 	paused = false;
 	dayTimer = 0;
+}
+var uiUnpause = function () {
+	addRitualAI("ai one");
+	addRitualAI("ai two");
+	addRitualAI("ai three");
+	uiUnpauseInner();
 };
 
 var addRitualAI = function(ai) {
@@ -450,13 +464,11 @@ var printRituals = function() {
 		var advanceDay = function () {
 			dayNumber += 1;
 			paused = true;
+			makeLabel();
 			if (document.getElementById('auto').checked)
 				uiUnpause();
 			else
-			{
-				makeLabel();
 				document.getElementById('add-ritual-menu').style.display = 'block';
-			}
 		};
 
 		var changeTimeOfDay = function (newTimeOfDay) {
@@ -465,7 +477,7 @@ var printRituals = function() {
 			for (colorTime in timeColorBlocks) {
 				var block = timeColorBlocks[colorTime];
 				var alpha = colorTime == timeOfDay ? 1 : 0;
-				block.tween({alpha: alpha}, 100);
+				block.tween({alpha: alpha}, 800);
 			}
 		};
 
