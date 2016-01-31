@@ -379,10 +379,7 @@ var uiUnpauseInner = function () {
 	document.getElementById('add-ritual-menu').style.display = 'none';
 	paused = false;
 	dayTimer = 0;
-	if (!hasPlayedMusicOnce) {
-		startMusic();
-		hasPlayedMusicOnce = true;
-	}
+	startMusic();
 }
 var uiUnpause = function () {
 	addRitualAI("ai one");
@@ -507,14 +504,49 @@ var printRituals = function() {
 	console.log(text);
 };
 
-var hasPlayedMusicOnce;
-
-var startMusic = function () {
+var setUpMusic = function () {
 	Crafty.audio.add("backgroundMusic", [
 		"audio/ggj-song.ogg",
 		"audio/ggj-song.mp3"
 	]);
-	Crafty.audio.play("backgroundMusic", 1);
+	Crafty.audio.add("violin", [
+		"audio/violin-ritual.ogg",
+		"audio/violin-ritual.mp3"
+	]);
+	Crafty.audio.add("recorder", [
+		"audio/ggj-recorder.ogg",
+		"audio/ggj-recorder.mp3"
+	]);
+	Crafty.audio.add("food", [
+		"audio/food-chime.ogg",
+		"audio/food-chime.mp3"
+	]);
+	Crafty.audio.add("dnb", [
+		"audio/dnb.ogg",
+		"audio/dnb.mp3"
+	]);
+};
+
+var startMusic = function () {
+	if (dayNumber === 1) {
+		Crafty.audio.play("backgroundMusic", 1);
+	}
+	if (dayNumber === 5) {
+		Crafty.audio.play("recorder", 1);
+	}
+	if (dayNumber === 6) {
+		Crafty.audio.play("violin", 1);
+	}
+};
+
+var playFoodSound = function () {
+	Crafty.audio.play("food", 1);
+};
+
+var playCelebrateSound = function () {
+	if (!Crafty.audio.isPlaying("dnb")) {
+		Crafty.audio.play("dnb", 1);
+	}
 };
 
 (function () {
@@ -536,7 +568,7 @@ var startMusic = function () {
 		//initialize label data tracking
 		labelDataTrack();
 
-		hasPlayedMusicOnce = false;
+		setUpMusic();
 	};
 
 	var makeFollowers = function () {

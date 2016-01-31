@@ -31,7 +31,7 @@ makeFollower = function (x, y, startCult) {
 	var follower = {};
 
 	var followed = [];
-	
+
 	follower.useItem = function(cul, feed, joy) {
 		if (cul == cultIn)
 		{
@@ -371,6 +371,7 @@ makeFollower = function (x, y, startCult) {
 				if (skillTimer <= 0) {
 					followers.forEach(function (x) { x.feelJoyful(locationAt, cultIn) });
 					aiState = "neutral";
+					playCelebrateSound();
 				}
 				break;
 			case "proselytize":
@@ -429,6 +430,7 @@ makeFollower = function (x, y, startCult) {
 					if (nearFoodArray[0] != -1) {
 						foods[nearFoodArray[0]].destroy();
 						foods.splice(nearFoodArray[0], 1);
+						playFoodSound();
 					}
 				}
 				else
