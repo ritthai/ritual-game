@@ -43,7 +43,7 @@ span {
 
 		<div id="add-ritual-menu">
 			<p>
-				You are the cult leader of the red cloacked "heroes"! Our people seek rituals to direct our misguided lives and triumph against the heathens of this forsaken land. Preach to us.
+				You are the cult leader of the red cloacked "heroes"! Our people seek rituals to direct our misguided lives and triumph against the heathens. Preach to us. (<a href ="#instructions">More...</a>)
 			</p>
 			<select id="condition-types" onchange="makeUiCond()"></select> <select id="condition-locations"></select><br />
 			<select id="action-types" onchange="makeUiAct()"></select> <select id="action-locations"></select><br />
@@ -52,20 +52,20 @@ span {
 		</div>
 
 		<div id="extra-ritual-menu">
-		<button onclick="uiClearRituals()">Banish Existing Rituals</button>
-		<input id="auto" type="checkbox" /> Automatically Continue with Existing Rituals
+			<input id="auto" type="checkbox" /> Automatically Continue with Existing Rituals
+			<button onclick="uiClearRituals()">Banish Existing Rituals</button>
 		</div>
 	</div>
 	<pre id="rituals"></pre>
 	Items:<br/>
 	<pre id="items"></pre>
 
-	<button onclick="toggleDebugMode()">Toggle detailed follower info</button>
+	<button onclick="toggleDebugMode()">Show / Hide detailed follower info</button>
 	from cult: <select id="follower-cult"></select>
 
 	<pre id="debug-info"></pre>
 
-	<h3>Wisdom of the Ascended</h3>
+	<h3 id="instructions">Wisdom of the Ascended</h3>
 
 	<p>Food and happiness are both essential.</p>
 
@@ -78,6 +78,8 @@ span {
 	<p>Celebration is the most straightforward way to create happiness, and it is most effective in groups. When a follower celebrates, all followers in that location become happier. Even followers of other cults start feeling better, but only half as much as us true believers.</p>
 
 	<p>If we wish to convert others to our cause though, we must lower their happiness. Preach a ritual of berating the heathens to our followers, and any heathen in the same location as a follower who is berating will lose happiness.</p>
+
+	<h4>Be Productive</h4>
 
 	<p>But life is more than mere survival. Preach a ritual of being productive to our followers, and they will work whatever location they are in. These lands hold bounty of all sorts.</p>
 

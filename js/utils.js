@@ -32,7 +32,7 @@ var utils = (function (){
 	var getFollowersForCult = function (cult) {
 		return followers.filter(function (x) { return x.getCult() === cult; });
 	};
-	
+
 	module.detectLeader = function () {
 		//does anyone have enough people to have the needed majority?
 		var ai1 = module.getFollowerCount("ai one");
@@ -64,7 +64,7 @@ var utils = (function (){
 			return "player";
 		return null;
 	};
-	
+
 	module.detectInstantWinner = function (cult_count) {
 		var ai1 = module.getFollowerCount("ai one");
 		var ai2 = module.getFollowerCount("ai two");
@@ -97,7 +97,7 @@ var utils = (function (){
 			return "player";
 		return null;
 	}
-	
+
 	module.getAliasFor = function(key){
 		if (aliases[key] != null)
 			return aliases[key];
@@ -105,7 +105,7 @@ var utils = (function (){
 		//is it a cult?
 		if (ais[key] != null)
 			return ais[key];
-		
+
 		//it's a location I guess
 		return key;
 	};
@@ -115,10 +115,10 @@ var utils = (function (){
 
 var aliases = {
 	"gatherFood": "search for food",
-	"celebrate": "celebrate",
+	"celebrate": "celebrate (raise happiness of nearby followers)",
 	"travel": "travel to the",
-	"proselytize": "berate the heathens",
-	"salvage": "be productive",
+	"proselytize": "berate heathens (drop happiness of nearby enemy cult followers)",
+	"salvage": "be productive (see Wisdom of the Ascended below)",
 	"wander": "wander the lands",
 	"morning": "In the morning",
 	"evening": "In the evening",
@@ -131,9 +131,10 @@ var aliases = {
 
 var printMeters = function() {
 	document.getElementById('meter-info').textContent =
-		"FOOD = " + utils.getAverageFood("player").toFixed(1) + ", " +
-		"HAPPY = " + utils.getAverageHappy("player").toFixed(1) + ", " +
-		"FOLLOWERS = " + utils.getFollowerCount("player").toFixed(0);
+		"Avg Food = " + utils.getAverageFood("player").toFixed(1) + ", " +
+		"Avg Happiness = " + utils.getAverageHappy("player").toFixed(1) + ", " +
+		"Followers = " + utils.getFollowerCount("player").toFixed(0);
+
 
 }
 

@@ -165,9 +165,9 @@ var makeLabel = function(dontMake) {
 		if (labelWinner == null)
 			text = "You survived to day " + dayNumber + "!";
 		else if (labelWinner == "player")
-			text = "You won on day " + dayNumber + "!";
+			text = "You won on day " + labelWinnerDay + "!";
 		else
-			text = "You lost to " + utils.getAliasFor(labelWinner) + " on day " + dayNumber + "!";
+			text = "You lost to " + utils.getAliasFor(labelWinner) + " on day " + labelWinnerDay + "!";
 		if (textElements.length > 0)
 			text += "<br/>" + textElements.join("<br/>");
 
