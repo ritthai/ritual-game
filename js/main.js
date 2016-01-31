@@ -761,7 +761,8 @@ var playCelebrateSound = function () {
 				.filter(function (x) { return x.cultIn === followerCult; });
 			// var json = JSON.stringify(state, null, 4);
 			//nicer-looking follower info
-			var json = state.map(function(x) { return "Food = " + x["food"] + ", Happiness = " + x["happy"] + ", located at " + x["locationAt"]; })
+			var json = state.map(function(x) { return "Food = " + x["food"].toFixed(1) + ", Happiness = " + x["happy"].toFixed(1) +
+														(x["locationAt"] != "none" ? ", located at " + x["locationAt"] : ""); })
 			printToDebug(json.join("\n"));
 		};
 
