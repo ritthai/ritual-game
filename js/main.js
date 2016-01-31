@@ -923,6 +923,8 @@ var playCelebrateSound = function () {
 				{
 					bird.x += Math.cos(angle) * FrameRate * BirdSpeed;
 					bird.y += Math.sin(angle) * FrameRate * BirdSpeed;
+					var oldX = bird.x;
+					var oldY = bird.y;
 					if (bird.x < 0)
 						bird.x += SCREEN_WIDTH;
 					if (bird.x > SCREEN_WIDTH)
@@ -931,6 +933,12 @@ var playCelebrateSound = function () {
 						bird.y += SCREEN_HEIGHT;
 					if (bird.y > SCREEN_HEIGHT)
 						bird.y -= SCREEN_HEIGHT;
+					
+					//change the bird's angle a bit
+					var change = 0.1;
+					if (oldX != bird.x || oldY != bird.y)
+						change = 0.5;
+					angle += Math.random() * change - change / 2;
 				}
 			});
 		birds.push(bird);
