@@ -752,7 +752,7 @@ var startMusic = function () {
 
 			if (almostWinner == null)
 			{
-				//TODO: random events
+				//random events
 				var dayOfWeek = dayNumber % 7;
 				if (dayOfWeek >= 3)
 					dayEvent = null;

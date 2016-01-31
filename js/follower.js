@@ -399,8 +399,6 @@ makeFollower = function (x, y, startCult) {
 		});
 
 	var aiTravelGatherFood = function () {
-		//TODO: check rituals list for rituals that are based on location or proximity to moving things
-
 		//walk there at constant speed
 		var speedAdjusted = ((FollowerSpeed - FollowerSpeedStarving) * food * 0.01 + FollowerSpeedStarving) * FrameRate * (dayEvent == "hysteria" ? 2.5 : 1) * (dayEvent == "miasma" ? 0.5 : 1) * aiActRateBuffs[cultIn];
 		var xDif = xTarget - sprite.x;
@@ -414,7 +412,7 @@ makeFollower = function (x, y, startCult) {
 
 			if (aiState == "gatherFood")
 			{
-				//TODO: pick up food near your location
+				//pick up food near your location
 				//or try again if it's all gone
 				var nearFoodArray = nearestFood();
 				if (nearFoodArray[0] == -1)
