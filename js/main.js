@@ -164,7 +164,7 @@ var makeLabel = function(dontMake) {
 				if (!paused && textLabel.alpha == 1)
 				{
 					textLabel.alpha = 0.9999;
-					textLabel.tween({alpha: 0}, 1000);
+					textLabel.tween({alpha: 0}, 5000);
 				}
 				if (textLabel.alpha <= 0)
 					textLabel.destroy();
