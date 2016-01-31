@@ -6,15 +6,18 @@ var fading = false;
 		if (location.search != "")
 			document.getElementById('splashscreen').hidden = true;
 	}, 0);
+
+	//fade after time
+	setTimeout(function () { fade(); }, 2000)
 }());
 
 var fade = function()
 {
 	if (fading)
 		return; //it's already faing
-	
+
 	fading = true;
-	
+
 	var op = 1;
 	var timer = setInterval(function () {
 		if (op < 0.05)
