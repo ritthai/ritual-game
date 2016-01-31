@@ -471,14 +471,14 @@ var ritualTranslate = function(ritual) {
 };
 
 var printPlayerRituals = function() {
-	var text = utils.getAliasFor("player") + ' rituals:\n';
+	var text = 'Rituals of the ' + utils.getAliasFor("player") + ' (you):\n';
 	rituals.player.forEach(function (ritual) {
 		text += ritualTranslate(ritual) + '\n';
 	});
 	text += '\n';
 	if (utils.getFollowerCount("ai one") > 0)
 	{
-		text += utils.getAliasFor("ai one") + ' rituals:\n';
+		text += 'Rituals of the ' + utils.getAliasFor("ai one") + ':\n';
 		rituals["ai one"].forEach(function (ritual) {
 			text += ritualTranslate(ritual) + '\n';
 		});
@@ -486,7 +486,7 @@ var printPlayerRituals = function() {
 	text += '\n';
 	if (utils.getFollowerCount("ai two") > 0)
 	{
-		text += utils.getAliasFor("ai two") + ' rituals:\n';
+		text += 'Rituals of the ' + utils.getAliasFor("ai two") + ':\n';
 		rituals["ai two"].forEach(function (ritual) {
 			text += ritualTranslate(ritual) + '\n';
 		});
@@ -494,7 +494,7 @@ var printPlayerRituals = function() {
 	text += '\n';
 	if (utils.getFollowerCount("ai three") > 0)
 	{
-		text += utils.getAliasFor("ai three") + ' rituals:\n';
+		text += 'Rituals of the ' + utils.getAliasFor("ai three") + ':\n';
 		rituals["ai three"].forEach(function (ritual) {
 			text += ritualTranslate(ritual) + '\n';
 		});
