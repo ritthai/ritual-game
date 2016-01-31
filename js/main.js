@@ -194,7 +194,7 @@ var makeUi = function () {
 var makeUiCond = function() {
 	var needLoc = false;
 	var needAI = false;
-	
+
 	switch(document.getElementById('condition-types').value)
 	{
 	case "atLocation":
@@ -204,7 +204,7 @@ var makeUiCond = function() {
 		needAI = true;
 		break;
 	}
-	
+
 	document.getElementById('condition-locations').innerHTML = '';
 	document.getElementById('condition-locations').hidden = false;
 
@@ -218,7 +218,7 @@ var makeUiCond = function() {
 	}
 	if (needAI)
 		populateSelect(aiNames, 'condition-locations');
-	
+
 	if (!needAI && !needLoc)
 	{
 		document.getElementById('condition-locations').value = "";
@@ -228,16 +228,16 @@ var makeUiCond = function() {
 
 var makeUiAct = function() {
 	var needLoc = false;
-	
+
 	switch(document.getElementById('action-types').value)
 	{
 	case "travel":
 		needLoc = true;
 		break;
 	}
-	
+
 	document.getElementById('action-locations').innerHTML = '';
-	
+
 	if (needLoc)
 	{
 		document.getElementById('action-locations').hidden = false;
@@ -674,7 +674,7 @@ var startMusic = function () {
 			}
 			else
 				dayEvent = null;
-			
+
 			//clear death from all locations
 			for (var loc in locations)
 				locations[loc].death = false;
@@ -728,7 +728,7 @@ var startMusic = function () {
 	};
 
 	var makeFood = function (x, y, unused) {
-		var food = Crafty.e("2D, Canvas, Image")
+		var food = Crafty.e("2D, DOM, Image")
 			.attr({x:x, y:y, w:10, h:10})
 			.image('images/sundrop.png');
 		foods.push(food);

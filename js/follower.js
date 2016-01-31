@@ -334,7 +334,7 @@ makeFollower = function (x, y, startCult) {
 	};
 
 	//main loop
-	var sprite = Crafty.e("2D, Canvas, Image")
+	var sprite = Crafty.e("2D, DOM, Image")
 		.image(getCultImage(startCult))
 		.attr({x:x, y:y, w:20, h:34})
 		.bind("EnterFrame", function(e){
