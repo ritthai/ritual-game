@@ -88,7 +88,7 @@ var LocationTypes = {
 	"farm": {"color": "rgb(150, 150, 30)", "happyChange": 0, "foodChange": 0.38},
 	"stone circle": {"color": "rgb(100, 100, 100)", "happyChange": 0, "foodChange": 0, "image": "images/rocks.png"},
 	"marsh": {"color": "rgb(60, 30, 10)", "happyChange": 0, "foodChange": 0},
-	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0},
+	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0, "image": "images/village.png"},
 	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.038, "foodChange": 0.0938},
 };
 
