@@ -10,6 +10,13 @@ var rituals = {
 	"ai three": [],
 };
 
+var aiNames = [
+	"player",
+	"ai one",
+	"ai two",
+	"ai three"
+];
+
 var ais = {
 	"player": "none",
 	"ai one": "druid",
@@ -61,7 +68,8 @@ var conditionTypes = [
 	"evening",
 	"atLocation",
 	"bird",
-	"seeDeath"
+	"seeDeath",
+	"cultMemberAt"
 ];
 
 var actionTypes = [
@@ -167,6 +175,7 @@ var makeUi = function () {
 	populateSelect(conditionTypes, 'condition-types');
 	populateSelect([''], 'condition-locations');
 	populateSelect(locations, 'condition-locations');
+	populateSelect(aiNames, 'condition-locations');
 	populateSelect(actionTypes, 'action-types');
 	populateSelect([''], 'action-locations');
 	populateSelect(locations, 'action-locations');
@@ -217,6 +226,12 @@ var addRitualAI = function(ai) {
 	if (labelWinner != null)
 		return;
 	
+	if (almostWinner != null && almostWinner != ai)
+	{
+		//add an offensive ritual
+		addRitual(ai, "cultMemberAt", almostWinner, "proselytize", "");
+		return;
+	}
 	
 	var aiScript = AIScripts[ais[ai]];
 	var good = aiRunThroughList(aiScript["good"]);
@@ -252,7 +267,7 @@ var birds = [];
 var BirdSpeed = 300;
 
 
-var DayLength = 5;
+var DayLength = 22;
 var dayTimer = 0;
 var dayNumber = 1;
 
@@ -325,7 +340,7 @@ var printRituals = function() {
 	var makeFollowers = function () {
 		for (var i = 0; i < people_count / cult_count; i++)
 			makeAtRandomPosition(makeFollower, "player");
-		for (var i = 0; i < people_count * 2 / cult_count + 100; i++)
+		for (var i = 0; i < people_count * 2 / cult_count; i++)
 			makeAtRandomPosition(makeFollower, "ai one");
 		if (cult_count > 2)
 			for (var i = 0; i < people_count * 3 / cult_count; i++)

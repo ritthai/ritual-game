@@ -112,6 +112,17 @@ makeFollower = function (x, y, startCult) {
 			}
 		}
 	}
+	
+	follower.inCultAtPlace = function (cul, loc) {
+		return cultIn == cul && locationAt == loc;
+	}
+	
+	var checkLocationForCult = function (cul) {
+		for (var fol in followers)
+			if (followers[fol].inCultAtPlace(cul, locationAt))
+				return true;
+		return false;
+	};
 
 	var getCultColor = function (cult) {
 		return (cult == "player" ? "green" : (cult == "ai one" ? "purple" : (cult == "ai two" ? "blue" : "red")));
@@ -204,6 +215,11 @@ makeFollower = function (x, y, startCult) {
 			case "seeDeath":
 				doOnce = true;
 				//TODO: this activates if someone has died in your area recently
+				break;
+			case "cultMemberAt":
+				//is there someone of that cult here?
+				doOnce = true;
+				conditionSuccess = checkLocationForCult(rituals[cultIn][ritual].condition.param);
 				break;
 			}
 			if (doOnce && followed.length > ritual && followed[ritual] == dayNumber)
