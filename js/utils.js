@@ -97,9 +97,37 @@ var utils = (function (){
 			return "player";
 		return null;
 	}
+	
+	module.getAliasFor = function(key){
+		if (aliases[key] != null)
+			return aliases[key];
+
+		//is it a cult?
+		if (ais[key] != null)
+			return ais[key];
+		
+		//it's a location I guess
+		return key;
+	};
 
 	return module;
 }());
+
+var aliases = {
+	"gatherFood": "search for food",
+	"celebrate": "celebrate",
+	"travel": "travel to the",
+	"proselytize": "berate the heathens",
+	"salvage": "be productive",
+	"wander": "wander the lands",
+	"morning": "In the morning",
+	"evening": "In the evening",
+	"afternoon": "In the afternoon",
+	"atLocation": "If you visit the",
+	"bird": "If you see a bird",
+	"seeDeath": "If you see death",
+	"cultMemberAt": "If you meet a follower of the",
+};
 
 var printMeters = function() {
 	document.getElementById('meter-info').textContent =

@@ -18,7 +18,7 @@ var aiNames = [
 ];
 
 var ais = {
-	"player": "none",
+	"player": "hero",
 	"ai one": "druid",
 	"ai two": "necromancer",
 	"ai three": "nymph",
@@ -133,7 +133,7 @@ var makeLabel = function(dontMake) {
 				textElements.push("Your followers became " + (newHappy - labelHappyRecord).toFixed(1) + "% happier that day.");
 		}
 		if (almostWinner != null)
-			textElements.push((almostWinner == "player" ? "You" : "Enemy " + almostWinner) + " will win in " + almostWinnerDay + " day" + (almostWinnerDay == 1 ? "" : "s") + "!");
+			textElements.push((almostWinner == "player" ? "You" : "Enemy " + utils.getAliasFor(almostWinner)) + " will win in " + almostWinnerDay + " day" + (almostWinnerDay == 1 ? "" : "s") + "!");
 		if (dayEvent == "heatwave")
 			textElements.push("Looks like there's going to be a heat wave!");
 		else if (dayEvent == "hysteria")
@@ -150,7 +150,7 @@ var makeLabel = function(dontMake) {
 		else if (labelWinner == "player")
 			text = "You won on day " + dayNumber + "!";
 		else
-			text = "You lost to " + labelWinner + " on day " + dayNumber + "!";
+			text = "You lost to " + utils.getAliasFor(labelWinner) + " on day " + dayNumber + "!";
 		if (textElements.length > 0)
 			text += "<br/>" + textElements.join("<br/>");
 
@@ -201,7 +201,7 @@ var makeUi = function () {
 var populateSelect = function (list, id) {
 	list.forEach(function (x) {
 		var option = document.createElement('option');
-		var content = document.createTextNode(x);
+		var content = document.createTextNode(utils.getAliasFor(x));
 		option.appendChild(content);
 		option.setAttribute('value', x);
 		document.getElementById(id).appendChild(option);
@@ -259,7 +259,7 @@ var addRitualAI = function(ai) {
 
 	var ritualSelection = aiScript["rituals"][ritualOn];
 
-	addRitual(ai, ritualSelection[0], ritualSelection[1] == "good" ? good : bad, ritualSelection[2], ritualSelection[3] == "good" ? good : bad);
+	addRitual(ai, ritualSelection[0], ritualSelection[1] == "good" ? good : (ritualSelection[1] == "bad" ? bad : ""), ritualSelection[2], ritualSelection[3] == "good" ? good : ( ritualSelection[3] == "bad" ? bad : ""));
 };
 
 var aiRunThroughList = function(list) {
@@ -308,23 +308,43 @@ var addRitual = function (
 	});
 };
 
+var ritualTranslate = function(ritual) {
+	var text = utils.getAliasFor(ritual.condition.type);
+	if (ritual.condition.param != "")
+		text += " " + utils.getAliasFor(ritual.condition.param);
+	text += ", " + utils.getAliasFor(ritual.action.type);
+	if (ritual.action.param != "")
+		text += " " + utils.getAliasFor(ritual.action.param);
+	text += ".";
+	return text;
+};
+
 var printPlayerRituals = function() {
-	var text = 'PLAYER RITUALS:\n';
+	var text = utils.getAliasFor("player") + ' rituals:\n';
 	rituals.player.forEach(function (ritual) {
-		text += JSON.stringify(ritual) + '\n';
+		text += ritualTranslate(ritual) + '\n';
 	});
-	text += 'AI ONE RITUALS:\n';
-	rituals["ai one"].forEach(function (ritual) {
-		text += JSON.stringify(ritual) + '\n';
-	});
-	text += 'AI TWO RITUALS:\n';
-	rituals["ai two"].forEach(function (ritual) {
-		text += JSON.stringify(ritual) + '\n';
-	});
-	text += 'AI THREE RITUALS:\n';
-	rituals["ai three"].forEach(function (ritual) {
-		text += JSON.stringify(ritual) + '\n';
-	});
+	if (utils.getFollowerCount("ai one") > 0)
+	{
+		text += utils.getAliasFor("ai one") + ' rituals:\n';
+		rituals["ai one"].forEach(function (ritual) {
+			text += ritualTranslate(ritual) + '\n';
+		});
+	}
+	if (utils.getFollowerCount("ai two") > 0)
+	{
+		text += utils.getAliasFor("ai two") + ' rituals:\n';
+		rituals["ai two"].forEach(function (ritual) {
+			text += ritualTranslate(ritual) + '\n';
+		});
+	}
+	if (utils.getFollowerCount("ai three") > 0)
+	{
+		text += utils.getAliasFor("ai three") + ' rituals:\n';
+		rituals["ai three"].forEach(function (ritual) {
+			text += ritualTranslate(ritual) + '\n';
+		});
+	}
 	document.getElementById('rituals').textContent = text;
 };
 
