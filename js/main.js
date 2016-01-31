@@ -229,16 +229,16 @@ var resetItemListHTML = function() {
 		switch(items[i])
 		{
 		case "stolen jewelry":
-			itemListing.innerHTML += "This swanky jewelry would sure make you popular and happy."; //"RAISES HAPPY AND CONVERSION CHANCE";
+			itemListing.innerHTML += "The dead have no need for such cosmetics, but it will make our followers happy and attract the heathens to our cause."; //"RAISES HAPPY AND CONVERSION CHANCE";
 			break;
 		case "wild totem":
-			itemListing.innerHTML += "There's something about this totem that makes your heart race and your stomache rumble."; //"RAISES SPEED AND FOOD";
+			itemListing.innerHTML += "Something about this totem that makes our hearts race and stomache calm. (Raises speed and food of followers)";
 			break;
 		case "bag of food":
-			itemListing.innerHTML += "This bag of food is a delicious reward for your followers hard work.";//"RAISES FOOD";
+			itemListing.innerHTML += "Our minds cannot ascend whilst our physical bodies still hunger. Sate our hunger so that we may rise.";//"RAISES FOOD";
 			break;
 		case "bag of drugs":
-			itemListing.innerHTML += "This bag of, uh, drugs sure is a desirable thing to have.";//"RAISES HAPPY";
+			itemListing.innerHTML += "The celebrations bring us joy, but there are other... ways to find happiness.";//"RAISES HAPPY";
 			break;
 		}
 		itemListing.innerHTML += "<br/>";
@@ -475,6 +475,7 @@ var printPlayerRituals = function() {
 	rituals.player.forEach(function (ritual) {
 		text += ritualTranslate(ritual) + '\n';
 	});
+	text += '\n';
 	if (utils.getFollowerCount("ai one") > 0)
 	{
 		text += utils.getAliasFor("ai one") + ' rituals:\n';
@@ -482,6 +483,7 @@ var printPlayerRituals = function() {
 			text += ritualTranslate(ritual) + '\n';
 		});
 	}
+	text += '\n';
 	if (utils.getFollowerCount("ai two") > 0)
 	{
 		text += utils.getAliasFor("ai two") + ' rituals:\n';
@@ -489,6 +491,7 @@ var printPlayerRituals = function() {
 			text += ritualTranslate(ritual) + '\n';
 		});
 	}
+	text += '\n';
 	if (utils.getFollowerCount("ai three") > 0)
 	{
 		text += utils.getAliasFor("ai three") + ' rituals:\n';
@@ -678,6 +681,9 @@ var playCelebrateSound = function () {
 					case "firepit":
 						//get a totem item
 						makeItem("wild totem", awardWorkTo);
+						break;
+					case "farm":
+						makeItem("bag of food", awardWorkTo);
 						break;
 					default:
 						//get a generic item

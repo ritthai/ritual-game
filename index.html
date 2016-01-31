@@ -42,15 +42,18 @@ span {
 		<pre id="meter-info"></pre>
 
 		<div id="add-ritual-menu">
-		<select id="condition-types" onchange="makeUiCond()"></select> <select id="condition-locations"></select><br />
-		<select id="action-types" onchange="makeUiAct()"></select> <select id="action-locations"></select><br />
-		<button onclick="uiAddRitual()">Preach Additional Ritual</button>
-		<button onclick="uiUnpause()">Continue Present Rituals</button>
+			<p>
+				You are the cult leader of the red cloacked "heroes"! Our people seek rituals to direct our misguided lives and triumph against the heathens of this forsaken land. Preach to us.
+			</p>
+			<select id="condition-types" onchange="makeUiCond()"></select> <select id="condition-locations"></select><br />
+			<select id="action-types" onchange="makeUiAct()"></select> <select id="action-locations"></select><br />
+			<button onclick="uiAddRitual()">Preach Additional Ritual</button>
+			<button onclick="uiUnpause()">Continue with Existing Rituals</button>
 		</div>
 
 		<div id="extra-ritual-menu">
-		<button onclick="uiClearRituals()">Banish Rituals</button>
-		<input id="auto" type="checkbox" /> Auto Continue Present Rituals
+		<button onclick="uiClearRituals()">Banish Existing Rituals</button>
+		<input id="auto" type="checkbox" /> Automatically Continue with Existing Rituals
 		</div>
 	</div>
 	<pre id="rituals"></pre>
@@ -61,5 +64,25 @@ span {
 	from cult: <select id="follower-cult"></select>
 
 	<pre id="debug-info"></pre>
+
+	<h3>Wisdom of the Ascended</h3>
+
+	<p>Food and happiness are both essential.</p>
+
+	<p>All people know that without food comes death. It is important to search for food.</p>
+
+	<p>But you, great leader, must understand that without happiness comes defection. There are other cults in this realm who wish to misguide our people. Those who have no more happiness become unsatisfied with their cult, and will defect to whoever's cult has the most happiness.</p>
+
+	<p>The defection of followers with no happiness can be to our benefit when those from other cults join us. Keep your people happy, and not only will they remain your people, but others will join.</p>
+
+	<p>Celebration is the most straightforward way to create happiness, and it is most effective in groups. When a follower celebrates, all followers in that location become happier. Even followers of other cults start feeling better, but only half as much as us true believers.</p>
+
+	<p>If we wish to convert others to our cause though, we must lower their happiness. Preach a ritual of berating the heathens to our followers, and any heathen in the same location as a follower who is berating will lose happiness.</p>
+
+	<p>But life is more than mere survival. Preach a ritual of being productive to our followers, and they will work whatever location they are in. These lands hold bounty of all sorts.</p>
+
+	<p>The village holds potential followers. The graveyard holds jewelery. The firepit holds mystic totems. The farm holds food. And items of other sorts can be found elsewhere.</p>
+
+	<p>But being productive takes patience and dedication. It takes 30 instances of productivity in a location to yield one item. This is the sum of work put in by followers of any cult, but the prize will only go to whoever worked that location most. Upon yielding its reward, the location will reset back to 0.</p>
 </body>
 </html>
