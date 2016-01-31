@@ -149,7 +149,7 @@ var makeLabel = function(dontMake) {
 			else
 				textElements.push("Your followers have become " + (newHappy - labelHappyRecord).toFixed(1) + "% happier since yesterday day.");
 		}
-		if (almostWinner != null)
+		if (almostWinner != null && labelWinner === null)
 			textElements.push((almostWinner == "player" ? "You" : "Enemy " + utils.getAliasFor(almostWinner)) + " will win in " + almostWinnerDay + " day" + (almostWinnerDay == 1 ? "" : "s") + "!");
 		if (dayEvent == "heatwave")
 			textElements.push("Looks like there's going to be a heat wave!");
@@ -532,9 +532,6 @@ var startMusic = function () {
 		Crafty.audio.play("backgroundMusic", 1);
 	}
 	if (dayNumber === 5) {
-		Crafty.audio.play("recorder", 1);
-	}
-	if (dayNumber === 6) {
 		Crafty.audio.play("violin", 1);
 	}
 };
