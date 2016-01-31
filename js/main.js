@@ -132,7 +132,8 @@ var makeLabel = function(dontMake) {
 			textElements.push("You have gained " + (newPop - labelPopRecord).toFixed(0) + " followers since yesterday.");
 		else if (newPop < labelPopRecord)
 			textElements.push("You have lost " + (labelPopRecord - newPop).toFixed(0) + " followers since yesterday.");
-		var percentagePop = utils.getFollowerCount("player") * 100 / followers.length;
+		var followerCount = utils.getFollowerCount("player");
+		var percentagePop = followerCount > 0 ? followerCount * 100 / followers.length : 0;
 		textElements.push("You control " + percentagePop.toFixed(0) + "% of the population.");
 		if (Math.abs(newFood - labelFoodRecord) > 0.1)
 		{
@@ -205,8 +206,8 @@ var makeUi = function () {
 		cults.push(cult);
 	}
 	populateSelect(cults, 'follower-cult');
-	
-	
+
+
 	//TODO: remove these! they're just for testing
 	makeItem("stolen jewelry", "player");
 	makeItem("wild totem", "player");
@@ -256,13 +257,13 @@ var makeItem = function(type, cult) {
 };
 
 var useItem = function(type, cult, useID) {
-	
+
 	if (useID != -1)
 	{
 		items.splice(useID, 1);
 		resetItemListHTML();
 	}
-	
+
 	var feed = false;
 	var joy = false;
 	switch(type)
@@ -282,7 +283,7 @@ var useItem = function(type, cult, useID) {
 		joy = true;
 		break;
 	}
-	
+
 	followers.forEach(function (follower) {
 		follower.useItem(cult, feed, joy);
 	});
@@ -840,9 +841,9 @@ var startMusic = function () {
 
 	var makeBird = function (x, y, unused) {
 		var angle = Math.random() * Math.PI * 2;
-		var bird = Crafty.e("2D, Canvas, Color")
+		var bird = Crafty.e("2D, DOM, Image")
 			.attr({x:x, y:y, w:10, h:10})
-			.color("rgb(240, 240, 240)")
+			.image("images/bird.png")
 			.bind("EnterFrame", function(e) {
 				if (!paused)
 				{
