@@ -82,12 +82,12 @@ var actionTypes = [
 ];
 
 var LocationTypes = {
-	"graveyard": {"color": "rgb(75, 75, 75)", "happyChange": -0.15, "foodChange": 0},
+	"graveyard": {"color": "rgb(75, 75, 75)", "happyChange": -0.15, "foodChange": 0, "image": "images/grave.png"},
 	"firepit": {"color": "rgb(200, 30, 40)", "happyChange": 0, "foodChange": -0.38, "image": "images/fire-place.png"},
 	"grove": {"color": "rgb(30, 70, 30)", "happyChange": 0.15, "foodChange": 0, "image": "images/grove.png"},
 	"farm": {"color": "rgb(150, 150, 30)", "happyChange": 0, "foodChange": 0.38},
 	"stone circle": {"color": "rgb(100, 100, 100)", "happyChange": 0, "foodChange": 0, "image": "images/rocks.png"},
-	"marsh": {"color": "rgb(60, 30, 10)", "happyChange": 0, "foodChange": 0},
+	"marsh": {"color": "rgb(60, 30, 10)", "happyChange": 0, "foodChange": 0, "image": "images/marsh.png"},
 	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0, "image": "images/village.png"},
 	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.038, "foodChange": 0.0938},
 };
@@ -509,7 +509,7 @@ var startMusic = function () {
 
 	var makeScreen = function () {
 		Crafty.e("2D, Canvas, Color, Mouse, Tween")
-			.color('rgb(150, 200, 200)')
+			.color('rgb(150, 200, 150)')
 			.attr({w:SCREEN_WIDTH, h:SCREEN_HEIGHT })
 			.bind("MouseMove", function(e) {})
 			.bind("MouseDown", function(e) {})
@@ -645,9 +645,9 @@ var startMusic = function () {
 		};
 
 		var timeColorBlocks = {
-			"morning": makeTimeOfDayColorBlock('rgb(150, 200, 200)', 1),
-			"afternoon": makeTimeOfDayColorBlock('rgb(200, 150, 50)', 1),
-			"evening": makeTimeOfDayColorBlock('rgb(50, 50, 100)', 1),
+			"morning": makeTimeOfDayColorBlock('rgb(150, 200, 200)', 0),
+			"afternoon": makeTimeOfDayColorBlock('rgb(200, 150, 50)', 0.8),
+			"evening": makeTimeOfDayColorBlock('rgb(50, 50, 100)', 0.8),
 			"heatwave": makeTimeOfDayColorBlock('rgb(250, 100, 25)', 0.3),
 			"hysteria": makeTimeOfDayColorBlock('rgb(200, 175, 250)', 0.75),
 			"famine": makeTimeOfDayColorBlock('rgb(220, 50, 50)', 0.65),
