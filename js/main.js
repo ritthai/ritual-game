@@ -569,7 +569,11 @@ var startMusic = function () {
 						makeItem("wild totem", awardWorkTo);
 						break;
 					default:
-						//TODO: get a generic item
+						//get a generic item
+						if (Math.random() < 0.5)
+							makeItem("bag of food", awardWorkTo);
+						else
+							makeItem("bag of drugs", awardWorkTo);
 						break;
 					}
 
@@ -583,10 +587,34 @@ var startMusic = function () {
 	};
 	
 	var makeItem = function(type, cult) {
-		//TODO: make an item of a given type
-		
-		//if the cult is "player", add it to the items list
-		//otherwise use it immediately
+		if (cult == "player")
+		{
+			//TODO: add to the items list
+		}
+		else
+			useItem(type, cult);
+	};
+	
+	var useItem = function(type, cult) {
+		var feed = false;
+		var joy = false;
+		switch(type)
+		{
+		case "stolen jewelry":
+			joy = true;
+			aiConvertHappyBuffs[cult] += 10;
+			break;
+		case "wild totem":
+			feed = true;
+			aiActRateBuffs[cult] += 0.1;
+			break;
+		case "bag of food":
+			feed = true;
+			break;
+		case "bag of drugs":
+			joy = true;
+			break;
+		}
 	};
 
 	var makeScreen = function () {
