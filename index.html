@@ -14,12 +14,8 @@ pre {
 	font-family: Arial;
 }
 
-span {
-	font-weight: bold;
-}
-
 #ui {
-	width: 600px;
+	width: 800px;
 	margin: 0 auto;
 }
 
@@ -39,12 +35,13 @@ span {
 	<script type="text/javascript" src="js/main.js"></script>
 
 	<div id="ui">
-		<pre id="meter-info"></pre>
+		<span id="meter-info"></span>
+		<button onclick="toggleDebugMode()">Show / Hide per follower details</button>
+		for cult <select id="follower-cult"></select>
+		<pre id="debug-info"></pre>
 
 		<div id="add-ritual-menu">
-			<p>
-				You are the cult leader of the red cloacked "heroes"! Our people seek rituals to direct our misguided lives and triumph against the heathens. Preach to us. (<a href ="#instructions">More...</a>)
-			</p>
+			You, cult leader of the red cloacked "heroes", preach to us and mend our misguided lives. (<a href ="#instructions">More...</a>) <br />
 			<select id="condition-types" onchange="makeUiCond()"></select> <select id="condition-locations"></select><br />
 			<select id="action-types" onchange="makeUiAct()"></select> <select id="action-locations"></select><br />
 			<button onclick="uiAddRitual()">Preach Additional Ritual</button>
@@ -52,18 +49,14 @@ span {
 		</div>
 
 		<div id="extra-ritual-menu">
-			<input id="auto" type="checkbox" /> Automatically Continue with Existing Rituals
+			<input id="auto" type="checkbox" />
+			<label for="auto">Automatically Continue with Existing Rituals</label>
 			<button onclick="uiClearRituals()">Banish Existing Rituals</button>
 		</div>
 	</div>
 	<pre id="rituals"></pre>
 	Items:<br/>
 	<pre id="items"></pre>
-
-	<button onclick="toggleDebugMode()">Show / Hide detailed follower info</button>
-	from cult: <select id="follower-cult"></select>
-
-	<pre id="debug-info"></pre>
 
 	<h3 id="instructions">Wisdom of the Ascended</h3>
 
@@ -86,5 +79,7 @@ span {
 	<p>The village holds potential followers. The graveyard holds jewelery. The firepit holds mystic totems. The farm holds food. And items of other sorts can be found elsewhere.</p>
 
 	<p>But being productive takes patience and dedication. It takes 30 instances of productivity in a location to yield one item. This is the sum of work put in by followers of any cult, but the prize will only go to whoever worked that location most. Upon yielding its reward, the location will reset back to 0.</p>
+
+	<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 </body>
 </html>
