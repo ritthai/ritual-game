@@ -129,24 +129,24 @@ var makeLabel = function(dontMake) {
 		//make the text for the label
 		var textElements = [];
 		if (newPop > labelPopRecord)
-			textElements.push("You gained " + (newPop - labelPopRecord).toFixed(0) + " followers that day.");
+			textElements.push("You have gained " + (newPop - labelPopRecord).toFixed(0) + " followers since yesterday.");
 		else if (newPop < labelPopRecord)
-			textElements.push("You lost " + (labelPopRecord - newPop).toFixed(0) + " followers that day.");
+			textElements.push("You have lost " + (labelPopRecord - newPop).toFixed(0) + " followers since yesterday.");
 		var percentagePop = utils.getFollowerCount("player") * 100 / followers.length;
 		textElements.push("You control " + percentagePop.toFixed(0) + "% of the population.");
 		if (Math.abs(newFood - labelFoodRecord) > 0.1)
 		{
 			if (newFood < labelFoodRecord)
-				textElements.push("Your followers became " + (labelFoodRecord - newFood).toFixed(1) + "% hungrier that day.");
+				textElements.push("Your followers have become " + (labelFoodRecord - newFood).toFixed(1) + "% hungrier since yesterday.");
 			else
-				textElements.push("Your followers became " + (newFood - labelFoodRecord).toFixed(1) + "% more well-fed that day.");
+				textElements.push("Your followers have become " + (newFood - labelFoodRecord).toFixed(1) + "% more well-fed since yesterday.");
 		}
 		if (Math.abs(newHappy - labelHappyRecord) > 0.1)
 		{
 			if (newHappy < labelHappyRecord)
-				textElements.push("Your followers became " + (labelHappyRecord - newHappy).toFixed(1) + "% more miserable that day.");
+				textElements.push("Your followers have become " + (labelHappyRecord - newHappy).toFixed(1) + "% more miserable since yesterday.");
 			else
-				textElements.push("Your followers became " + (newHappy - labelHappyRecord).toFixed(1) + "% happier that day.");
+				textElements.push("Your followers have become " + (newHappy - labelHappyRecord).toFixed(1) + "% happier since yesterday day.");
 		}
 		if (almostWinner != null)
 			textElements.push((almostWinner == "player" ? "You" : "Enemy " + utils.getAliasFor(almostWinner)) + " will win in " + almostWinnerDay + " day" + (almostWinnerDay == 1 ? "" : "s") + "!");
