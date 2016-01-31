@@ -100,7 +100,7 @@ var utils = (function (){
 
 	module.getAliasFor = function(key, extra){
 		if (aliases[key] != null)
-			return aliases[key] + (extra && aliasExtras[key] != null ? aliasExtras[key] : "");
+			return aliases[key] + (extra && aliasExtras[key] != null ? " " + aliasExtras[key] : "");
 
 		//is it a cult?
 		if (ais[key] != null)
