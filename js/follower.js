@@ -166,32 +166,29 @@ makeFollower = function (x, y, startCult) {
 		});
 		return bestOtherCult;
 	};
-
-	var handleAiNeutral = function () {
-		getRealLocation();
-
+	
+	var checkRitualInner = function(doOnceOnly) {
 		//check rituals list for rituals that are based on time, location, or proximity to people
 		for (var ritual in rituals[cultIn])
 		{
 			//check the condition
 			var conditionSuccess = false;
-			var doOnce = false;
 			switch(rituals[cultIn][ritual].condition.type)
 			{
 			case "morning":
 				//is it morning?
-				conditionSuccess = dayTimer <= DayLength / 3;
-				doOnce = true;
+				if (doOnceOnly)
+					conditionSuccess = dayTimer <= DayLength / 3;
 				break;
 			case "afternoon":
 				//is it afternoon?
-				conditionSuccess = dayTimer <= DayLength * 2 / 3 && dayTimer > DayLength / 3;
-				doOnce = true;
+				if (doOnceOnly)
+					conditionSuccess = dayTimer <= DayLength * 2 / 3 && dayTimer > DayLength / 3;
 				break;
 			case "evening":
 				//is it evening?
-				conditionSuccess = dayTimer > DayLength * 2 / 3;
-				doOnce = true;
+				if (doOnceOnly)
+					conditionSuccess = dayTimer > DayLength * 2 / 3;
 				break;
 			case "atLocation":
 				//are you there?
@@ -199,30 +196,31 @@ makeFollower = function (x, y, startCult) {
 				break;
 			case "bird":
 				//is there... a bird nearby?
-				doOnce = true;
-				for (var bird in birds)
-				{
-					var xD = birds[bird].x - sprite.x;
-					var yD = birds[bird].y - sprite.y;
-					var dist = Math.sqrt(xD*xD+yD*yD)
-					if (dist < FollowerBirdDistance)
+				if (doOnceOnly)
+					for (var bird in birds)
 					{
-						conditionSuccess = true; //you DID see a bird! oh my god! etc etc
-						break;
+						var xD = birds[bird].x - sprite.x;
+						var yD = birds[bird].y - sprite.y;
+						var dist = Math.sqrt(xD*xD+yD*yD)
+						if (dist < FollowerBirdDistance)
+						{
+							conditionSuccess = true; //you DID see a bird! oh my god! etc etc
+							break;
+						}
 					}
-				}
 				break;
 			case "seeDeath":
-				doOnce = true;
 				//TODO: this activates if someone has died in your area recently
+				if (doOnceOnly)
+					conditionSuccess = true;
 				break;
 			case "cultMemberAt":
 				//is there someone of that cult here?
-				doOnce = true;
-				conditionSuccess = checkLocationForCult(rituals[cultIn][ritual].condition.param);
+				if (doOnceOnly)
+					conditionSuccess = checkLocationForCult(rituals[cultIn][ritual].condition.param);
 				break;
 			}
-			if (doOnce && followed.length > ritual && followed[ritual] == dayNumber)
+			if (doOnceOnly && followed.length > ritual && followed[ritual] == dayNumber)
 				conditionSuccess = false;
 
 			if (conditionSuccess)
@@ -293,7 +291,15 @@ makeFollower = function (x, y, startCult) {
 				break; //stop checking
 			}
 		}
+	}
 
+	var handleAiNeutral = function () {
+		getRealLocation();
+
+		checkRitualInner(true);
+		if (aiState == "neutral")
+			checkRitualInner(false);
+		
 		if (aiState == "neutral")
 		{
 			//there are no rituals to follow

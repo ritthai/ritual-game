@@ -116,6 +116,8 @@ var makeLabel = function(dontMake) {
 			textElements.push("You gained " + (newPop - labelPopRecord).toFixed(0) + " followers that day.");
 		else if (newPop < labelPopRecord)
 			textElements.push("You lost " + (labelPopRecord - newPop).toFixed(0) + " followers that day.");
+		var percentagePop = utils.getFollowerCount("player") * 100 / followers.length;
+		textElements.push("You control " + percentagePop.toFixed(0) + "% of the population.");
 		if (Math.abs(newFood - labelFoodRecord) > 0.1)
 		{
 			if (newFood < labelFoodRecord)
@@ -340,13 +342,13 @@ var printRituals = function() {
 	var makeFollowers = function () {
 		for (var i = 0; i < people_count / cult_count; i++)
 			makeAtRandomPosition(makeFollower, "player");
-		for (var i = 0; i < people_count * 2 / cult_count; i++)
+		for (var i = 0; i < people_count / cult_count; i++)
 			makeAtRandomPosition(makeFollower, "ai one");
 		if (cult_count > 2)
-			for (var i = 0; i < people_count * 3 / cult_count; i++)
+			for (var i = 0; i < people_count / cult_count; i++)
 				makeAtRandomPosition(makeFollower, "ai two");
 		if (cult_count > 3)
-			for (var i = 0; i < people_count * 4 / cult_count; i++)
+			for (var i = 0; i < people_count / cult_count; i++)
 				makeAtRandomPosition(makeFollower, "ai three");
 	};
 
