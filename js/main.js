@@ -86,7 +86,7 @@ var LocationTypes = {
 	"firepit": {"color": "rgb(200, 30, 40)", "happyChange": 0, "foodChange": -0.38, "image": "images/fire-place.png"},
 	"grove": {"color": "rgb(30, 70, 30)", "happyChange": 0.15, "foodChange": 0},
 	"farm": {"color": "rgb(150, 150, 30)", "happyChange": 0, "foodChange": 0.38},
-	"stone circle": {"color": "rgb(100, 100, 100)", "happyChange": 0, "foodChange": 0},
+	"stone circle": {"color": "rgb(100, 100, 100)", "happyChange": 0, "foodChange": 0, "image": "images/rocks.png"},
 	"marsh": {"color": "rgb(60, 30, 10)", "happyChange": 0, "foodChange": 0},
 	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0},
 	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.038, "foodChange": 0.0938},
@@ -219,6 +219,10 @@ var uiUnpauseInner = function () {
 	document.getElementById('add-ritual-menu').style.display = 'none';
 	paused = false;
 	dayTimer = 0;
+	if (!hasPlayedMusicOnce) {
+		startMusic();
+		hasPlayedMusicOnce = true;
+	}
 }
 var uiUnpause = function () {
 	addRitualAI("ai one");
@@ -230,14 +234,14 @@ var uiUnpause = function () {
 var addRitualAI = function(ai) {
 	if (labelWinner != null)
 		return;
-	
+
 	if (almostWinner != null && almostWinner != ai)
 	{
 		//add an offensive ritual
 		addRitual(ai, "cultMemberAt", almostWinner, "proselytize", "");
 		return;
 	}
-	
+
 	var aiScript = AIScripts[ais[ai]];
 	var good = aiRunThroughList(aiScript["good"]);
 	var bad = aiRunThroughList(aiScript["bad"]);
@@ -323,6 +327,16 @@ var printRituals = function() {
 	console.log(text);
 };
 
+var hasPlayedMusicOnce;
+
+var startMusic = function () {
+	Crafty.audio.add("backgroundMusic", [
+		"audio/ggj-song.ogg",
+		"audio/ggj-song.mp3"
+	]);
+	Crafty.audio.play("backgroundMusic", 1);
+};
+
 (function () {
 	var food_count = 0;
 	var people_count = 0;
@@ -341,6 +355,8 @@ var printRituals = function() {
 
 		//initialize label data tracking
 		labelDataTrack();
+
+		hasPlayedMusicOnce = false;
 	};
 
 	var makeFollowers = function () {
@@ -511,7 +527,7 @@ var printRituals = function() {
 		};
 
 		var advanceDay = function () {
-			
+
 			//detect victory or defeat
 			if (labelWinner == null)
 			{
@@ -547,13 +563,13 @@ var printRituals = function() {
 						almostWinner = null;
 				}
 			}
-			
+
 			if (almostWinner == null)
 			{
 				//TODO: random events
 				dayEvent = "heatwave";
 			}
-			
+
 			dayNumber += 1;
 			paused = true;
 			makeLabel();
