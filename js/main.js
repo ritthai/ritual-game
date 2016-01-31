@@ -214,18 +214,18 @@ var makeUi = function () {
 	makeItem("bag of drugs", "player");
 };
 
-var makeItem = function(type, cult) {
-	if (cult == "player")
+var resetItemListHTML = function() {
+	document.getElementById('items').innerHTML = "";
+	for (var i = 0; i < items.length; i++)
 	{
-		//add to the items list
 		var itemListing = document.createElement("t");
 		var item = document.createElement('button');
 		itemListing.appendChild(item);
-		var content = document.createTextNode(type);
+		var content = document.createTextNode(items[i]);
 		item.appendChild(content);
-		item.setAttribute('onclick', "useItem('" + type + "','" + cult + "')");
+		item.setAttribute('onclick', "useItem('" + items[i] + "','player'," + i + ")");
 		itemListing.innerHTML += " ";
-		switch(type)
+		switch(items[i])
 		{
 		case "stolen jewelry":
 			itemListing.innerHTML += "RAISES HAPPY AND CONVERSION CHANCE";
@@ -243,11 +243,26 @@ var makeItem = function(type, cult) {
 		itemListing.innerHTML += "<br/>";
 		document.getElementById('items').appendChild(itemListing);
 	}
-	else
-		useItem(type, cult);
 };
 
-var useItem = function(type, cult) {
+var makeItem = function(type, cult) {
+	if (cult == "player")
+	{
+		items.push(type);
+		resetItemListHTML();
+	}
+	else
+		useItem(type, cult, -1);
+};
+
+var useItem = function(type, cult, useID) {
+	
+	if (useID != -1)
+	{
+		items.splice(useID, 1);
+		resetItemListHTML();
+	}
+	
 	var feed = false;
 	var joy = false;
 	switch(type)
