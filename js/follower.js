@@ -150,7 +150,7 @@ makeFollower = function (x, y, startCult) {
 			// you converted! switch to happiest cult that's not yours
 			happy = 100;
 			cultIn = getHappiestOtherCult();
-			sprite.color(getCultColor(cultIn));
+			sprite.image(getCultImage(cultIn));
 			return;
 		}
 	};
