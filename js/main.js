@@ -129,7 +129,7 @@ var makeLabel = function(dontMake) {
 		//make the text for the label
 		var textElements = [];
 		if (newPop > labelPopRecord)
-			textElements.push("You have gained " + (newPop - labelPopRecord).toFixed(0) + " followers since yesterday.");
+			textElements.push("You have gained " + (newPop - labelPopRecord).toFixed(0) + " follower" + (newPop > labelPopRecord + 1 ? "s" : "") + " since yesterday.");
 		else if (newPop < labelPopRecord)
 			textElements.push("You have lost " + (labelPopRecord - newPop).toFixed(0) + " followers since yesterday.");
 		var followerCount = utils.getFollowerCount("player");
@@ -348,7 +348,7 @@ var makeUiAct = function() {
 var populateSelect = function (list, id) {
 	list.forEach(function (x) {
 		var option = document.createElement('option');
-		var content = document.createTextNode(utils.getAliasFor(x));
+		var content = document.createTextNode(utils.getAliasFor(x, true));
 		option.appendChild(content);
 		option.setAttribute('value', x);
 		document.getElementById(id).appendChild(option);
@@ -524,10 +524,10 @@ var setUpMusic = function () {
 };
 
 var startMusic = function () {
-	if (dayNumber === 1) {
+	if (dayNumber % 10 === 1) {
 		Crafty.audio.play("backgroundMusic", 1);
 	}
-	if (dayNumber === 5) {
+	if (dayNumber % 10 === 5) {
 		Crafty.audio.play("violin", 1);
 	}
 };

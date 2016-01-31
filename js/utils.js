@@ -98,9 +98,9 @@ var utils = (function (){
 		return null;
 	}
 
-	module.getAliasFor = function(key){
+	module.getAliasFor = function(key, extra){
 		if (aliases[key] != null)
-			return aliases[key];
+			return aliases[key] + (extra && aliasExtras[key] != null ? aliasExtras[key] : "");
 
 		//is it a cult?
 		if (ais[key] != null)
@@ -115,10 +115,10 @@ var utils = (function (){
 
 var aliases = {
 	"gatherFood": "search for food",
-	"celebrate": "celebrate (raise happiness of nearby followers)",
+	"celebrate": "celebrate",
 	"travel": "travel to the",
-	"proselytize": "berate heathens (drop happiness of nearby enemy cult followers)",
-	"salvage": "be productive (see Wisdom of the Ascended below)",
+	"proselytize": "berate heathens",
+	"salvage": "be productive",
 	"wander": "wander the lands",
 	"morning": "In the morning",
 	"evening": "In the evening",
@@ -128,6 +128,12 @@ var aliases = {
 	"seeDeath": "If you see death",
 	"cultMemberAt": "If you meet a follower of the",
 };
+
+var aliasExtras = {
+	"celebrate": "(raise happiness of nearby followers)",
+	"proselytize": "(drop happiness of nearby enemy cult followers)",
+	"salvage": "(see Wisdom of the Ascended below)",
+}
 
 var printMeters = function() {
 	document.getElementById('meter-info').textContent =
