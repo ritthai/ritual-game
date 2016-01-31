@@ -33,7 +33,7 @@ makeFollower = function (x, y, startCult) {
 	var followed = [];
 
 	follower.feelJoyful = function(loc, cul) {
-		if (locationAt == loc)
+		if (locationAt == loc && dayEvent != "miasma")
 		{
 			happy += (cul == cultIn ? 1 : 0.15) * FollowerSingBoost;
 			if (happy > 100)
@@ -129,8 +129,8 @@ makeFollower = function (x, y, startCult) {
 	};
 
 	var handleNecessities = function () {
-		food -= FollowerFoodDrain * FrameRate;
-		happy -= FollowerHappyDrain * FrameRate;
+		food -= FollowerFoodDrain * (dayEvent == "heatwave" ? 2 : 1) * FrameRate;
+		happy -= FollowerHappyDrain * (dayEvent == "hysteria" ? 3 : 1) * FrameRate;
 		if (food < 50)
 			happy -= FollowerHungryHappyDrain * FrameRate;
 		if (food <= 0) {
@@ -374,7 +374,7 @@ makeFollower = function (x, y, startCult) {
 		//TODO: check rituals list for rituals that are based on location or proximity to moving things
 
 		//walk there at constant speed
-		var speedAdjusted = ((FollowerSpeed - FollowerSpeedStarving) * food * 0.01 + FollowerSpeedStarving) * FrameRate;
+		var speedAdjusted = ((FollowerSpeed - FollowerSpeedStarving) * food * 0.01 + FollowerSpeedStarving) * FrameRate * (dayEvent == "hysteria" ? 2.5 : 1) * (dayEvent == "miasma" ? 0.5 : 1);
 		var xDif = xTarget - sprite.x;
 		var yDif = yTarget - sprite.y;
 		var dif = Math.sqrt(xDif*xDif+yDif*yDif);

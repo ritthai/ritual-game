@@ -136,6 +136,12 @@ var makeLabel = function(dontMake) {
 			textElements.push((almostWinner == "player" ? "You" : "Enemy " + almostWinner) + " will win in " + almostWinnerDay + " day" + (almostWinnerDay == 1 ? "" : "s") + "!");
 		if (dayEvent == "heatwave")
 			textElements.push("Looks like there's going to be a heat wave!");
+		else if (dayEvent == "hysteria")
+			textElements.push("You feel a great panic brewing up!");
+		else if (dayEvent == "famine")
+			textElements.push("You can see the crops withering!");
+		else if (dayEvent == "miasma")
+			textElements.push("You feel joyless somehow!");
 
 
 		var text;
@@ -383,7 +389,7 @@ var startMusic = function () {
 			//the first real map
 			//a symmetrical map for three cults
 
-			food_count = 60;
+			food_count = 25;
 			people_count = 30
 			bird_count = 4;
 			cult_count = 3;
@@ -492,7 +498,7 @@ var startMusic = function () {
 				{
 					if (dayTimer == 0)
 						makeFoods();
-					dayTimer += FrameRate;
+					dayTimer += FrameRate * (dayEvent == "miasma" ? 0.75 : 1);
 					updateTimeOfDay();
 				}
 				printMeters();
@@ -567,8 +573,31 @@ var startMusic = function () {
 			if (almostWinner == null)
 			{
 				//TODO: random events
-				dayEvent = "heatwave";
+				var dayOfWeek = dayNumber % 7;
+				if (dayOfWeek >= 3)
+					dayEvent = null;
+				else if (dayOfWeek == 0)
+				{
+					var rand = Math.floor(Math.random() * 4);
+					switch(rand)
+					{
+					case 0:
+						dayEvent = "miasma";
+						break;
+					case 1:
+						dayEvent = "heatwave";
+						break;
+					case 2:
+						dayEvent = "famine";
+						break;
+					case 3:
+						dayEvent = "hysteria";
+						break;
+					}
+				}
 			}
+			else
+				dayEvent = null;
 
 			dayNumber += 1;
 			paused = true;
@@ -595,7 +624,10 @@ var startMusic = function () {
 			"morning": makeTimeOfDayColorBlock('rgb(150, 200, 200)', 1),
 			"afternoon": makeTimeOfDayColorBlock('rgb(200, 150, 50)', 1),
 			"evening": makeTimeOfDayColorBlock('rgb(50, 50, 100)', 1),
-			"heatwave": makeTimeOfDayColorBlock('rgb(200, 100, 25)', 0.3)
+			"heatwave": makeTimeOfDayColorBlock('rgb(250, 100, 25)', 0.3),
+			"hysteria": makeTimeOfDayColorBlock('rgb(200, 175, 250)', 0.75),
+			"famine": makeTimeOfDayColorBlock('rgb(220, 50, 50)', 0.65),
+			"miasma": makeTimeOfDayColorBlock('rgb(125, 125, 125)', 0.8),
 		};
 	};
 
@@ -608,7 +640,9 @@ var startMusic = function () {
 	};
 
 	var makeFoods = function () {
-		for (var i = 0; i < food_count && foods.length < food_count * 2; i++) {
+		if (dayEvent == "famine")
+			return;
+		for (var i = 0; i < food_count && foods.length < food_count * 1.5; i++) {
 			makeAtRandomPosition(makeFood, "");
 		}
 	};
