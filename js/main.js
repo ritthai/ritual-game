@@ -24,6 +24,22 @@ var ais = {
 	"ai three": "nymph",
 };
 
+var aiConvertHappyBuffs = {
+	"player": 0,
+	"ai one": 0,
+	"ai two": 0,
+	"ai three": 0,
+};
+
+var items = [];
+
+var aiActRateBuffs = {
+	"player": 1.0,
+	"ai one": 1.0,
+	"ai two": 1.0,
+	"ai three": 1.0,
+};
+
 var AIScripts = {
 	"druid": {good:["grove", "stone circle", "marsh"], bad:["village", "graveyard", "firepit"], rituals:
 						[
@@ -465,12 +481,13 @@ var startMusic = function () {
 			//the first real map
 			//a symmetrical map for three cults
 
-			food_count = 25;
+			food_count = 35;
 			people_count = 30
 			bird_count = 4;
 			cult_count = 3;
 			ais["ai one"] = "druid";
 			ais["ai two"] = "necromancer";
+			ais["ai three"] = "cleric";
 
 			makeLocation(20, 45, "marsh");
 			makeLocation(170, 110, "firepit");
@@ -544,10 +561,12 @@ var startMusic = function () {
 						makeFollower(x + LocationSize / 2, y + LocationSize / 2, awardWorkTo);
 						break;
 					case "graveyard":
-						//TODO: get a jewelry item
+						//get a jewelry item
+						makeItem("stolen jewelry", awardWorkTo);
 						break;
 					case "firepit":
-						//TODO: get a totem item
+						//get a totem item
+						makeItem("wild totem", awardWorkTo);
 						break;
 					default:
 						//TODO: get a generic item
@@ -561,6 +580,13 @@ var startMusic = function () {
 				}
 			});
 		locations.push(newLoc);
+	};
+	
+	var makeItem = function(type, cult) {
+		//TODO: make an item of a given type
+		
+		//if the cult is "player", add it to the items list
+		//otherwise use it immediately
 	};
 
 	var makeScreen = function () {

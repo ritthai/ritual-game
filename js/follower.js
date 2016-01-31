@@ -165,9 +165,12 @@ makeFollower = function (x, y, startCult) {
 	var getHappiestOtherCult = function () {
 		var cults = ['player', 'ai one', 'ai two', 'ai three'];
 		var bestOtherCult = '';
+		var bestOtherCultHappy = 0;
 		cults.forEach(function (x) {
-			if (cultIn !== x && utils.getAverageHappy(x) > utils.getAverageHappy(bestOtherCult)) {
+			var otherCultHappy = utils.getAverageHappy(x) + aiConvertHappyBuffs[x];
+			if (cultIn !== x && otherCultHappy > bestOtherCultHappy) {
 				bestOtherCult = x;
+				bestOtherCultHappy = otherCultHappy;
 			}
 		});
 		return bestOtherCult;
@@ -350,14 +353,14 @@ makeFollower = function (x, y, startCult) {
 				handleAiNeutral();
 				break;
 			case "celebrate":
-				skillTimer -= FrameRate;
+				skillTimer -= FrameRate * aiActRateBuffs[cultIn];
 				if (skillTimer <= 0) {
 					followers.forEach(function (x) { x.feelJoyful(locationAt, cultIn) });
 					aiState = "neutral";
 				}
 				break;
 			case "proselytize":
-				skillTimer -= FrameRate;
+				skillTimer -= FrameRate * aiActRateBuffs[cultIn];
 				if (skillTimer <= 0) {
 					//you proclaimed
 					followers.forEach(function (x) { x.feelHurt(locationAt, cultIn) });
@@ -365,7 +368,7 @@ makeFollower = function (x, y, startCult) {
 				}
 				break;
 			case "salvage":
-				skillTimer -= FrameRate;
+				skillTimer -= FrameRate * aiActRateBuffs[cultIn];
 				if (skillTimer <= 0) {
 					//you worked
 					for (var loc in locations)
@@ -385,7 +388,7 @@ makeFollower = function (x, y, startCult) {
 		//TODO: check rituals list for rituals that are based on location or proximity to moving things
 
 		//walk there at constant speed
-		var speedAdjusted = ((FollowerSpeed - FollowerSpeedStarving) * food * 0.01 + FollowerSpeedStarving) * FrameRate * (dayEvent == "hysteria" ? 2.5 : 1) * (dayEvent == "miasma" ? 0.5 : 1);
+		var speedAdjusted = ((FollowerSpeed - FollowerSpeedStarving) * food * 0.01 + FollowerSpeedStarving) * FrameRate * (dayEvent == "hysteria" ? 2.5 : 1) * (dayEvent == "miasma" ? 0.5 : 1) * aiActRateBuffs[cultIn];
 		var xDif = xTarget - sprite.x;
 		var yDif = yTarget - sprite.y;
 		var dif = Math.sqrt(xDif*xDif+yDif*yDif);
