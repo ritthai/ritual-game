@@ -74,14 +74,14 @@ var actionTypes = [
 ];
 
 var LocationTypes = {
-	"graveyard": {"color": "rgb(75, 75, 75)", "happyChange": -0.1, "foodChange": 0},
-	"firepit": {"color": "rgb(200, 30, 40)", "happyChange": 0, "foodChange": -0.25, "image": "images/fire-place.png"},
-	"grove": {"color": "rgb(30, 70, 30)", "happyChange": 0.1, "foodChange": 0},
-	"farm": {"color": "rgb(150, 150, 30)", "happyChange": 0, "foodChange": 0.25},
+	"graveyard": {"color": "rgb(75, 75, 75)", "happyChange": -0.15, "foodChange": 0},
+	"firepit": {"color": "rgb(200, 30, 40)", "happyChange": 0, "foodChange": -0.38, "image": "images/fire-place.png"},
+	"grove": {"color": "rgb(30, 70, 30)", "happyChange": 0.15, "foodChange": 0},
+	"farm": {"color": "rgb(150, 150, 30)", "happyChange": 0, "foodChange": 0.38},
 	"stone circle": {"color": "rgb(100, 100, 100)", "happyChange": 0, "foodChange": 0},
 	"marsh": {"color": "rgb(60, 30, 10)", "happyChange": 0, "foodChange": 0},
 	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0},
-	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.025, "foodChange": 0.0625},
+	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.038, "foodChange": 0.0938},
 };
 
 var labelPopRecord = -1;

@@ -3,8 +3,9 @@ var FollowerSpeedStarving = 75;
 var FollowerSingTime = 4.0;
 var FollowerWorkTime = 10.0;
 var FollowerProclaimTime = 2.0;
-var FollowerFoodDrain = 0.5;
-var FollowerHappyDrain = 0.2;
+var FollowerFoodDrain = 0.9;
+var FollowerHappyDrain = 0.3;
+var FollowerHungryHappyDrain = 0.2;
 var FollowerFoodGatherDistance = 30;
 var FollowerSingBoost = 1;
 var FollowerProclaimPenalty = 1;
@@ -119,6 +120,8 @@ makeFollower = function (x, y, startCult) {
 	var handleNecessities = function () {
 		food -= FollowerFoodDrain * FrameRate;
 		happy -= FollowerHappyDrain * FrameRate;
+		if (food < 50)
+			happy -= FollowerHungryHappyDrain * FrameRate;
 		if (food <= 0) {
 			// you starved!
 			sprite.destroy();
