@@ -101,11 +101,11 @@ var LocationTypes = {
 	"graveyard": {"color": "rgb(75, 75, 75)", "happyChange": -0.15, "foodChange": 0, "image": "images/grave.png"},
 	"firepit": {"color": "rgb(200, 30, 40)", "happyChange": 0, "foodChange": -0.38, "image": "images/fire-place.png"},
 	"grove": {"color": "rgb(30, 70, 30)", "happyChange": 0.15, "foodChange": 0, "image": "images/grove.png"},
-	"farm": {"color": "rgb(150, 150, 30)", "happyChange": 0, "foodChange": 0.38},
+	"farm": {"color": "rgb(150, 150, 30)", "happyChange": 0, "foodChange": 0.38, "image": "images/farm.png"},
 	"stone circle": {"color": "rgb(100, 100, 100)", "happyChange": 0, "foodChange": 0, "image": "images/rocks.png"},
 	"marsh": {"color": "rgb(60, 30, 10)", "happyChange": 0, "foodChange": 0, "image": "images/marsh.png"},
 	"village": {"color": "rgb(100, 90, 30)", "happyChange": 0, "foodChange": 0, "image": "images/village.png"},
-	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.038, "foodChange": 0.0938},
+	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.038, "foodChange": 0.0938, "image": "images/manor.png"},
 };
 
 var almostWinner = null;
