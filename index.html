@@ -14,9 +14,16 @@ pre {
 	font-family: Arial;
 }
 
-#ui {
-	width: 800px;
-	margin: 0 auto;
+#splashimage {
+	max-width:100%;
+    top:0;
+    left:0;
+	right:0;
+    bottom:0;
+	margin:auto;
+	overflow:auto;
+	position:fixed;
+	background-color:black;
 }
 
 #cr-stage {
@@ -25,14 +32,21 @@ pre {
 </style>
 </head>
 <body>
+	<script type="text/javascript" src="js/fade.js"></script>
+	
+	 <div id="splashscreen">
+	    <img src="splash-16by9.png" onclick="fade()" id="splashimage"/>
+	</div>
+	
+	<div>
 	<h1>CULT LEADER</h1>
 	<br/>
 	<br/>
 	<h2>Level Select</h2>
 	<form method="get" action="insideGame.html">
-		<input type="submit" name="map" value="Cult City"><br/>
-		<input type="submit" name="map" value="Moon Plains"><br/>
-		<input type="submit" name="map" value="XLand"><br/>
+		<input type="submit" name="map" value="Cult City">  This city sure has a lot of cultists in it!<br/>A map for four cults.<br/><br/>
+		<input type="submit" name="map" value="Moon Plains">  This oasis in the plains has it all!<br/>A map for three cults<br/><br/>
+		<input type="submit" name="map" value="XLand">  X marks the spot. Try digging in the center!<br/>A map for two cults<br/><br/>
 	</form>
 	<br/>
 	<br/>
@@ -40,5 +54,6 @@ pre {
 	<br/>
 	<h3>Credits</h3>
 	<p>By Ritchie Thai and Theodore Abshire</p>
+	</div>
 </body>
 </html>

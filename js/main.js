@@ -631,8 +631,8 @@ var playCelebrateSound = function () {
 		case "XLand":
 		default:
 			//a small symmetrical two-player map
-			food_count = 25;
-			people_count = 20;
+			food_count = 28;
+			people_count = 24;
 			bird_count = 2;
 			cult_count = 2;
 			ais["ai one"] = "cleric";
