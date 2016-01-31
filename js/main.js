@@ -489,7 +489,7 @@ var startMusic = function () {
 
 	var makeScreen = function () {
 		Crafty.e("2D, Canvas, Color, Mouse, Tween")
-			.color('rgb(150, 200, 200)')
+			.color('rgb(150, 200, 150)')
 			.attr({w:SCREEN_WIDTH, h:SCREEN_HEIGHT })
 			.bind("MouseMove", function(e) {})
 			.bind("MouseDown", function(e) {})
@@ -621,9 +621,9 @@ var startMusic = function () {
 		};
 
 		var timeColorBlocks = {
-			"morning": makeTimeOfDayColorBlock('rgb(150, 200, 200)', 1),
-			"afternoon": makeTimeOfDayColorBlock('rgb(200, 150, 50)', 1),
-			"evening": makeTimeOfDayColorBlock('rgb(50, 50, 100)', 1),
+			"morning": makeTimeOfDayColorBlock('rgb(150, 200, 200)', 0),
+			"afternoon": makeTimeOfDayColorBlock('rgb(200, 150, 50)', 0.8),
+			"evening": makeTimeOfDayColorBlock('rgb(50, 50, 100)', 0.8),
 			"heatwave": makeTimeOfDayColorBlock('rgb(250, 100, 25)', 0.3),
 			"hysteria": makeTimeOfDayColorBlock('rgb(200, 175, 250)', 0.75),
 			"famine": makeTimeOfDayColorBlock('rgb(220, 50, 50)', 0.65),
