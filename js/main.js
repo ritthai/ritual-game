@@ -552,7 +552,9 @@ var playCelebrateSound = function () {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 		dayTimer = 0;
 		makeScreen();
-		makeLocations("cult city");
+		
+		//get the map
+		makeLocations(location.search.substring(5, 999));
 		makeFollowers();
 		for (var i = 0; i < bird_count; i++)
 			makeAtRandomPosition(makeBird, "");
@@ -583,7 +585,7 @@ var playCelebrateSound = function () {
 		//MAP VARIANTS
 		switch(mapName)
 		{
-		case "cult city":
+		case "Cult+City":
 			//the four-player map; a bit food-starved
 			food_count = 33;
 			people_count = 32;
@@ -602,7 +604,32 @@ var playCelebrateSound = function () {
 			makeLocation(620, 340, "marsh");
 			
 			break;
-		case "xland":
+		case "Moon+Plains":
+
+			//the first real map
+			//a symmetrical map for three cults
+
+			food_count = 35;
+			people_count = 30;
+			bird_count = 4;
+			cult_count = 3;
+			ais["ai one"] = "druid";
+			ais["ai two"] = "necromancer";
+			ais["ai three"] = "cleric";
+
+			makeLocation(20, 65, "marsh");
+			makeLocation(170, 130, "firepit");
+			makeLocation(140, 260, "grove");
+
+			makeLocation(340, 140, "stone circle");
+			makeLocation(340, 300, "old manor");
+
+			makeLocation(510, 130, "farm");
+			makeLocation(540, 260, "village");
+			makeLocation(660, 65, "graveyard");
+			break;
+		case "XLand":
+		default:
 			//a small symmetrical two-player map
 			food_count = 25;
 			people_count = 20;
@@ -617,30 +644,6 @@ var playCelebrateSound = function () {
 			makeLocation(610, 30, "firepit");
 			makeLocation(610, 350, "stone circle");
 			makeLocation(340, 190, "village");
-			break;
-		case "moon plains":
-
-			//the first real map
-			//a symmetrical map for three cults
-
-			food_count = 35;
-			people_count = 30;
-			bird_count = 4;
-			cult_count = 3;
-			ais["ai one"] = "druid";
-			ais["ai two"] = "necromancer";
-			ais["ai three"] = "cleric";
-
-			makeLocation(20, 45, "marsh");
-			makeLocation(170, 110, "firepit");
-			makeLocation(140, 240, "grove");
-
-			makeLocation(340, 120, "stone circle");
-			makeLocation(340, 280, "old manor");
-
-			makeLocation(510, 110, "farm");
-			makeLocation(540, 240, "village");
-			makeLocation(660, 45, "graveyard");
 			break;
 		}
 	};
