@@ -137,6 +137,12 @@ makeFollower = function (x, y, startCult) {
 			// you starved!
 			sprite.destroy();
 			followers.splice(followers.indexOf(follower), 1); // remove from list
+
+			//mark your location with death
+			for (var loc in locations)
+				if (locations[loc].locationType == locationAt)
+					locations[loc].death = true;
+			
 			return;
 		}
 		if (happy <= 0)
@@ -210,9 +216,14 @@ makeFollower = function (x, y, startCult) {
 					}
 				break;
 			case "seeDeath":
-				//TODO: this activates if someone has died in your area recently
+				//did someone die in your current location?
 				if (doOnceOnly)
-					conditionSuccess = true;
+					for (var loc in locations)
+						if (locations[loc].locationType == locationAt && locations[loc].death)
+						{
+							conditionSuccess = true;
+							break;
+						}
 				break;
 			case "cultMemberAt":
 				//is there someone of that cult here?

@@ -421,7 +421,7 @@ var startMusic = function () {
 			newLoc = Crafty.e("2D, Canvas, Color");
 		}
 		newLoc = newLoc
-			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType, works:locWorks});
+			.attr({x:x, y:y, w:LocationSize, h:LocationSize, locationType:locationType, works:locWorks, death:false});
 		if (loc["image"]) {
 			newLoc = newLoc.image(loc["image"]);
 		} else {
@@ -598,6 +598,10 @@ var startMusic = function () {
 			}
 			else
 				dayEvent = null;
+			
+			//clear death from all locations
+			for (var loc in locations)
+				locations[loc].death = false;
 
 			dayNumber += 1;
 			paused = true;
