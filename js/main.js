@@ -134,6 +134,9 @@ var makeLabel = function(dontMake) {
 		}
 		if (almostWinner != null)
 			textElements.push((almostWinner == "player" ? "You" : "Enemy " + almostWinner) + " will win in " + almostWinnerDay + " day" + (almostWinnerDay == 1 ? "" : "s") + "!");
+		if (dayEvent == "heatwave")
+			textElements.push("Looks like there's going to be a heat wave!");
+
 
 		var text;
 		if (labelWinner == null)
@@ -272,6 +275,7 @@ var BirdSpeed = 300;
 var DayLength = 22;
 var dayTimer = 0;
 var dayNumber = 1;
+var dayEvent = null;
 
 var foods = [];
 var locations = [];
@@ -547,6 +551,7 @@ var printRituals = function() {
 			if (almostWinner == null)
 			{
 				//TODO: random events
+				dayEvent = "heatwave";
 			}
 			
 			dayNumber += 1;
@@ -565,22 +570,24 @@ var printRituals = function() {
 			timeOfDay = newTimeOfDay;
 			for (colorTime in timeColorBlocks) {
 				var block = timeColorBlocks[colorTime];
-				var alpha = colorTime == timeOfDay ? 1 : 0;
+				var alpha = (colorTime == timeOfDay || colorTime == dayEvent) ? timeColorBlocks[colorTime].maxAlpha : 0;
 				block.tween({alpha: alpha}, 800);
 			}
 		};
 
 		var timeColorBlocks = {
-			"morning": makeTimeOfDayColorBlock('rgb(150, 200, 200)'),
-			"afternoon": makeTimeOfDayColorBlock('rgb(200, 150, 50)'),
-			"evening": makeTimeOfDayColorBlock('rgb(50, 50, 100)')
+			"morning": makeTimeOfDayColorBlock('rgb(150, 200, 200)', 1),
+			"afternoon": makeTimeOfDayColorBlock('rgb(200, 150, 50)', 1),
+			"evening": makeTimeOfDayColorBlock('rgb(50, 50, 100)', 1),
+			"heatwave": makeTimeOfDayColorBlock('rgb(200, 100, 25)', 0.3)
 		};
 	};
 
-	var makeTimeOfDayColorBlock = function (color) {
+	var makeTimeOfDayColorBlock = function (color, maxAlpha) {
 		return Crafty.e("2D, Canvas, Color, Tween")
 			.color(color)
-			.attr({w:SCREEN_WIDTH, h:SCREEN_HEIGHT })
+			.attr({w:SCREEN_WIDTH, h:SCREEN_HEIGHT})
+			.attr({maxAlpha:maxAlpha})
 			.attr({alpha: 0});
 	};
 
