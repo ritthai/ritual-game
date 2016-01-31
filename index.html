@@ -36,8 +36,8 @@ span {
 		<pre id="meter-info"></pre>
 
 		<div id="add-ritual-menu">
-		<select id="condition-types"></select> <select id="condition-locations"></select><br />
-		<select id="action-types"></select> <select id="action-locations"></select><br />
+		<select id="condition-types" onchange="makeUiCond()"></select> <select id="condition-locations"></select><br />
+		<select id="action-types" onchange="makeUiAct()"></select> <select id="action-locations"></select><br />
 		<button onclick="uiAddRitual()">Preach Additional Ritual</button>
 		<button onclick="uiUnpause()">Continue Present Rituals</button>
 		</div>

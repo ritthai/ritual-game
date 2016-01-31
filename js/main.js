@@ -179,23 +179,79 @@ var makeLabel = function(dontMake) {
 var paused = true;
 
 var makeUi = function () {
-	var locations = [];
-	for (var loc in LocationTypes) {
-		locations.push(loc);
-	}
 	populateSelect(conditionTypes, 'condition-types');
-	populateSelect([''], 'condition-locations');
-	populateSelect(locations, 'condition-locations');
-	populateSelect(aiNames, 'condition-locations');
 	populateSelect(actionTypes, 'action-types');
-	populateSelect([''], 'action-locations');
-	populateSelect(locations, 'action-locations');
+	makeUiCond();
+	makeUiAct();
 
 	var cults = [];
 	for (var cult in ais) {
 		cults.push(cult);
 	}
 	populateSelect(cults, 'follower-cult');
+};
+
+var makeUiCond = function() {
+	var needLoc = false;
+	var needAI = false;
+	
+	switch(document.getElementById('condition-types').value)
+	{
+	case "atLocation":
+		needLoc = true;
+		break;
+	case "cultMemberAt":
+		needAI = true;
+		break;
+	}
+	
+	document.getElementById('condition-locations').innerHTML = '';
+	document.getElementById('condition-locations').hidden = false;
+
+	if (needLoc)
+	{
+		var locations = [];
+		for (var loc in LocationTypes) {
+			locations.push(loc);
+		}
+		populateSelect(locations, 'condition-locations');
+	}
+	if (needAI)
+		populateSelect(aiNames, 'condition-locations');
+	
+	if (!needAI && !needLoc)
+	{
+		document.getElementById('condition-locations').value = "";
+		document.getElementById('condition-locations').hidden = true;
+	}
+};
+
+var makeUiAct = function() {
+	var needLoc = false;
+	
+	switch(document.getElementById('action-types').value)
+	{
+	case "travel":
+		needLoc = true;
+		break;
+	}
+	
+	document.getElementById('action-locations').innerHTML = '';
+	
+	if (needLoc)
+	{
+		document.getElementById('action-locations').hidden = false;
+		var locations = [];
+		for (var loc in LocationTypes) {
+			locations.push(loc);
+		}
+		populateSelect(locations, 'action-locations');
+	}
+	else
+	{
+		document.getElementById('action-locations').value = "";
+		document.getElementById('action-locations').hidden = true;
+	}
 };
 
 var populateSelect = function (list, id) {
