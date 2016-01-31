@@ -232,13 +232,13 @@ var resetItemListHTML = function() {
 			itemListing.innerHTML += "The dead have no need for such cosmetics, but it will make our followers happy and attract the heathens to our cause."; //"RAISES HAPPY AND CONVERSION CHANCE";
 			break;
 		case "wild totem":
-			itemListing.innerHTML += "Something about this totem that makes our hearts race and stomache calm. (Raises speed and food of followers)";
+			itemListing.innerHTML += "There is something about this totem that makes our hearts race and stomache calm. (Raises speed and food of followers)";
 			break;
 		case "bag of food":
 			itemListing.innerHTML += "Our minds cannot ascend whilst our physical bodies still hunger. Sate our hunger so that we may rise.";//"RAISES FOOD";
 			break;
 		case "bag of drugs":
-			itemListing.innerHTML += "The celebrations bring us joy, but there are other... ways to find happiness.";//"RAISES HAPPY";
+			itemListing.innerHTML += "The celebrations bring us joy, but there are... other ways to find happiness.";//"RAISES HAPPY";
 			break;
 		}
 		itemListing.innerHTML += "<br/>";

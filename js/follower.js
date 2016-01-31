@@ -37,7 +37,7 @@ makeFollower = function (x, y, startCult) {
 		{
 			if (joy)
 			{
-				happy += joy;
+				happy += 10;
 				if (happy > 100)
 					happy = 100;
 			}
