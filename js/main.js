@@ -604,6 +604,14 @@ var playCelebrateSound = function () {
 			makeLocation(620, 340, "marsh");
 			
 			break;
+		case "Secret+Map":
+			food_count = 1;
+			people_count = 2;
+			bird_count = 50;
+			cult_count = 2;
+			
+			makeLocation(340, 190, "stone circle");
+			break;
 		case "Moon+Plains":
 
 			//the first real map
