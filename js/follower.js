@@ -112,11 +112,11 @@ makeFollower = function (x, y, startCult) {
 			}
 		}
 	}
-	
+
 	follower.inCultAtPlace = function (cul, loc) {
 		return cultIn == cul && locationAt == loc;
 	}
-	
+
 	var checkLocationForCult = function (cul) {
 		for (var fol in followers)
 			if (followers[fol].inCultAtPlace(cul, locationAt))
@@ -124,8 +124,8 @@ makeFollower = function (x, y, startCult) {
 		return false;
 	};
 
-	var getCultColor = function (cult) {
-		return (cult == "player" ? "green" : (cult == "ai one" ? "purple" : (cult == "ai two" ? "blue" : "red")));
+	var getCultImage = function (cult) {
+		return (cult == "player" ? "images/follower-red.png" : (cult == "ai one" ? "images/follower-green.png" : (cult == "ai two" ? "images/follower-purple.png" : "images/follower-yellow.png")));
 	};
 
 	var handleNecessities = function () {
@@ -142,7 +142,7 @@ makeFollower = function (x, y, startCult) {
 			for (var loc in locations)
 				if (locations[loc].locationType == locationAt)
 					locations[loc].death = true;
-			
+
 			return;
 		}
 		if (happy <= 0)
@@ -175,7 +175,7 @@ makeFollower = function (x, y, startCult) {
 		});
 		return bestOtherCult;
 	};
-	
+
 	var checkRitualInner = function(doOnceOnly) {
 		//check rituals list for rituals that are based on time, location, or proximity to people
 		for (var ritual in rituals[cultIn])
@@ -313,7 +313,7 @@ makeFollower = function (x, y, startCult) {
 		checkRitualInner(true);
 		if (aiState == "neutral")
 			checkRitualInner(false);
-		
+
 		if (aiState == "neutral")
 		{
 			//there are no rituals to follow
@@ -337,9 +337,9 @@ makeFollower = function (x, y, startCult) {
 	};
 
 	//main loop
-	var sprite = Crafty.e("2D, Canvas, Color")
-		.color(getCultColor(startCult))
-		.attr({x:x, y:y, w:20, h:20})
+	var sprite = Crafty.e("2D, Canvas, Image")
+		.image(getCultImage(startCult))
+		.attr({x:x, y:y, w:20, h:34})
 		.bind("EnterFrame", function(e){
 			if (paused) return;
 
