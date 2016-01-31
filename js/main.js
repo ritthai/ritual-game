@@ -95,7 +95,7 @@ var makeLabel = function(dontMake) {
 	var newPop = utils.getFollowerCount("player");
 	var newHappy = utils.getAverageHappy("player");
 	var newFood = utils.getAverageFood("player");
-	
+
 	if (!dontMake)
 	{
 		//make the text for the label
@@ -118,11 +118,11 @@ var makeLabel = function(dontMake) {
 			else
 				textElements.push("Your followers became " + (newHappy - labelHappyRecord).toFixed(1) + "% happier that day.");
 		}
-		
+
 		var text = "You survived to day " + dayNumber + "!";
 		if (textElements.length > 0)
 			text += "<br/>" + textElements.join("<br/>");
-	
+
 		var textLabel = Crafty.e("2D, DOM, Text, CSS, Tween")
 			.attr({x: 0, y: 40, w: SCREEN_WIDTH})
 			.text(text)
@@ -139,7 +139,7 @@ var makeLabel = function(dontMake) {
 					textLabel.destroy();
 			});
 	}
-	
+
 	labelHappyRecord = newHappy;
 	labelFoodRecord = newFood;
 	labelPopRecord = newPop;
@@ -158,6 +158,12 @@ var makeUi = function () {
 	populateSelect(actionTypes, 'action-types');
 	populateSelect([''], 'action-locations');
 	populateSelect(locations, 'action-locations');
+
+	var cults = [];
+	for (var cult in ais) {
+		cults.push(cult);
+	}
+	populateSelect(cults, 'follower-cult');
 };
 
 var populateSelect = function (list, id) {
@@ -295,7 +301,7 @@ var printRituals = function() {
 		for (var i = 0; i < bird_count; i++)
 			makeAtRandomPosition(makeBird, "");
 		setTimeout(makeUi, 0);
-		
+
 		//initialize label data tracking
 		labelDataTrack();
 	};
@@ -442,8 +448,14 @@ var printRituals = function() {
 			});
 
 		var printDebugInfo = function () {
-			if (!isDebugMode) { return; }
-			var state = followers.map(function (x) { return x.getState(); });
+			if (!isDebugMode) {
+				printToDebug('');
+				return;
+			}
+			var followerCult = document.getElementById('follower-cult').value;
+			var state = followers
+				.map(function (x) { return x.getState(); })
+				.filter(function (x) { return x.cultIn === followerCult; });
 			var json = JSON.stringify(state, null, 4);
 			printToDebug(json);
 		};
@@ -502,9 +514,9 @@ var printRituals = function() {
 	};
 
 	var makeFood = function (x, y, unused) {
-		var food = Crafty.e("2D, Canvas, Color")
+		var food = Crafty.e("2D, Canvas, Image")
 			.attr({x:x, y:y, w:10, h:10})
-			.color("rgb(50, 200, 50)");
+			.image('images/sundrop.png');
 		foods.push(food);
 	};
 
