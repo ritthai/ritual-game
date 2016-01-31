@@ -87,28 +87,54 @@ var LocationTypes = {
 var labelPopRecord = -1;
 var labelHappyRecord = -1;
 var labelFoodRecord = -1;
-var makeLabel = function() {
+var labelDataTrack = function() {
+	makeLabel(true);
+};
+var makeLabel = function(dontMake) {
 	//track label values
-	var newPop = 0;
-	var newHappy = 0;
-	var newFood = 0;
+	var newPop = utils.getFollowerCount("player");
+	var newHappy = utils.getAverageHappy("player");
+	var newFood = utils.getAverageFood("player");
 	
-	//TODO: get the text for the label
-	var text = "Hi I'm a label";
+	if (!dontMake)
+	{
+		//make the text for the label
+		var textElements = [];
+		if (newPop > labelPopRecord)
+			textElements.push("You gained " + (newPop - labelPopRecord).toFixed(0) + " followers that day.");
+		else if (newPop < labelPopRecord)
+			textElements.push("You lost " + (labelPopRecord - newPop).toFixed(0) + " followers that day.");
+		if (newFood < labelFoodRecord)
+			textElements.push("Your followers became " + (labelFoodRecord - newFood).toFixed(1) + "% hungrier that day.");
+		else if (newFood > labelFoodRecord)
+			textElements.push("Your followers became " + (newFood - labelFoodRecord).toFixed(1) + "% more well-fed that day.");
+		if (newHappy < labelHappyRecord)
+			textElements.push("Your followers became " + (labelHappyRecord - newHappy).toFixed(1) + "% more miserable that day.");
+		else if (newHappy > labelHappyRecord)
+			textElements.push("Your followers became " + (newHappy - labelHappyRecord).toFixed(1) + "% happier that day.");
+		
+		var text = "You survived to day " + dayNumber + "!";
+		if (textElements.length > 0)
+			text += "<br/>" + textElements.join("<br/>");
 	
-	var label = Crafty.e("2D, DOM, Text, CSS")
-		.attr({x: 0, y: 40, w: SCREEN_WIDTH})
-		.text(text)
-		.css({"text-align": "center", "color": "white"})
-		.bind("EnterFrame", function(e) {
-			if (!paused && label.alpha == 1)
-			{
-				label.alpha = 0.9999;
-				label.tween({alpha: 0}, 80);
-			}
-			if (label.alpha <= 0)
-				label.destroy();
-		});
+		var label = Crafty.e("2D, DOM, Text, CSS")
+			.attr({x: 0, y: 40, w: SCREEN_WIDTH})
+			.text(text)
+			.css({"text-align": "center", "color": "white"})
+			.bind("EnterFrame", function(e) {
+				if (!paused && label.alpha == 1)
+				{
+					label.alpha = 0.9999;
+					label.tween({alpha: 0}, 80);
+				}
+				if (label.alpha <= 0)
+					label.destroy();
+			});
+	}
+	
+	labelHappyRecord = newHappy;
+	labelFoodRecord = newFood;
+	labelPopRecord = newPop;
 };
 
 var paused = true;
@@ -255,6 +281,9 @@ var printRituals = function() {
 		for (var i = 0; i < bird_count; i++)
 			makeAtRandomPosition(makeBird, "");
 		setTimeout(makeUi, 0);
+		
+		//initialize label data tracking
+		labelDataTrack();
 	};
 
 	var makeFollowers = function () {
