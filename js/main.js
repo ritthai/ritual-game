@@ -814,6 +814,11 @@ var startMusic = function () {
 			"famine": makeTimeOfDayColorBlock('rgb(220, 50, 50)', 0.65),
 			"miasma": makeTimeOfDayColorBlock('rgb(125, 125, 125)', 0.8),
 		};
+
+		Crafty.e("2D, Canvas, Image")
+			.attr({w:SCREEN_WIDTH, h:SCREEN_HEIGHT })
+			.image('images/background.png')
+			.attr({alpha: 0.5});
 	};
 
 	var makeTimeOfDayColorBlock = function (color, maxAlpha) {
