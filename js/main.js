@@ -205,6 +205,72 @@ var makeUi = function () {
 		cults.push(cult);
 	}
 	populateSelect(cults, 'follower-cult');
+	
+	
+	//sample starting items
+	makeItem("stolen jewelry", "player");
+	makeItem("wild totem", "player");
+	makeItem("bag of food", "player");
+	makeItem("bag of drugs", "player");
+};
+
+var makeItem = function(type, cult) {
+	if (cult == "player")
+	{
+		//add to the items list
+		var itemListing = document.createElement("t");
+		var item = document.createElement('button');
+		itemListing.appendChild(item);
+		var content = document.createTextNode(type);
+		item.appendChild(content);
+		item.setAttribute('onclick', "useItem('" + type + "','" + cult + "')");
+		itemListing.innerHTML += " ";
+		switch(type)
+		{
+		case "stolen jewelry":
+			itemListing.innerHTML += "RAISES HAPPY AND CONVERSION CHANCE";
+			break;
+		case "wild totem":
+			itemListing.innerHTML += "RAISES SPEED AND FOOD";
+			break;
+		case "bag of food":
+			itemListing.innerHTML += "RAISES FOOD";
+			break;
+		case "bag of drugs":
+			itemListing.innerHTML += "RAISES HAPPY";
+			break;
+		}
+		itemListing.innerHTML += "<br/>";
+		document.getElementById('items').appendChild(itemListing);
+	}
+	else
+		useItem(type, cult);
+};
+
+var useItem = function(type, cult) {
+	var feed = false;
+	var joy = false;
+	switch(type)
+	{
+	case "stolen jewelry":
+		joy = true;
+		aiConvertHappyBuffs[cult] += 10;
+		break;
+	case "wild totem":
+		feed = true;
+		aiActRateBuffs[cult] += 0.1;
+		break;
+	case "bag of food":
+		feed = true;
+		break;
+	case "bag of drugs":
+		joy = true;
+		break;
+	}
+	
+	followers.forEach(function (follower) {
+		follower.useItem(cult, feed, joy);
+	});
 };
 
 var makeUiCond = function() {
@@ -584,37 +650,6 @@ var startMusic = function () {
 				}
 			});
 		locations.push(newLoc);
-	};
-	
-	var makeItem = function(type, cult) {
-		if (cult == "player")
-		{
-			//TODO: add to the items list
-		}
-		else
-			useItem(type, cult);
-	};
-	
-	var useItem = function(type, cult) {
-		var feed = false;
-		var joy = false;
-		switch(type)
-		{
-		case "stolen jewelry":
-			joy = true;
-			aiConvertHappyBuffs[cult] += 10;
-			break;
-		case "wild totem":
-			feed = true;
-			aiActRateBuffs[cult] += 0.1;
-			break;
-		case "bag of food":
-			feed = true;
-			break;
-		case "bag of drugs":
-			joy = true;
-			break;
-		}
 	};
 
 	var makeScreen = function () {

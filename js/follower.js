@@ -31,6 +31,20 @@ makeFollower = function (x, y, startCult) {
 	var follower = {};
 
 	var followed = [];
+	
+	follower.useItem = function(cul, feed, joy) {
+		if (cul == cultIn)
+		{
+			if (joy)
+			{
+				happy += joy;
+				if (happy > 100)
+					happy = 100;
+			}
+			if (feed)
+				food = 100;
+		}
+	};
 
 	follower.feelJoyful = function(loc, cul) {
 		if (locationAt == loc && dayEvent != "miasma")
