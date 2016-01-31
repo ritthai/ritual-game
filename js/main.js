@@ -228,16 +228,16 @@ var resetItemListHTML = function() {
 		switch(items[i])
 		{
 		case "stolen jewelry":
-			itemListing.innerHTML += "RAISES HAPPY AND CONVERSION CHANCE";
+			itemListing.innerHTML += "This swanky jewelry would sure make you popular and happy."; //"RAISES HAPPY AND CONVERSION CHANCE";
 			break;
 		case "wild totem":
-			itemListing.innerHTML += "RAISES SPEED AND FOOD";
+			itemListing.innerHTML += "There's something about this totem that makes your heart race and your stomache rumble."; //"RAISES SPEED AND FOOD";
 			break;
 		case "bag of food":
-			itemListing.innerHTML += "RAISES FOOD";
+			itemListing.innerHTML += "This bag of food is a delicious reward for your followers hard work.";//"RAISES FOOD";
 			break;
 		case "bag of drugs":
-			itemListing.innerHTML += "RAISES HAPPY";
+			itemListing.innerHTML += "This bag of, uh, drugs sure is a desirable thing to have.";//"RAISES HAPPY";
 			break;
 		}
 		itemListing.innerHTML += "<br/>";
