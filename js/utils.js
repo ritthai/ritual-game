@@ -32,6 +32,39 @@ var utils = (function (){
 	var getFollowersForCult = function (cult) {
 		return followers.filter(function (x) { return x.getCult() === cult; });
 	};
+	
+	module.detectInstantWinner = function (cult_count) {
+		var ai1 = getFollowerCount("ai one");
+		var ai2 = getFollowerCount("ai two");
+		var ai3 = getFollowerCount("ai three");
+		if (getFollowerCount("player") == 0)
+		{
+			//there's an instant winner
+			if (cult_count == 1)
+				return "ai one";
+			else if (cult_count == 2)
+			{
+				if (ai1 > ai2)
+					return "ai one";
+				return "ai two";
+			}
+			else
+			{
+				if (ai1 > ai2)
+				{
+					if (ai1 > ai3)
+						return "ai one";
+					return "ai three";
+				}
+				else if (ai2 > ai3)
+					return "ai two";
+				return "ai three";
+			}
+		}
+		if (ai1 == 0 && ai2 == 0 && ai3 == 0)
+			return "player";
+		return null;
+	}
 
 	return module;
 }());
