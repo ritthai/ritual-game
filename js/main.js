@@ -605,10 +605,11 @@ var playCelebrateSound = function () {
 			
 			break;
 		case "Secret+Map":
+			//can you survive in the capital city of the BIRDS??????
 			food_count = 1;
-			people_count = 2;
+			people_count = 4;
 			bird_count = 50;
-			cult_count = 2;
+			cult_count = 4;
 			
 			makeLocation(340, 190, "stone circle");
 			break;
