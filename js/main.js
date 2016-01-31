@@ -84,6 +84,10 @@ var LocationTypes = {
 	"old manor": {"color": "rgb(130, 50, 20)", "happyChange": 0.038, "foodChange": 0.0938},
 };
 
+var almostWinner = null;
+var almostWinnerDay = 0;
+var labelWinnerDay = 0;
+var labelWinner = null;
 var labelPopRecord = -1;
 var labelHappyRecord = -1;
 var labelFoodRecord = -1;
@@ -118,8 +122,16 @@ var makeLabel = function(dontMake) {
 			else
 				textElements.push("Your followers became " + (newHappy - labelHappyRecord).toFixed(1) + "% happier that day.");
 		}
+		if (almostWinner != null)
+			textElements.push((almostWinner == "player" ? "You" : "Enemy " + almostWinner) + " will win in " + almostWinnerDay + " day" + (almostWinnerDay == 1 ? "" : "s") + "!");
 
-		var text = "You survived to day " + dayNumber + "!";
+		var text;
+		if (labelWinner == null)
+			text = "You survived to day " + dayNumber + "!";
+		else if (labelWinner == "player")
+			text = "You won on day " + dayNumber + "!";
+		else
+			text = "You lost to " + labelWinner + " on day " + dayNumber + "!";
 		if (textElements.length > 0)
 			text += "<br/>" + textElements.join("<br/>");
 
@@ -202,6 +214,10 @@ var uiUnpause = function () {
 };
 
 var addRitualAI = function(ai) {
+	if (labelWinner != null)
+		return;
+	
+	
 	var aiScript = AIScripts[ais[ai]];
 	var good = aiRunThroughList(aiScript["good"]);
 	var bad = aiRunThroughList(aiScript["bad"]);
@@ -236,7 +252,7 @@ var birds = [];
 var BirdSpeed = 300;
 
 
-var DayLength = 25;
+var DayLength = 5;
 var dayTimer = 0;
 var dayNumber = 1;
 
@@ -309,7 +325,7 @@ var printRituals = function() {
 	var makeFollowers = function () {
 		for (var i = 0; i < people_count / cult_count; i++)
 			makeAtRandomPosition(makeFollower, "player");
-		for (var i = 0; i < people_count * 2 / cult_count; i++)
+		for (var i = 0; i < people_count * 2 / cult_count + 100; i++)
 			makeAtRandomPosition(makeFollower, "ai one");
 		if (cult_count > 2)
 			for (var i = 0; i < people_count * 3 / cult_count; i++)
@@ -474,13 +490,57 @@ var printRituals = function() {
 		};
 
 		var advanceDay = function () {
+			
+			//detect victory or defeat
+			if (labelWinner == null)
+			{
+				var instantWinner = utils.detectInstantWinner(cult_count);
+				if (instantWinner != null)
+				{
+					//someone won!
+					labelWinner = instantWinner;
+					labelWinnerDay = dayNumber;
+				}
+				else
+				{
+					var leader = utils.detectLeader();
+					if (leader != null)
+					{
+						if (leader == almostWinner)
+						{
+							almostWinnerDay -= 1;
+							if (almostWinnerDay == 0)
+							{
+								labelWinner = almostWinner;
+								labelWinnerDay = dayNumber;
+								almostWinner = null;
+							}
+						}
+						else
+						{
+							almostWinner = leader;
+							almostWinnerDay = 3;
+						}
+					}
+					else
+						almostWinner = null;
+				}
+			}
+			
+			if (almostWinner == null)
+			{
+				//TODO: random events
+			}
+			
 			dayNumber += 1;
 			paused = true;
 			makeLabel();
-			if (document.getElementById('auto').checked)
+			if (document.getElementById('auto').checked || (labelWinner != null && labelWinner != "player"))
 				uiUnpause();
-			else
+			else if (labelWinner == null || labelWinner == "player")
 				document.getElementById('add-ritual-menu').style.display = 'block';
+			if (labelWinner != null && labelWinner != "player")
+				document.getElementById('extra-ritual-menu').style.display = 'none';
 		};
 
 		var changeTimeOfDay = function (newTimeOfDay) {

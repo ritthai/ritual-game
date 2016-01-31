@@ -33,11 +33,43 @@ var utils = (function (){
 		return followers.filter(function (x) { return x.getCult() === cult; });
 	};
 	
+	module.detectLeader = function () {
+		//does anyone have enough people to have the needed majority?
+		var ai1 = module.getFollowerCount("ai one");
+		var ai2 = module.getFollowerCount("ai two");
+		var ai3 = module.getFollowerCount("ai three");
+		var player = module.getFollowerCount("player");
+		var total = ai1 + ai2 + ai3 + player;
+		var cultsAlive = (ai1 > 0 ? 1 : 0) + (ai2 > 0 ? 1 : 0) + (ai3 > 0 ? 1 : 0) + 1;
+		var followersNeeded;
+		switch(cultsAlive)
+		{
+		case 2:
+			followersNeeded = total * 0.75;
+			break;
+		case 3:
+			followersNeeded = total * 0.6;
+			break;
+		case 4:
+			followersNeeded = total * 0.5;
+			break;
+		}
+		if (ai1 > followersNeeded)
+			return "ai one";
+		if (ai2 > followersNeeded)
+			return "ai two";
+		if (ai3 > followersNeeded)
+			return "ai three";
+		if (player > followersNeeded)
+			return "player";
+		return null;
+	};
+	
 	module.detectInstantWinner = function (cult_count) {
-		var ai1 = getFollowerCount("ai one");
-		var ai2 = getFollowerCount("ai two");
-		var ai3 = getFollowerCount("ai three");
-		if (getFollowerCount("player") == 0)
+		var ai1 = module.getFollowerCount("ai one");
+		var ai2 = module.getFollowerCount("ai two");
+		var ai3 = module.getFollowerCount("ai three");
+		if (module.getFollowerCount("player") == 0)
 		{
 			//there's an instant winner
 			if (cult_count == 1)
