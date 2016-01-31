@@ -81,10 +81,10 @@ makeFollower = function (x, y, startCult) {
 		return {
 			food: food,
 			happy: happy,
-			aiState: aiState,
-			xTarget: xTarget,
-			yTarget: yTarget,
-			skillTimer: skillTimer,
+			// aiState: aiState,
+			// xTarget: xTarget,
+			// yTarget: yTarget,
+			// skillTimer: skillTimer,
 			locationAt: locationAt,
 			cultIn: cultIn
 		};

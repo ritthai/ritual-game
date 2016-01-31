@@ -5,6 +5,6 @@ var toggleDebugMode = function () {
 };
 
 var printToDebug = function (message) {
-	document.getElementById('debug-info').textContent;
-	document.getElementById('debug-info').textContent = message;
+	// document.getElementById('debug-info').textContent;
+	document.getElementById('debug-info').textContent = message;//.join("\n");
 };

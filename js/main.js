@@ -206,13 +206,6 @@ var makeUi = function () {
 		cults.push(cult);
 	}
 	populateSelect(cults, 'follower-cult');
-
-
-	//TODO: remove these! they're just for testing
-	makeItem("stolen jewelry", "player");
-	makeItem("wild totem", "player");
-	makeItem("bag of food", "player");
-	makeItem("bag of drugs", "player");
 };
 
 var resetItemListHTML = function() {
@@ -559,7 +552,7 @@ var playCelebrateSound = function () {
 		Crafty.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 		dayTimer = 0;
 		makeScreen();
-		makeLocations("moon island");
+		makeLocations("cult city");
 		makeFollowers();
 		for (var i = 0; i < bird_count; i++)
 			makeAtRandomPosition(makeBird, "");
@@ -590,13 +583,48 @@ var playCelebrateSound = function () {
 		//MAP VARIANTS
 		switch(mapName)
 		{
-		case "moon island":
+		case "cult city":
+			//the four-player map; a bit food-starved
+			food_count = 33;
+			people_count = 32;
+			bird_count = 1;
+			cult_count = 4;
+			ais["ai one"] = "cleric";
+			ais["ai two"] = "necromancer";
+			ais["ai three"] = "nymph";
+			
+			makeLocation(280, 170, "village");
+			makeLocation(400, 240, "old manor");
+			makeLocation(430, 90, "firepit");
+			makeLocation(270, 290, "graveyard");
+			
+			makeLocation(30, 80, "farm");
+			makeLocation(620, 340, "marsh");
+			
+			break;
+		case "xland":
+			//a small symmetrical two-player map
+			food_count = 25;
+			people_count = 20;
+			bird_count = 2;
+			cult_count = 2;
+			ais["ai one"] = "cleric";
+			ais["ai two"] = "necromancer";
+			ais["ai three"] = "druid";
+			
+			makeLocation(70, 30, "marsh");
+			makeLocation(70, 350, "graveyard");
+			makeLocation(610, 30, "firepit");
+			makeLocation(610, 350, "stone circle");
+			makeLocation(340, 190, "village");
+			break;
+		case "moon plains":
 
 			//the first real map
 			//a symmetrical map for three cults
 
 			food_count = 35;
-			people_count = 30
+			people_count = 30;
 			bird_count = 4;
 			cult_count = 3;
 			ais["ai one"] = "druid";
@@ -731,8 +759,10 @@ var playCelebrateSound = function () {
 			var state = followers
 				.map(function (x) { return x.getState(); })
 				.filter(function (x) { return x.cultIn === followerCult; });
-			var json = JSON.stringify(state, null, 4);
-			printToDebug(json);
+			// var json = JSON.stringify(state, null, 4);
+			//nicer-looking follower info
+			var json = state.map(function(x) { return "Food = " + x["food"] + ", Happiness = " + x["happy"] + ", located at " + x["locationAt"]; })
+			printToDebug(json.join("\n"));
 		};
 
 		var updateTimeOfDay = function () {
