@@ -1,5 +1,13 @@
 var fading = false;
 
+(function (){
+	//auto-disable splashscreen if you have any argument
+	setTimeout(function() {
+		if (location.search != "")
+			document.getElementById('splashscreen').hidden = true;
+	}, 0);
+}());
+
 var fade = function()
 {
 	if (fading)
