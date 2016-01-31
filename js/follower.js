@@ -367,23 +367,35 @@ makeFollower = function (x, y, startCult) {
 				handleAiNeutral();
 				break;
 			case "celebrate":
+				var oldNumParticles = Math.floor(skillTimer * 2.5);
 				skillTimer -= FrameRate * aiActRateBuffs[cultIn];
+				var numParticles = oldNumParticles - Math.floor(skillTimer * 2.5);
 				if (skillTimer <= 0) {
 					followers.forEach(function (x) { x.feelJoyful(locationAt, cultIn) });
 					aiState = "neutral";
 					playCelebrateSound();
+					numParticles += 3;
 				}
+				for (var i = 0; i < numParticles; i++)
+					makeParticle(sprite.x, sprite.y, "any", 100, 0, 80, 30, 1.0, 2.0);
 				break;
 			case "proselytize":
+				var oldNumParticles = Math.floor(skillTimer * 5);
 				skillTimer -= FrameRate * aiActRateBuffs[cultIn];
+				var numParticles = oldNumParticles - Math.floor(skillTimer * 5);
 				if (skillTimer <= 0) {
 					//you proclaimed
 					followers.forEach(function (x) { x.feelHurt(locationAt, cultIn) });
 					aiState = "neutral";
+					numParticles += 5;
 				}
+				for (var i = 0; i < numParticles; i++)
+					makeParticle(sprite.x, sprite.y, "rgb(70, 60, 60)", 75, 100, -50, 100, 2.0, 1.0);
 				break;
 			case "salvage":
+				var oldNumParticles = Math.floor(skillTimer * 3.5);
 				skillTimer -= FrameRate * aiActRateBuffs[cultIn];
+				var numParticles = oldNumParticles - Math.floor(skillTimer * 3.5);
 				if (skillTimer <= 0) {
 					//you worked
 					for (var loc in locations)
@@ -391,6 +403,8 @@ makeFollower = function (x, y, startCult) {
 							locations[loc].works[cultIn] += 1;
 					aiState = "neutral";
 				}
+				for (var i = 0; i < numParticles; i++)
+					makeParticle(sprite.x, sprite.y, "rgb(200, 180, 150)", 120, 10, 100, 50, 2.0, 1.0);
 				break;
 			case "travel":
 			case "gatherFood":

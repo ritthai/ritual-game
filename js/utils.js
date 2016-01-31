@@ -141,3 +141,81 @@ var printMeters = function() {
 var makeAtRandomPosition = function (callback, thirdVar) {
 	callback(utils.getRandomX(), utils.getRandomY(), thirdVar);
 };
+
+var makeParticle = function(x, y, color, speed, friction, gravity, fallLength, lifetime, fadeLength)
+{
+	var angle = Math.random() * Math.PI / 3 + Math.PI / 4;
+	var xSpeed = Math.cos(angle) * speed;
+	var ySpeed = Math.sin(angle) * -speed;
+	
+	//get color
+	if (color == "any")
+	{
+		var colorRoll = Math.floor(Math.random() * 5);
+		switch(colorRoll)
+		{
+		case 0:
+			color = "red";
+			break;
+		case 1:
+			color = "blue";
+			break;
+		case 2:
+			color = "green";
+			break;
+		case 3:
+			color = "yellow";
+			break;
+		case 4:
+			color = "pink";
+			break;
+		}
+	}
+	
+	var part = Crafty.e("2D, Canvas, Color, Tween")
+		.attr({x:x - 3 + Math.random() * 20, y:y - 3 + Math.random() * 20, w:6, h:6})
+		.color(color)
+		.bind("EnterFrame", function(e) {
+			//move
+			part.x += xSpeed * FrameRate;
+			part.y += ySpeed * FrameRate;
+
+			//apply friction
+			if (friction > 0)
+			{
+				var frictReduce = friction * FrameRate;
+				totalSpeed = Math.sqrt(xSpeed*xSpeed+ySpeed*ySpeed);
+				if (frictReduce >= totalSpeed)
+				{
+					xSpeed = 0;
+					ySpeed = 0;
+				}
+				else
+				{
+					xSpeed -= frictReduce * xSpeed / totalSpeed;
+					ySpeed -= frictReduce * ySpeed / totalSpeed;
+				}
+			}
+
+			//apply gravity
+			ySpeed += gravity * FrameRate;
+
+			//apply total fall length
+			if (part.y >= y + fallLength)
+			{
+				xSpeed = 0;
+				ySpeed = 0;
+				part.y = y + fallLength;
+			}
+
+			//handle lifetime
+			lifetime -= FrameRate;
+			if (part.alpha == 1 && lifetime <= 0)
+			{
+				part.alpha = 0.999;
+				part.tween({alpha: 0}, fadeLength * 1000);
+			}
+			else if (part.alpha <= 0)
+				part.destroy();
+		});
+}
